@@ -46,6 +46,7 @@
             <a href="#features">Product</a>
             <a href="#try">Try it</a>
             <a href="#faq">FAQ</a>
+            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github" id="gh-stars">GitHub</a>
             <a href="#beta" class="nav-cta">Join beta</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -251,6 +252,47 @@
             </div>
         </section>
 
+        <!-- DEVICE MATRIX -->
+        <section class="matrix-section reveal" id="devices">
+            <div class="section-header">
+                <p class="section-eyebrow">The honest device matrix</p>
+                <h2>What works on <em>your</em> glasses, today.</h2>
+            </div>
+            <div class="device-matrix" role="table" aria-label="Device compatibility">
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">Any phone or computer</span>
+                    <span class="matrix-status works">Full experience</span>
+                    <span class="matrix-how">Rehearse and perform in the browser — everything works right now.</span>
+                </div>
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">XREAL Air / One / Pro</span>
+                    <span class="matrix-status works">Works today</span>
+                    <span class="matrix-how">Use the glasses as your phone or PC display — Spector runs on the big virtual screen.</span>
+                </div>
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">Viture Luma / Pro / Beast</span>
+                    <span class="matrix-status works">Works today</span>
+                    <span class="matrix-how">Same as XREAL — mirror your device, read eyes-up.</span>
+                </div>
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">Ray-Ban Meta Gen 1 / 2</span>
+                    <span class="matrix-status partial">Rehearsal-only</span>
+                    <span class="matrix-how">No display in these glasses — prep on your phone until delivery is second nature.</span>
+                </div>
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">Ray-Ban Meta Display</span>
+                    <span class="matrix-status waiting">Waiting on Meta</span>
+                    <span class="matrix-how">Full on-lens support when Meta opens its glasses app store — SpectorCore is built to port.</span>
+                </div>
+                <div class="matrix-row" role="row">
+                    <span class="matrix-device">Even Realities, Brilliant Labs &amp; others</span>
+                    <span class="matrix-status partial">Varies</span>
+                    <span class="matrix-how">Depends on browser or mirroring support — <a href="#beta">beta testers wanted</a>.</span>
+                </div>
+            </div>
+            <p class="matrix-note">We'd rather under-promise: if your device isn't honestly covered here, tell us and we'll test it.</p>
+        </section>
+
         <!-- FAQ -->
         <section class="faq-section reveal" id="faq">
             <div class="section-header">
@@ -410,16 +452,26 @@
             </p>
         </section>
 
+        <!-- FOUNDER -->
+        <section class="founder-section reveal" id="founder">
+            <img src="images/founder.jpg" alt="Jeffrey, who builds Spector" class="founder-photo" width="72" height="72" loading="lazy" onerror="this.style.display='none'">
+            <div class="founder-text">
+                <p>Hi — I'm <strong>Jeffrey</strong>. I build Spector on my own, from Hong Kong. It started because I kept watching people (myself included) read <em>at</em> a camera instead of talking to it — and smart glasses finally make that fixable. If you try it, I'd genuinely like to hear what broke or what felt good.</p>
+                <p class="founder-links"><a href="https://github.com/hydrogenbondss" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.instagram.com/spectorlabs" target="_blank" rel="noopener">Instagram</a> · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></p>
+            </div>
+        </section>
+
         <!-- INVESTOR / PARTNER NOTE -->
         <section class="investor-note reveal" id="investors">
-            <p>Building something here. Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a> or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
+            <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
         </section>
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span>&copy; 2026 Spector Labs</span>
+            <span>&copy; 2026 Spector Labs · updated <a id="last-updated" href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">recently</a></span>
             <div class="footer-links">
                 <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank">GitHub</a>
+                <a href="https://www.instagram.com/spectorlabs" target="_blank" rel="noopener">Instagram</a>
                 <a href="#try">Try it</a>
                 <a href="mailto:hello@spectorlabs.io">Contact</a>
                 <a href="/teleprompter-for-xreal">XREAL</a>
@@ -929,6 +981,33 @@
             });
         }
 
+        // Proof of life: live GitHub stars in the nav + "updated N days ago" in the footer.
+        // One cached API call; degrades silently to plain "GitHub"/"recently" offline.
+        function initProofOfLife() {
+            const stars = document.getElementById('gh-stars');
+            const updated = document.getElementById('last-updated');
+            const apply = (d) => {
+                if (stars && d.stargazers_count >= 10) stars.textContent = `GitHub ★ ${d.stargazers_count}`;
+                if (updated && d.pushed_at) {
+                    const days = Math.max(0, Math.floor((Date.now() - new Date(d.pushed_at)) / 864e5));
+                    updated.textContent = days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
+                }
+            };
+            try {
+                const cached = JSON.parse(localStorage.getItem('spector_gh') || 'null');
+                if (cached && Date.now() - cached.t < 36e5) { apply(cached.d); return; }
+            } catch {}
+            fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
+                .then(r => r.ok ? r.json() : null)
+                .then(d => {
+                    if (!d) return;
+                    const slim = { stargazers_count: d.stargazers_count || 0, pushed_at: d.pushed_at };
+                    try { localStorage.setItem('spector_gh', JSON.stringify({ t: Date.now(), d: slim })); } catch {}
+                    apply(slim);
+                })
+                .catch(() => {});
+        }
+
         // Live hero demo — same pacing rules as the player (mode base × punctuation),
         // so the hero shows real product behavior instead of a video.
         function initHeroDemo() {
@@ -1042,6 +1121,7 @@
             renderLibrary();
             renderHistory();
             initHeroDemo();
+            initProofOfLife();
             initMotion();
             registerServiceWorker();
             initInstallPrompt();

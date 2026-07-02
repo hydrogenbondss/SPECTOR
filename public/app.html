@@ -41,6 +41,7 @@
         </div>
         <div class="timer">
             <span id="time-elapsed">0:00</span>
+            <span id="pacing-indicator" class="pacing-indicator" aria-hidden="true">auto-pacing · punctuation-aware</span>
             <span id="time-remaining">– remaining</span>
         </div>
     </div>
@@ -70,16 +71,11 @@
     </div>
 
     <div id="comfort-tip" class="comfort-tip hidden">
-        <span>In Comfort: gently move your head (or simulate tilt) for breathing + drift spatial effects. Use right-temple button (or <strong>B</strong> key) to advance.</span>
+        <span>Comfort mode uses your device's motion sensors — move gently and the text breathes and drifts with you, anchored in space.</span>
         <button id="dismiss-comfort-tip" type="button">Got it</button>
     </div>
 
-    <!-- Hardware legend moved to prominent .glasses-hw-legend under modes for better visibility of button/touch controls -->
-
-    <div id="bookmarks" class="bookmarks" style="max-width:620px;margin:4px auto 8px;font-size:11px;color:#888;display:none;">
-        <span style="margin-right:8px;">Sections:</span>
-        <span id="bookmarks-list"></span>
-    </div>
+    <!-- Tester scaffolding below (button sim, tilt sim, hardware legend) only renders with ?debug -->
 
     <div class="glasses-button-test" style="max-width:620px;margin:4px auto 12px;text-align:center;">
         <button id="glasses-button-sim" class="btn-secondary" style="padding:6px 12px;font-size:12px;">Simulate right temple button (advance)</button>
@@ -96,7 +92,7 @@
 
     <div id="end-screen" class="end-screen hidden">
         <h2>Well done.</h2>
-        <p class="subtitle">Rehearsal complete. Review your pacing. On real Ray-Ban Meta Display, the right temple button will advance chunks live during performance.</p>
+        <p class="subtitle">Rehearsal complete. Review your pacing — then run it again until delivery feels natural.</p>
 
         <div class="stats">
             <div>
@@ -120,7 +116,7 @@
         <div class="analytics-panel" id="analytics-panel">
             <p class="analytics-line" id="analytics-hesitations">—</p>
             <p class="analytics-line" id="analytics-slowest">—</p>
-            <p class="analytics-line" style="font-size:11px; color:#888; margin-top:8px;">Use your glasses' right temple button for live advance when performing.</p>
+            <p class="analytics-line" style="font-size:11px; color:#888; margin-top:8px;">Tip: a pacing score above 85% means you're ready to perform eyes-up.</p>
         </div>
 
         <div class="end-actions">
@@ -427,15 +423,18 @@
         preset: () => navigator.vibrate?.([10]),
     };
 
+    // First run should never be an empty prompter — land on a real sample so the
+    // pacing "aha" happens in one tap. (Bring your own script from the landing page.)
+    const SAMPLE_SCRIPT = "Welcome to **Spector**. [pause] This is the actual engine, pacing itself to punctuation. Short lines move quickly. Longer sentences, like this one, get the room they need to breathe. **Emphasis** earns a hold. [pause:2s] Commas add a beat, sentence ends linger, and you never touch a scroll wheel. Eyes up. No script-face. [pause] Now try it with your own words — hit Edit Script when you finish.";
+
     function getScriptFromURL() {
         const params = new URLSearchParams(window.location.search);
         const encoded = params.get('script');
         if (encoded) {
             const decoded = SpectorCore.decodeScript(encoded);
             if (decoded) return decoded;
-            return 'Welcome to Spector. This is a sample script.';
         }
-        return 'Welcome to Spector. Paste your script on the landing page.';
+        return SAMPLE_SCRIPT;
     }
 
     function getMs() {
@@ -491,6 +490,14 @@
         }
         const progress = chunks.length ? ((currentIndex + 1) / chunks.length) * 100 : 0;
         document.getElementById('progress-fill').style.width = `${progress}%`;
+
+        // Make the auto-pacing visible: pulse the indicator each time the engine advances
+        const pace = document.getElementById('pacing-indicator');
+        if (pace && isPlaying) {
+            pace.classList.remove('tick');
+            void pace.offsetWidth;
+            pace.classList.add('tick');
+        }
 
         if (startTime) {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -919,36 +926,6 @@
         setInterval(refreshTiltPanel, 900);
     }
 
-    function setupBookmarks() {
-        const container = document.getElementById('bookmarks');
-        const list = document.getElementById('bookmarks-list');
-        if (!container || !list) return;
-        const lines = rawScript.split(/\n/);
-        const sections = [];
-        lines.forEach((line, i) => {
-            const m = line.match(/^##\s+(.+)$/);
-            if (m) sections.push({title: m[1].trim(), lineIndex: i});
-        });
-        if (!sections.length) {
-            container.style.display = 'none';
-            return;
-        }
-        container.style.display = 'block';
-        list.innerHTML = '';
-        sections.forEach(sec => {
-            const span = document.createElement('span');
-            span.textContent = sec.title;
-            span.addEventListener('click', () => {
-                // find closest chunk
-                // simple: jump to first chunk after this line (approximate by word count or just go to 0 for demo)
-                // For real, could store line to chunk map, but simple: scroll to top or first
-                currentIndex = Math.max(0, Math.floor((sec.lineIndex / lines.length) * chunks.length));
-                updateDisplay();
-            });
-            list.appendChild(span);
-        });
-    }
-
     // ─── Player preferences (text size, leading, speed, mode) persist per device ───
     const PREFS_KEY = 'spector_prefs_v1';
     function loadPrefs() {
@@ -1109,6 +1086,14 @@
     }
 
     function init() {
+        // Tester scaffolding (button sim, tilt sim, hardware legend) is opt-in via ?debug —
+        // real users get a clean player. TESTING.md documents the flag for beta testers.
+        const DEBUG = new URLSearchParams(window.location.search).has('debug');
+        if (!DEBUG) {
+            document.querySelectorAll('.glasses-button-test, #desktop-tilt-sim, .glasses-hw-legend')
+                .forEach(el => el.remove());
+        }
+
         if (new URLSearchParams(window.location.search).has('test')) {
             runSpectorCoreTests().then((pass) => {
                 document.body.innerHTML = '<pre id="spector-test-output">' +
@@ -1129,7 +1114,6 @@
         setupMotionPermissionUI();
         setupCustomization();
         setupControlsFade();
-        setupBookmarks();
         setupGlassesButtonSim();
         setupDesktopTiltSim();
         wireGlassButtons();
@@ -1148,7 +1132,7 @@
             setTimeout(() => {
                 const toast = document.createElement('div');
                 toast.className = 'first-run-toast';
-                toast.innerHTML = `Welcome! Try <strong>Comfort</strong> mode for spatial head-tracking effects.<br>Simulate the right-temple button with the <strong>B</strong> key or the button below.`;
+                toast.innerHTML = `A sample script is loaded — just hit <strong>Play</strong>.<br>Then try <strong>Comfort</strong> mode for spatial head-tracking.`;
                 document.body.appendChild(toast);
 
                 toast.classList.add('visible');

@@ -3,10 +3,11 @@
    ═══════════════════════════════════════ */
 
 :root {
-    --bg: #000000;
-    --bg-elevated: #0A0A0A;
-    --bg-card: #080808;
-    --text: #FFFFFF;
+    /* near-black canvas + soft-white text ladder — pure #FFF on pure #000 glares */
+    --bg: #0A0A0C;
+    --bg-elevated: #101012;
+    --bg-card: #0D0D0F;
+    --text: #F4F4F6;
     --text-muted: #A1A1AA;
     --text-dim: #71717A;
     --accent: #7C3AED;
@@ -250,8 +251,143 @@ a.nav-cta:hover {
     font-size: 13px;
     color: var(--text-dim);
     letter-spacing: 0.01em;
-    margin: 0;
+    margin: 14px 0 0;
+    text-align: center;
 }
+
+.btn-hero {
+    font-size: 16px;
+    padding: 16px 32px;
+    box-shadow: 0 0 32px rgba(124, 58, 237, 0.35);
+}
+
+.hero-ghost-link {
+    align-self: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 12px 8px;
+    transition: color 0.2s ease;
+}
+
+.hero-ghost-link:hover { color: var(--text); }
+
+/* ─── Hero live demo — the engine itself as the hero visual ─── */
+.hero-demo {
+    display: block;
+    max-width: 640px;
+    margin: 44px auto 0;
+    padding: 40px 32px 24px;
+    background: var(--bg-elevated);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.25s ease, transform 0.25s var(--transition-smooth);
+    /* no entrance animation — the demo text is the LCP element; fading it in delays LCP */
+}
+
+.hero-demo::before {
+    content: '';
+    position: absolute;
+    inset: -35%;
+    background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.14), transparent 62%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.hero-demo:hover {
+    border-color: rgba(124, 58, 237, 0.4);
+    transform: translateY(-2px);
+}
+
+.hero-demo-line {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.45;
+    padding: 10px 0;
+    transition: opacity 0.5s var(--transition-smooth);
+}
+
+.hero-demo-line.prev,
+.hero-demo-line.next {
+    opacity: 0.18;
+    font-size: 17px;
+}
+
+.hero-demo-line.active {
+    color: var(--text);
+    letter-spacing: -0.01em;
+    text-shadow: 0 0 32px rgba(124, 58, 237, 0.25);
+}
+
+.hd-emphasis {
+    color: #A78BFA;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(167, 139, 250, 0.5);
+    text-underline-offset: 4px;
+}
+
+.hero-demo-footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.hero-demo-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.hero-demo-fill {
+    height: 100%;
+    width: 12%;
+    background: linear-gradient(90deg, var(--accent), #A78BFA);
+    border-radius: var(--radius-pill);
+    transition: width 0.6s var(--transition-smooth);
+}
+
+.hero-demo-pacing {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.hero-demo-pacing.tick {
+    animation: pacingPulse 0.6s ease-out;
+}
+
+@keyframes pacingPulse {
+    0% { color: #A78BFA; }
+    100% { color: var(--text-dim); }
+}
+
+.install-hint {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin: 14px 0 0;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.link-btn:hover { color: var(--accent); }
 
 /* ─── Hero Visual ─── */
 .hero-visual {
@@ -386,13 +522,14 @@ a.nav-cta:hover {
 .feature-icon {
     width: 44px;
     height: 44px;
-    background: var(--accent-subtle);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    color: var(--accent);
+    color: var(--text-muted);
 }
 
 .feature-label {
@@ -1552,10 +1689,24 @@ body.mirror-mode .bookmarks {
 .timer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 10px;
     font-size: 13px;
     color: var(--text-muted);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
+}
+
+.pacing-indicator {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.pacing-indicator.tick {
+    animation: pacingPulse 0.6s ease-out;
 }
 
 /* Speed presets */
@@ -1919,8 +2070,8 @@ body.mirror-mode .bookmarks {
                 transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* hero visual: subtle scroll parallax (transform applied by JS per frame) */
-.hero-visual { will-change: transform; }
+/* hero demo: subtle scroll parallax (transform applied by JS per frame) */
+.hero-demo { will-change: transform; }
 
 /* ─── Market stat strip (Why now) ─── */
 .stat-strip {

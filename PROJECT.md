@@ -48,7 +48,7 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 | **Canonical assets** | Done | Single `public/style.css` (no `styles.css` split) |
 | **Verification** | Done | `tests/run_verification.py` — single entry point, 15 artifacts |
 | **GitHub** | Done | `main` pushed with full revamp + merge of prior remote history |
-| **Git identity** | Done | Global email set to `jeffreynicholas.t@gmail.com` |
+| **Git identity** | Done | Commit attribution configured |
 
 ### Competitive positioning (vs Meta teleprompter)
 

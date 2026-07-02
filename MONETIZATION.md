@@ -1,18 +1,14 @@
 # Spector — Monetization
 
-> **STATUS: PARKED (July 2026).** Field notes from attempting setup, so nobody
-> re-fights these walls:
-> - **Lemon Squeezy** — account created but activation requires a Hong Kong
->   Business Registration Number (Stripe-backed identity check wants a legal
->   business name matching a tax ID). Unlocks if/when a HK sole proprietorship
->   is registered (~HK$2,350/yr via GovHK).
-> - **Gumroad** — account created; the bank-connect flow fails for HK banks.
->   The working path is **Settings → Payments → PayPal** payout (standard for
->   HK creators), then withdraw from PayPal to a local bank. Note: selling can
+> **STATUS: PARKED (July 2026).** Setup notes for whenever this resumes:
+> - **Lemon Squeezy** — activation runs a Stripe-backed identity check that
+>   requires a registered business (legal name matching a tax ID) in some
+>   jurisdictions. If that's a blocker, use Gumroad instead.
+> - **Gumroad** — the bank-connect flow doesn't support every region; the
+>   reliable fallback is **Settings → Payments → PayPal** payout. Selling can
 >   start before payouts are verified — the balance just accrues.
-> - Product copy (name / summary / description for "Spector Pro — Founding
->   Supporter", ~$34 one-time, license keys on) is already written — ask
->   Claude or check the session notes.
+> - Product framing: "Spector Pro — Founding Supporter", one-time ~$34,
+>   license keys enabled (see the pricing rationale below).
 > - **Resume trigger:** the first time someone actually asks to pay. Until
 >   traffic exists, distribution beats checkout.
 

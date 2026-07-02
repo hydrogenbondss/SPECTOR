@@ -32,6 +32,8 @@
 </head>
 <body class="landing">
 
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
     <!-- NAV -->
     <nav class="site-nav">
         <a href="#" class="nav-brand">
@@ -42,9 +44,9 @@
             <span class="nav-indicator" aria-hidden="true"></span>
             <a href="#why-now">Why now</a>
             <a href="#features">Product</a>
-            <a href="#vision">Vision</a>
             <a href="#try">Try it</a>
             <a href="#faq">FAQ</a>
+            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github" id="gh-stars">GitHub</a>
             <a href="#beta" class="nav-cta">Join beta</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -60,20 +62,22 @@
             <h1 class="hero-headline">Eyes <span class="text-purple">Forward.</span></h1>
             <p class="hero-subhead">Spector is the teleprompter that works on <strong>any</strong> smart glasses — Ray-Ban Meta, XREAL, Viture — not just one brand's. Rehearse on your phone, then perform eyes-up on glasses. Free and open source, no account.</p>
             <div class="hero-cta-group">
-                <a href="#try" class="btn-primary">Try it free</a>
-                <a href="#beta" class="btn-secondary">Join the beta →</a>
-                <button id="install-btn" type="button" class="btn-secondary">Install app</button>
+                <a href="app.html" class="btn-primary btn-hero">Try it now — no signup</a>
+                <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="hero-ghost-link">★ Star on GitHub</a>
             </div>
-            <p class="hero-note">No account required · Works today on phone · Built for the glasses HUD · Open source</p>
         </section>
 
-        <!-- HERO VISUAL (demo video) -->
-        <div class="hero-visual">
-            <video class="hero-media" autoplay muted loop playsinline preload="none" width="1600" height="900" poster="images/hero-glasses.webp" aria-label="Spector teleprompter running on smart glasses">
-                <source src="spector-demo.mp4" type="video/mp4">
-                <img src="images/hero-glasses.webp" alt="Spector teleprompter HUD running on Ray-Ban Meta smart glasses" width="1600" height="900">
-            </video>
-        </div>
+        <!-- HERO LIVE DEMO — this is the real engine, not a video -->
+        <a class="hero-demo" id="hero-demo" href="app.html" title="Open the full player">
+            <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
+            <div class="hero-demo-line active" id="hd-active">This is <span class="hd-emphasis">Spector</span> — running live, right now.</div>
+            <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
+            <div class="hero-demo-footer">
+                <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill"></div></div>
+                <span class="hero-demo-pacing" id="hd-pacing">auto-pacing · punctuation-aware</span>
+            </div>
+        </a>
+        <p class="hero-note">This is the actual engine — click it to load a full sample script.</p>
 
         <!-- TRUST BAR -->
         <div class="trust-bar">
@@ -152,8 +156,8 @@
                         </svg>
                     </div>
                     <p class="feature-label">Pacing</p>
-                    <h3>Adaptive speed</h3>
-                    <p>Speeds up and slows with your natural rhythm. Punctuation-aware timing, emphasis holds. No manual scroll ever.</p>
+                    <h3>Auto-paced, punctuation-aware</h3>
+                    <p>Advances at speaking pace on its own — lingering on sentence ends, breathing at commas, holding on <strong>emphasis</strong>. No manual scroll.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -220,76 +224,6 @@
             </div>
         </section>
 
-        <!-- SEE IT IN ACTION -->
-        <section class="demo-section reveal" id="see-it">
-            <div class="section-header">
-                <p class="section-eyebrow">See it in action</p>
-                <h2>The real app, running.</h2>
-            </div>
-            <p class="problem-statement" style="margin-bottom:32px;">No mockups — this is Spector actually playing a script: adaptive pacing, cue emphasis, and the eyes-up HUD. <a href="#try">Try it yourself →</a></p>
-            <div class="demo-player">
-                <video class="demo-media" autoplay muted loop playsinline preload="none" width="606" height="920" poster="images/demo-poster.jpg" aria-label="Screen recording of the Spector teleprompter playing a script with adaptive pacing and cue emphasis">
-                    <source src="spector-real-demo.webm" type="video/webm">
-                    <img src="images/demo-poster.jpg" alt="Spector teleprompter playing a script, with a highlighted line" width="606" height="920">
-                </video>
-            </div>
-        </section>
-
-        <!-- TRACTION -->
-        <section class="traction-section reveal" id="traction">
-            <div class="section-header">
-                <p class="section-eyebrow">Status</p>
-                <h2>Early, live, and open.</h2>
-            </div>
-            <p class="problem-statement" style="margin-bottom:36px;">No vanity metrics — just a working product. Spector runs today, the code is fully open source, and the founding beta just opened. Try it right now and be one of the first to shape it.</p>
-            <div class="traction-support">
-                <span class="traction-pill"><strong>Live today</strong> · try it in your browser now</span>
-                <span class="traction-pill"><strong>4 platforms</strong> · Ray-Ban Meta, XREAL, Viture, Brilliant Labs</span>
-                <span class="traction-pill"><strong>Open source</strong> · public on GitHub</span>
-            </div>
-        </section>
-
-        <!-- VISION / ROADMAP -->
-        <section class="vision-section reveal" id="vision">
-            <div class="section-header">
-                <p class="section-eyebrow">Vision</p>
-                <h2>We start with teleprompter. We don't stop there.</h2>
-            </div>
-            <p class="problem-statement" style="margin-bottom:48px;">
-                Rehearsing and delivering scripted speech is where the pain is sharpest — so that's where we start. From there, the goal is simple: <strong>become the app you open before you speak</strong> on glasses.
-            </p>
-            <div class="roadmap">
-                <div class="roadmap-item">
-                    <div class="roadmap-phase">Now</div>
-                    <div class="roadmap-body">
-                        <h4>Auto-paced teleprompter</h4>
-                        <p>Rehearse on phone, perform on glasses. Live today.</p>
-                    </div>
-                </div>
-                <div class="roadmap-item">
-                    <div class="roadmap-phase">Next</div>
-                    <div class="roadmap-body">
-                        <h4>Live delivery coaching</h4>
-                        <p>Real-time pacing, filler-word, and confidence feedback delivered on-lens as you speak.</p>
-                    </div>
-                </div>
-                <div class="roadmap-item future">
-                    <div class="roadmap-phase">Later</div>
-                    <div class="roadmap-body">
-                        <h4>Translation & live captioning</h4>
-                        <p>Real-time translation and captions in your field of view — speak to anyone, anywhere.</p>
-                    </div>
-                </div>
-                <div class="roadmap-item future">
-                    <div class="roadmap-phase">Vision</div>
-                    <div class="roadmap-body">
-                        <h4>The go-to app for speaking on glasses</h4>
-                        <p>Where you turn to prepare and deliver any talk, pitch, or presentation.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- COMPARISON -->
         <section class="comparison-section reveal">
             <div class="section-header">
@@ -316,6 +250,47 @@
                     </ul>
                 </div>
             </div>
+        </section>
+
+        <!-- DEVICE MATRIX -->
+        <section class="matrix-section reveal" id="devices">
+            <div class="section-header">
+                <p class="section-eyebrow">The honest device matrix</p>
+                <h2>What works on <em>your</em> glasses, today.</h2>
+            </div>
+            <div class="device-matrix">
+                <div class="matrix-row">
+                    <span class="matrix-device">Any phone or computer</span>
+                    <span class="matrix-status works">Full experience</span>
+                    <span class="matrix-how">Rehearse and perform in the browser — everything works right now.</span>
+                </div>
+                <div class="matrix-row">
+                    <span class="matrix-device">XREAL Air / One / Pro</span>
+                    <span class="matrix-status works">Works today</span>
+                    <span class="matrix-how">Use the glasses as your phone or PC display — Spector runs on the big virtual screen.</span>
+                </div>
+                <div class="matrix-row">
+                    <span class="matrix-device">Viture Luma / Pro / Beast</span>
+                    <span class="matrix-status works">Works today</span>
+                    <span class="matrix-how">Same as XREAL — mirror your device, read eyes-up.</span>
+                </div>
+                <div class="matrix-row">
+                    <span class="matrix-device">Ray-Ban Meta Gen 1 / 2</span>
+                    <span class="matrix-status partial">Rehearsal-only</span>
+                    <span class="matrix-how">No display in these glasses — prep on your phone until delivery is second nature.</span>
+                </div>
+                <div class="matrix-row">
+                    <span class="matrix-device">Ray-Ban Meta Display</span>
+                    <span class="matrix-status waiting">Waiting on Meta</span>
+                    <span class="matrix-how">Full on-lens support when Meta opens its glasses app store — SpectorCore is built to port.</span>
+                </div>
+                <div class="matrix-row">
+                    <span class="matrix-device">Even Realities, Brilliant Labs &amp; others</span>
+                    <span class="matrix-status partial">Varies</span>
+                    <span class="matrix-how">Depends on browser or mirroring support — <a href="#beta">beta testers wanted</a>.</span>
+                </div>
+            </div>
+            <p class="matrix-note">We'd rather under-promise: if your device isn't honestly covered here, tell us and we'll test it.</p>
         </section>
 
         <!-- FAQ -->
@@ -414,6 +389,7 @@
                     <button id="launch-btn" class="btn-primary" style="flex:1;">Launch Teleprompter</button>
                     <button id="save-btn" class="btn-secondary">Save</button>
                 </div>
+                <p class="install-hint">Use it often? <button id="install-btn" type="button" class="link-btn">Install as an app</button> — works offline, opens full-screen.</p>
             </div>
         </section>
 
@@ -476,14 +452,23 @@
             </p>
         </section>
 
+        <!-- FOUNDER -->
+        <section class="founder-section reveal" id="founder">
+            <img src="images/founder.jpg" alt="Jeffrey, who builds Spector" class="founder-photo" width="72" height="72" loading="lazy" onerror="this.style.display='none'">
+            <div class="founder-text">
+                <p>Hi — I'm <strong>Jeffrey</strong>. I build Spector on my own, from Hong Kong. It started because I kept watching people (myself included) read <em>at</em> a camera instead of talking to it — and smart glasses finally make that fixable. If you try it, I'd genuinely like to hear what broke or what felt good.</p>
+                <p class="founder-links"><a href="https://github.com/hydrogenbondss" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></p>
+            </div>
+        </section>
+
         <!-- INVESTOR / PARTNER NOTE -->
         <section class="investor-note reveal" id="investors">
-            <p>Building something here. Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a> or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
+            <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
         </section>
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span>&copy; 2026 Spector Labs</span>
+            <span>&copy; 2026 Spector Labs · updated <a id="last-updated" href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">recently</a></span>
             <div class="footer-links">
                 <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank">GitHub</a>
                 <a href="#try">Try it</a>
@@ -995,6 +980,141 @@
             });
         }
 
+        // Proof of life: live GitHub stars in the nav + "updated N days ago" in the footer.
+        // One cached API call; degrades silently to plain "GitHub"/"recently" offline.
+        function initProofOfLife() {
+            const stars = document.getElementById('gh-stars');
+            const updated = document.getElementById('last-updated');
+            const apply = (d) => {
+                if (stars && d.stargazers_count >= 10) stars.textContent = `GitHub ★ ${d.stargazers_count}`;
+                if (updated && d.pushed_at) {
+                    const days = Math.max(0, Math.floor((Date.now() - new Date(d.pushed_at)) / 864e5));
+                    updated.textContent = days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
+                }
+            };
+            try {
+                const cached = JSON.parse(localStorage.getItem('spector_gh') || 'null');
+                if (cached && Date.now() - cached.t < 36e5) { apply(cached.d); return; }
+            } catch {}
+            const go = () => fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
+                .then(r => r.ok ? r.json() : null)
+                .then(d => {
+                    if (!d) return;
+                    const slim = { stargazers_count: d.stargazers_count || 0, pushed_at: d.pushed_at };
+                    try { localStorage.setItem('spector_gh', JSON.stringify({ t: Date.now(), d: slim })); } catch {}
+                    apply(slim);
+                })
+                .catch(() => {});
+            // off the critical path — wait for idle so it never competes with first paint
+            if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 5000 });
+            else setTimeout(go, 3500);
+        }
+
+        // Live hero demo — same pacing rules as the player (mode base × punctuation),
+        // so the hero shows real product behavior instead of a video.
+        function initHeroDemo() {
+            const prev = document.getElementById('hd-prev');
+            const active = document.getElementById('hd-active');
+            const next = document.getElementById('hd-next');
+            const fill = document.getElementById('hd-fill');
+            const pacing = document.getElementById('hd-pacing');
+            if (!prev || !active || !next) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // static frame
+
+            const LINES = [
+                'Good evening, everyone.',
+                'This is <span class="hd-emphasis">Spector</span> — running live, right now.',
+                'No video. No mockup.',
+                'It paces itself to your punctuation…',
+                '…holds on <span class="hd-emphasis">emphasis</span>,',
+                'and breathes at pauses.',
+                'Eyes up. No script-face.',
+                'Works on any smart glasses — and this phone.',
+            ];
+            const ms = (html) => {
+                const text = html.replace(/<[^>]+>/g, '');
+                let base = 2000;
+                if (/[.!?…]$/.test(text)) base *= 1.3;
+                if (/,$/.test(text)) base *= 1.15;
+                if (/hd-emphasis/.test(html)) base *= 1.15;
+                return base;
+            };
+            let i = 1;
+            const step = () => {
+                prev.innerHTML = LINES[(i - 1 + LINES.length) % LINES.length];
+                active.innerHTML = LINES[i % LINES.length];
+                next.innerHTML = LINES[(i + 1) % LINES.length];
+                if (fill) fill.style.width = (((i % LINES.length) + 1) / LINES.length) * 100 + '%';
+                if (pacing) {
+                    pacing.classList.remove('tick');
+                    void pacing.offsetWidth; // restart the pulse
+                    pacing.classList.add('tick');
+                }
+                const delay = ms(LINES[i % LINES.length]);
+                i++;
+                setTimeout(step, delay);
+            };
+            setTimeout(step, 1800);
+        }
+
+        function initMotion() {
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Scroll progress bar (kept even for reduced motion — it's a position indicator)
+            const bar = document.getElementById('scroll-progress');
+            if (bar) {
+                let ticking = false;
+                const update = () => {
+                    const h = document.documentElement;
+                    const max = h.scrollHeight - h.clientHeight;
+                    bar.style.width = (max > 0 ? (window.pageYOffset / max) * 100 : 0) + '%';
+                    ticking = false;
+                };
+                window.addEventListener('scroll', () => {
+                    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+                }, { passive: true });
+                update();
+            }
+
+            if (reduce) return; // no count-up / parallax when reduced motion is requested
+
+            // Count-up the market stats when they scroll into view
+            const countObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    countObserver.unobserve(entry.target);
+                    const el = entry.target;
+                    const m = el.textContent.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
+                    if (!m) return;
+                    const target = parseFloat(m[1]), suffix = m[2], start = performance.now(), dur = 1100;
+                    const tick = (now) => {
+                        const p = Math.min(1, (now - start) / dur);
+                        const eased = 1 - Math.pow(1 - p, 3);
+                        el.textContent = Math.round(target * eased) + suffix;
+                        if (p < 1) requestAnimationFrame(tick);
+                        else el.textContent = m[1] + suffix;
+                    };
+                    requestAnimationFrame(tick);
+                });
+            }, { threshold: 0.6 });
+            document.querySelectorAll('.stat-num').forEach(s => countObserver.observe(s));
+
+            // Subtle hero parallax — the visual lags the scroll a touch
+            const hero = document.querySelector('.hero-demo');
+            if (hero) {
+                let ticking2 = false;
+                const move = () => {
+                    const shift = Math.max(-44, Math.min(44, window.pageYOffset * 0.06));
+                    hero.style.transform = `translateY(${shift}px)`;
+                    ticking2 = false;
+                };
+                window.addEventListener('scroll', () => {
+                    if (!ticking2) { ticking2 = true; requestAnimationFrame(move); }
+                }, { passive: true });
+                move();
+            }
+        }
+
         function init() {
             initFileUpload();
             initButtons();
@@ -1002,6 +1122,9 @@
             initCueToolbar();
             renderLibrary();
             renderHistory();
+            initHeroDemo();
+            initProofOfLife();
+            initMotion();
             registerServiceWorker();
             initInstallPrompt();
             wireGlassButtons();

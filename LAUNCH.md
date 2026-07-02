@@ -29,12 +29,12 @@ accounts/logins (Google, a payment provider, your social handles) — no code.
    const CHECKOUT_URL = 'https://YOURSTORE.lemonsqueezy.com/buy/XXXXXXXX';
    const SPONSOR_URL  = 'https://github.com/sponsors/hydrogenbondss';
    ```
-   *(Paste these to me and I'll commit them, or edit + push yourself.)*
+   *(One-line edit + deploy once the store exists.)*
 
 ## 2. Get indexed by Google (~5 min, your login)
 
 1. **search.google.com/search-console** → Add property → **URL prefix** `https://spectorlabs.io`.
-2. Verify with the **HTML tag** method → paste me the `<meta google-site-verification>` snippet and I'll add it to the site; then click **Verify**.
+2. Verify with the **HTML tag or HTML file** method (the verification file already ships in `public/`); then click **Verify**.
 3. **Sitemaps** → enter `sitemap.xml` → **Submit**.
 4. **URL Inspection** → request indexing for each device page.
 

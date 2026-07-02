@@ -403,9 +403,9 @@
 
         <!-- HISTORY -->
         <section class="history-section" id="history-section" style="display:none;margin-top:8px;">
-            <h3 style="font-size:14px;font-weight:600;color:#71717A;margin:0 0 8px;letter-spacing:0.04em;text-transform:uppercase;">Recent rehearsals</h3>
+            <h3 style="font-size:14px;font-weight:600;color:#85858E;margin:0 0 8px;letter-spacing:0.04em;text-transform:uppercase;">Recent rehearsals</h3>
             <div id="history-list" style="font-size:12px;color:#888;"></div>
-            <div style="font-size:10px;color:#8a8a8a;margin-top:4px;">Local only. Cloud sync planned.</div>
+            <div style="font-size:10px;color:#85858E;margin-top:4px;">Stored only in this browser — nobody else can see these. <button id="clear-history" class="link-btn" style="font-size:10px;">Clear history</button></div>
         </section>
 
         <!-- SUPPORT / PRO -->
@@ -1138,6 +1138,13 @@
 
             const betaForm = document.getElementById('beta-form');
             if (betaForm) betaForm.addEventListener('submit', handleBetaSubmit);
+
+            const clearHistory = document.getElementById('clear-history');
+            if (clearHistory) clearHistory.addEventListener('click', () => {
+                try { localStorage.removeItem('spector_runs_v1'); } catch {}
+                const section = document.getElementById('history-section');
+                if (section) section.style.display = 'none';
+            });
 
             const draft = localStorage.getItem('spector_draft');
             if (draft) {

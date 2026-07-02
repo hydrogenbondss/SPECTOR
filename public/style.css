@@ -9,7 +9,7 @@
     --bg-card: #0D0D0F;
     --text: #F4F4F6;
     --text-muted: #A1A1AA;
-    --text-dim: #71717A;
+    --text-dim: #85858E; /* ≥4.5:1 on the near-black canvas (was #71717A, which passed only on pure #000) */
     --accent: #7C3AED;
     --accent-hover: #6D28D9;
     --accent-subtle: rgba(124, 58, 237, 0.10);

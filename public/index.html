@@ -68,7 +68,7 @@
         </section>
 
         <!-- HERO LIVE DEMO — this is the real engine, not a video -->
-        <a class="hero-demo" id="hero-demo" href="app.html" aria-label="Live preview of the Spector teleprompter — click to open the full player">
+        <a class="hero-demo" id="hero-demo" href="app.html" title="Open the full player">
             <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
             <div class="hero-demo-line active" id="hd-active">This is <span class="hd-emphasis">Spector</span> — running live, right now.</div>
             <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
@@ -258,33 +258,33 @@
                 <p class="section-eyebrow">The honest device matrix</p>
                 <h2>What works on <em>your</em> glasses, today.</h2>
             </div>
-            <div class="device-matrix" role="table" aria-label="Device compatibility">
-                <div class="matrix-row" role="row">
+            <div class="device-matrix">
+                <div class="matrix-row">
                     <span class="matrix-device">Any phone or computer</span>
                     <span class="matrix-status works">Full experience</span>
                     <span class="matrix-how">Rehearse and perform in the browser — everything works right now.</span>
                 </div>
-                <div class="matrix-row" role="row">
+                <div class="matrix-row">
                     <span class="matrix-device">XREAL Air / One / Pro</span>
                     <span class="matrix-status works">Works today</span>
                     <span class="matrix-how">Use the glasses as your phone or PC display — Spector runs on the big virtual screen.</span>
                 </div>
-                <div class="matrix-row" role="row">
+                <div class="matrix-row">
                     <span class="matrix-device">Viture Luma / Pro / Beast</span>
                     <span class="matrix-status works">Works today</span>
                     <span class="matrix-how">Same as XREAL — mirror your device, read eyes-up.</span>
                 </div>
-                <div class="matrix-row" role="row">
+                <div class="matrix-row">
                     <span class="matrix-device">Ray-Ban Meta Gen 1 / 2</span>
                     <span class="matrix-status partial">Rehearsal-only</span>
                     <span class="matrix-how">No display in these glasses — prep on your phone until delivery is second nature.</span>
                 </div>
-                <div class="matrix-row" role="row">
+                <div class="matrix-row">
                     <span class="matrix-device">Ray-Ban Meta Display</span>
                     <span class="matrix-status waiting">Waiting on Meta</span>
                     <span class="matrix-how">Full on-lens support when Meta opens its glasses app store — SpectorCore is built to port.</span>
                 </div>
-                <div class="matrix-row" role="row">
+                <div class="matrix-row">
                     <span class="matrix-device">Even Realities, Brilliant Labs &amp; others</span>
                     <span class="matrix-status partial">Varies</span>
                     <span class="matrix-how">Depends on browser or mirroring support — <a href="#beta">beta testers wanted</a>.</span>
@@ -997,7 +997,7 @@
                 const cached = JSON.parse(localStorage.getItem('spector_gh') || 'null');
                 if (cached && Date.now() - cached.t < 36e5) { apply(cached.d); return; }
             } catch {}
-            fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
+            const go = () => fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
                 .then(r => r.ok ? r.json() : null)
                 .then(d => {
                     if (!d) return;
@@ -1006,6 +1006,9 @@
                     apply(slim);
                 })
                 .catch(() => {});
+            // off the critical path — wait for idle so it never competes with first paint
+            if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 5000 });
+            else setTimeout(go, 3500);
         }
 
         // Live hero demo — same pacing rules as the player (mode base × punctuation),

@@ -34,7 +34,7 @@ Dark-first. Black canvas, white text, a single purple accent. No second accent.
 | `--bg-card` | `#0D0D0F` | Nested/inset surfaces |
 | `--text` | `#F4F4F6` | Primary text, active teleprompter line (soft white, not `#FFF`) |
 | `--text-muted` | `#A1A1AA` | Secondary copy |
-| `--text-dim` | `#71717A` | Labels, captions, metadata |
+| `--text-dim` | `#85858E` | Labels, captions, metadata (kept ≥4.5:1 contrast on the near-black canvas) |
 | `--accent` | `#7C3AED` | Primary purple — CTAs, links, emphasis |
 | `--accent-hover` | `#6D28D9` | Hover / gradient end |
 | `--accent-subtle` | `rgba(124,58,237,0.10)` | Tinted fills |

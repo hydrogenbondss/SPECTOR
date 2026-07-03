@@ -895,7 +895,7 @@
             const email = formData.get('email');
             const glasses = formData.get('glasses') || '';
             const message = formData.get('message') || '';
-            const subject = encodeURIComponent('SPECTOR Beta Request');
+            const subject = encodeURIComponent('Spector Beta Request');
             const body = encodeURIComponent(`Email: ${email}\nGlasses model: ${glasses}\n\nNotes: ${message}`);
             window.location.href = `mailto:hello@spectorlabs.io?subject=${subject}&body=${body}`;
         }

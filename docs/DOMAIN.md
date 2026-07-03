@@ -80,7 +80,7 @@ Acquiring the domain is a strong signal of commitment. Immediate next:
 - Domain squatting: Act fast if you decide.
 - SEO: Old Vercel URLs will lose juice — set up proper redirects.
 - Cost: Domain ~$10-100+/yr depending on .com premium; hosting on Vercel free tier is fine for PWA.
-- Legal: The current "Spector™" claim in UI — ensure you own or have rights to the mark in your jurisdictions.
+- Legal: the ™ styling was dropped everywhere (July 2026, see BRAND.md — plain "Spector" in prose). If a registered mark is ever pursued, revisit then.
 
 **Current status (spectorlabs.io live):**
 - Domain purchased via Namecheap and connected to Vercel (site live at https://www.spectorlabs.io/).

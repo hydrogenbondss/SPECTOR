@@ -29,7 +29,7 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 | **Mirror mode** | Done | Toggle for camera/mirror-facing setups |
 | **Cue markers** | Done | `**emphasis**`, `[pause]`, `[pause:3s]` inline syntax |
 | **Rehearsal analytics** | Done | End-screen pacing %, hesitations, slowest chunk |
-| **PWA / offline** | Done | `manifest.json`, `sw.js` v6, offline shell verified |
+| **PWA / offline** | Done | `manifest.json`, `sw.js` v7, offline shell verified |
 | **iOS motion fix** | Done | `ensureMotionForPlayback()` skips motion setup when already bound |
 | **Meta positioning** | Done | Landing “Glasses & Future” section; compatibility notes, not hardware sales |
 | **Modular core** | Done | `window.SpectorCore` — chunk registry, hooks, `createMotion()` |
@@ -138,7 +138,7 @@ SPECTOR/
 │   ├── app.html        # Player + SpectorCore + ?test harness
 │   ├── style.css       # Canonical styles (landing + glasses mode)
 │   ├── manifest.json   # PWA manifest
-│   ├── sw.js           # Service worker v6
+│   ├── sw.js           # Service worker v7
 │   └── sw-prime.html   # SW registration helper
 ├── tests/
 │   └── run_verification.py

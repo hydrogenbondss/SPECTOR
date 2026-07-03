@@ -462,7 +462,7 @@
 
         <!-- INVESTOR / PARTNER NOTE -->
         <section class="investor-note reveal" id="investors">
-            <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
+            <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/docs/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
         </section>
 
         <!-- FOOTER -->
@@ -530,7 +530,7 @@
             if (activate && keyInput) activate.addEventListener('click', () => {
                 const key = keyInput.value.trim();
                 // NOTE: local activation only. For real enforcement, validate the key
-                // against the Lemon Squeezy License API first (see MONETIZATION.md).
+                // against the Lemon Squeezy License API first (see docs/MONETIZATION.md).
                 if (key.length < 8) {
                     if (status) status.textContent = 'That key doesn\'t look right — check the email from your purchase.';
                     return;

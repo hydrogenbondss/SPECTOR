@@ -561,7 +561,7 @@ def spector_deliverable_paths() -> list[str]:
         "public/index.html", "public/app.html", "public/style.css",
         "public/manifest.json", "public/sw.js", "public/sw-prime.html",
         "public/verify-sw.html", "vercel.json", "tests/run_verification.py",
-        "PROJECT.md", "TESTING.md",
+        "docs/PROJECT.md", "TESTING.md",
     ]
 
 

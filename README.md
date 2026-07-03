@@ -1,6 +1,9 @@
 # Spector™ • Eyes Forward
 
-**Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.**
+**Talk to camera. Not to your notes.**
+
+Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.
+Free core, forever. No account, no cloud, nothing uploaded — ever.
 
 [![Live Demo](https://img.shields.io/badge/Live-spectorlabs.io-000?style=flat-square)](https://spectorlabs.io)
 [![PWA](https://img.shields.io/badge/PWA-Installable-000?style=flat-square)](https://spectorlabs.io)

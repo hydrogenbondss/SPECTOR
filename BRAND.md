@@ -13,9 +13,15 @@ across the landing + player — keep this doc and the CSS in lock-step.
 
 - **Name:** Spector (stylized `Spector™` in product UI; `SPECTOR` in the nav
   wordmark and repo).
-- **Tagline:** **Eyes Forward.** — "Forward" is set in the accent purple.
+- **Headline hierarchy:** lead with the job-to-be-done, not the competitive
+  attribute claim — **"Talk to camera. Not to your notes."** is the hero H1.
+  **"Eyes Forward"** is kept as the hero badge/brand tagline (earned equity,
+  demoted from primary hook — see `BRANDING.md` §2 for the reasoning).
 - **One-liner:** *The auto-paced teleprompter built for smart glasses. Rehearse
   on your phone, perform on glasses.*
+- **The permanent promise** (state verbatim, everywhere — README, landing
+  footer, FAQ, never paraphrased): **"Free core, forever. No account, no
+  cloud, nothing uploaded — ever."**
 - Always write **Spector**, never "the Spector app" or "Spector Labs product."
   Footer entity line: `© Spector Labs`.
 

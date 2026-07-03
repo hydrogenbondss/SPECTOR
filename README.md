@@ -1,6 +1,9 @@
 # Spector™ • Eyes Forward
 
-**Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.**
+**Talk to camera. Not to your notes.**
+
+Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.
+Free core, forever. No account, no cloud, nothing uploaded — ever.
 
 [![Live Demo](https://img.shields.io/badge/Live-spectorlabs.io-000?style=flat-square)](https://spectorlabs.io)
 [![PWA](https://img.shields.io/badge/PWA-Installable-000?style=flat-square)](https://spectorlabs.io)
@@ -187,13 +190,11 @@ Explicit non-goals for now: native mobile binaries, accounts/backend, proprietar
 
 ## Contributing
 
-This is early. Issues and PRs welcome once public. Focus areas right now: real-glasses feedback, cue authoring UX, analytics depth, and making the "why Spector" story instantly clear to new visitors.
+This is early. Issues and PRs welcome. Focus areas right now: real-glasses feedback, cue authoring UX, analytics depth, and making the "why Spector" story instantly clear to new visitors.
 
 ---
 
 ## License & Disclaimer
-
-*(License to be added in next commit — currently MIT intent for ecosystem friendliness.)*
 
 Spector sells **teleprompter software only**. Not smart glasses, not Meta hardware, not affiliated with Meta Platforms, EssilorLuxottica, or Ray-Ban.
 
@@ -205,5 +206,3 @@ Live: https://spectorlabs.io
 Status: [PROJECT.md](PROJECT.md)  
 Testing on glasses: [TESTING.md](TESTING.md)  
 Source: [github.com/hydrogenbondss/SPECTOR](https://github.com/hydrogenbondss/SPECTOR)
-
-*Last updated: June 2026 (README refresh for visibility + education).*

@@ -21,6 +21,12 @@ Spector is a premium digital teleprompter PWA (software only). It gives creators
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute, testing instructions, and development notes.
 
+Questions, ideas, or just want to show what you built with it? Use
+[GitHub Discussions](https://github.com/hydrogenbondss/SPECTOR/discussions)
+rather than opening an issue. See [CHANGELOG.md](CHANGELOG.md) for what's
+shipped, or [Watch](https://github.com/hydrogenbondss/SPECTOR/subscription)
+the repo for release notifications.
+
 License: [MIT](LICENSE)
 
 ---

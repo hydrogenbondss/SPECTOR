@@ -11,8 +11,11 @@ across the landing + player — keep this doc and the CSS in lock-step.
 
 ## 1. Name & wordmark
 
-- **Name:** Spector (stylized `Spector™` in product UI; `SPECTOR` in the nav
-  wordmark and repo).
+- **Name:** **Spector** — plain title case, everywhere in prose (site copy,
+  README, docs, emails, posts). No ™, ever — it reads as legal pretension the
+  voice doesn't want. ALL-CAPS `SPECTOR` is reserved for exactly one role:
+  the letterspaced nav wordmark (a graphic lockup, not a spelling). The repo
+  name `SPECTOR` stays as-is and reads as that same lockup.
 - **Headline hierarchy:** lead with the job-to-be-done, not the competitive
   attribute claim — **"Talk to camera. Not to your notes."** is the hero H1.
   **"Eyes Forward"** is kept as the hero badge/brand tagline (earned equity,

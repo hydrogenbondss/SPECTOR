@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v6';
+const CACHE = 'spector-v7'; // bumped so returning visitors' caches drop the pre-fix comfort-comparison image
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {

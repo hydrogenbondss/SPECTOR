@@ -1,6 +1,6 @@
-# Contributing to SPECTOR 
+# Contributing to Spector
 
-Thank you for your interest in contributing to SPECTOR!
+Thank you for your interest in contributing to Spector!
 
 ## Code of Conduct
 

@@ -30,7 +30,7 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 - Corrected a hardware-support claim that overstated readiness versus the
   site's own honest device matrix, and fixed two self-contradictions in the
   README.
-- Published `BRANDING.md` — the project's branding and marketing plan.
+- Published the branding and marketing plan (now at `docs/BRANDING.md`).
 
 ## 2026-07-02
 

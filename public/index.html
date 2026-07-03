@@ -731,9 +731,11 @@
                     const insert = btn.dataset.insert;
                     if (insert === '**') {
                         insertAtCursor(ta, '**text**');
-                        const pos = ta.selectionStart - 4;
-                        ta.selectionStart = pos;
-                        ta.selectionEnd = pos + 4;
+                        // Cursor now sits right after the inserted "**text**" (8 chars);
+                        // select just "text" so typing over it replaces the word, not the markers.
+                        const end = ta.selectionStart;
+                        ta.selectionStart = end - 6;
+                        ta.selectionEnd = end - 2;
                     } else {
                         insertAtCursor(ta, insert);
                     }
@@ -843,13 +845,15 @@
             });
             btn.addEventListener('click', async () => {
                 if (deferredInstallPrompt) {
-                    deferredInstallPrompt.prompt();
-                    const { outcome } = await deferredInstallPrompt.userChoice;
-                    if (outcome === 'accepted') {
-                        btn.textContent = 'Installed ✓';
-                        btn.style.opacity = '0.7';
-                        btn.disabled = true;
-                    }
+                    try {
+                        deferredInstallPrompt.prompt();
+                        const { outcome } = await deferredInstallPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            btn.textContent = 'Installed ✓';
+                            btn.style.opacity = '0.7';
+                            btn.disabled = true;
+                        }
+                    } catch {}
                     deferredInstallPrompt = null;
                     return;
                 }
@@ -1172,7 +1176,16 @@
             } catch {}
         }
 
-        window.onload = init;
+        // DOMContentLoaded, not window.onload: init() only needs the DOM parsed, not
+        // every resource finished — onload waits on the Google Fonts stylesheet too,
+        // and that request hangs indefinitely (no error, just pending) for any visitor
+        // whose network/extensions block fonts.googleapis.com, which would otherwise
+        // leave every button and form on the page permanently non-functional.
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 
     <!-- Vercel Web Analytics (enable "Web Analytics" in the Vercel project dashboard for data to flow) -->

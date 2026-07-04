@@ -1079,13 +1079,12 @@
             document.getElementById('save-end-btn').textContent = 'Saved ✓';
         };
         document.getElementById('export-btn').onclick = () => {
-            const summary = `Script: ${rawScript.slice(0,100)}...\n\nChunks: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
-            navigator.clipboard.writeText(summary).then(() => {
-                const btn = document.getElementById('export-btn');
-                const orig = btn.textContent;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = orig, 1500);
-            });
+            const summary = `Script:\n${rawScript}\n\nChunks: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
+            const btn = document.getElementById('export-btn');
+            const orig = btn.textContent;
+            const flash = (label) => { btn.textContent = label; setTimeout(() => btn.textContent = orig, 1500); };
+            if (!navigator.clipboard) { flash('Copy not supported here'); return; }
+            navigator.clipboard.writeText(summary).then(() => flash('Copied!')).catch(() => flash('Copy failed'));
         };
         document.getElementById('new-script-btn').onclick = () => window.location.href = 'index.html';
         document.getElementById('exit-end-btn').onclick = () => window.location.href = 'index.html';

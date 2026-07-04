@@ -18,6 +18,10 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
   nothing — text rendered normally instead of mirrored. Now flips
   correctly for mirror/teleprompter-glass setups, with controls staying
   upright as intended.
+- Fixed "Copy Script + Stats" on the end screen: it was only copying a
+  100-character snippet of the script, not the full text — now copies
+  the whole thing, and fails gracefully instead of throwing if the
+  clipboard API isn't available.
 
 ## v1.3 — 2026-07-04
 

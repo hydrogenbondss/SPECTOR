@@ -64,6 +64,8 @@
         <button class="mode-btn" data-mode="presentation">Presentation</button>
     </div>
 
+    <div class="bookmarks hidden" id="bookmarks-bar" aria-label="Jump to section"></div>
+
     <div class="glasses-hw-legend">
         <span class="hw-title">Hardware controls</span>
         <span class="hw-detail">Ray-Ban Meta Display: right temple <strong>button</strong> (single press) = advance chunk • touch = pause/scroll • <span class="future">Neural Band coming</span></span>
@@ -242,18 +244,27 @@
         return escaped
             .replace(/\*\*([^*]+)\*\*/g, '<span class="cue-emphasis">$1</span>')
             .replace(/\[emphasis\]/gi, '')
-            .replace(/\[pause(?::\d+s)?\]/gi, '<span class="cue-pause" aria-hidden="true">⏸</span>');
+            .replace(/\[pause(?::\d+s)?\]/gi, '<span class="cue-pause" aria-hidden="true">⏸</span>')
+            .replace(/\[section:([^\]]+)\]/g, '$1');
     }
 
     function hybridChunkWithCues(text) {
         // Capturing group keeps each matched pause tag (with its duration, if any)
         // in the split result instead of discarding it — a plain .split() on the
         // non-capturing version silently drops "[pause:Ns]" down to a bare "[pause]".
-        const segments = text.split(/(\[pause(?::\d+s)?\])/i);
+        // A "## Section" header line is captured the same way, then converted to
+        // its own atomic [section:Label] chunk below — it must never be merged
+        // into surrounding sentences by the hybrid chunker.
+        const segments = text.split(/(\[pause(?::\d+s)?\]|^##[ \t]+[^\r\n]+$)/im);
         const out = [];
         segments.forEach((seg) => {
             if (/^\[pause(?::\d+s)?\]$/i.test(seg)) {
                 out.push(seg);
+                return;
+            }
+            const headerMatch = seg.match(/^##[ \t]+([^\r\n]+)$/);
+            if (headerMatch) {
+                out.push(`[section:${headerMatch[1].trim()}]`);
                 return;
             }
             const trimmed = seg.trim();
@@ -416,6 +427,7 @@
     let lastChunkAdvanceAt = 0;
     let rehearsalTimings = [];
     let mirrorEnabled = false;
+    let sectionBookmarks = [];
 
     const kalmanBeta = new KalmanFilter();
     const kalmanGamma = new KalmanFilter();
@@ -451,14 +463,59 @@
     function render() {
         const container = document.getElementById('script-text');
         container.innerHTML = '';
+        sectionBookmarks = [];
         chunks.forEach((chunk, index) => {
             const div = document.createElement('div');
             div.className = 'chunk';
             if (/^\[pause\]$/i.test((chunk || '').trim())) div.classList.add('cue-pause-chunk');
+            const sectionMatch = (chunk || '').match(/^\[section:([^\]]+)\]$/);
+            if (sectionMatch) {
+                div.classList.add('section-chunk');
+                sectionBookmarks.push({ label: sectionMatch[1], index });
+            }
             div.dataset.index = index;
             div.innerHTML = SpectorCore.formatChunkHtml(chunk);
             container.appendChild(div);
         });
+        renderBookmarks();
+    }
+
+    function renderBookmarks() {
+        const bar = document.getElementById('bookmarks-bar');
+        if (!bar) return;
+        bar.innerHTML = '';
+        if (!sectionBookmarks.length) {
+            bar.classList.add('hidden');
+            return;
+        }
+        bar.classList.remove('hidden');
+        sectionBookmarks.forEach(({ label, index }) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'bookmark-btn';
+            btn.textContent = label;
+            btn.dataset.index = index;
+            btn.addEventListener('click', () => jumpToChunk(index));
+            bar.appendChild(btn);
+        });
+        updateBookmarkHighlight();
+    }
+
+    function updateBookmarkHighlight() {
+        const bar = document.getElementById('bookmarks-bar');
+        if (!bar || !sectionBookmarks.length) return;
+        let activeIndex = -1;
+        sectionBookmarks.forEach(({ index }) => { if (index <= currentIndex) activeIndex = index; });
+        bar.querySelectorAll('.bookmark-btn').forEach((btn) => {
+            btn.classList.toggle('current', parseInt(btn.dataset.index, 10) === activeIndex);
+        });
+    }
+
+    function jumpToChunk(index) {
+        Haptics.tick();
+        currentIndex = Math.max(0, Math.min(chunks.length - 1, index));
+        lastChunkAdvanceAt = Date.now();
+        updateDisplay();
     }
 
     function recordChunkTiming(index, hesitated = false) {
@@ -488,6 +545,7 @@
     function updateDisplay() {
         document.querySelectorAll('.chunk').forEach(el => el.classList.remove('active'));
         const active = document.querySelector(`.chunk[data-index="${currentIndex}"]`);
+        updateBookmarkHighlight();
         if (active) {
             active.classList.add('active');
             const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1270,6 +1328,11 @@
         assert('hybridChunkWithCues preserves tagged pause duration', taggedCueChunks.includes('[pause:7s]'));
         assert('computeMs honors tagged pause duration',
             SpectorCore.getMs('focus', 'normal', '[pause:7s]') >= 7000);
+        const sectionChunks = SpectorCore.hybridChunkWithCues('Intro line.\n## Q&A\nWhat happens next?');
+        assert('hybridChunkWithCues extracts a section header as its own chunk',
+            sectionChunks.includes('[section:Q&A]'));
+        assert('formatChunkHtml strips the section wrapper down to the bare label',
+            SpectorCore.formatChunkHtml('[section:Q&A]') === 'Q&amp;A');
         const emphChunks = SpectorCore.chunk('We can do better. **Nailed it.**', 'hybrid');
         assert('emphasis closing ** survives sentence split',
             emphChunks.some(c => /\*\*[^*]+\*\*/.test(c)));

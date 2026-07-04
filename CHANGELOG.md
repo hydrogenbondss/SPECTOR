@@ -11,6 +11,13 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.5 — 2026-07-04
+
+- Added section bookmarks: mark a `## Section Name` line anywhere in your
+  script and it becomes its own chapter-marker beat in the player, plus a
+  jump button in a new bookmarks bar — tap "Q&A" or "Closing" to skip
+  straight there instead of scrubbing manually.
+
 ## v1.4 — 2026-07-04
 
 - Fixed Mirror mode: a CSS bug had the flipped wrapper's mirroring

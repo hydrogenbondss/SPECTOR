@@ -555,6 +555,13 @@ def step_static_verify():
     if "await ensureMotionForPlayback()" not in app.split("function handlePlayGesture")[1][:300]:
         fail("handlePlayGesture should await ensureMotionForPlayback only when starting")
 
+    css_no_comments = re.sub(r"/\*.*?\*/", "", (PUBLIC / "style.css").read_text(encoding="utf-8"), flags=re.S)
+    for selectors, decl in re.findall(r"([^{}]+)\{([^{}]*)\}", css_no_comments):
+        if "#script-text-wrapper" in selectors and ".chunk" in selectors and "scaleX(-1)" in decl:
+            fail("mirror-mode must not also flip .chunk — it's a descendant of the "
+                 "flipped #script-text-wrapper, so a second scaleX(-1) on it cancels "
+                 "the wrapper's flip and mirror mode renders text unmirrored")
+
 
 def spector_deliverable_paths() -> list[str]:
     return [

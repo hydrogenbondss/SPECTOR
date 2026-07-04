@@ -144,6 +144,7 @@ SPECTOR/
 │   └── run_verification.py
 ├── vercel.json         # { "outputDirectory": "public" }
 ├── TESTING.md          # Real glasses Developer Mode guide
+├── SECURITY.md         # Vulnerability reporting + local self-audit guide
 └── docs/PROJECT.md     # This file
 ```
 

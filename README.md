@@ -100,6 +100,7 @@ Founding testers get Spector Pro free for life.
 - In-browser test harness: open `app.html?test` (expects `SpectorTest: ALL PASS`).
 - Full verifier: `python tests/run_verification.py` (spins up a local server and exercises the PWA/service-worker/test paths).
 - Debug scaffolding (button sim, tilt sim) is behind `app.html?debug` — see [TESTING.md](TESTING.md), which also covers testing on real glasses.
+- Security: see [SECURITY.md](SECURITY.md) to report a vulnerability or run a local self-audit before a release.
 
 Working docs — the project memo, brand guidelines, and go-to-market notes — live
 in [`docs/`](docs/). They're part of building this in public; read them if you're

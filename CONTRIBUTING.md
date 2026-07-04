@@ -30,6 +30,7 @@ Be respectful, inclusive, and focused on building a great tool for people who re
   - What you were testing (e.g., "button advance during Comfort mode")
   - Steps to reproduce
   - Screenshots or screen recordings if possible
+- For security vulnerabilities, don't open a public issue — see [SECURITY.md](SECURITY.md).
 
 ## Development Notes
 
@@ -38,6 +39,7 @@ Be respectful, inclusive, and focused on building a great tool for people who re
 - Core engine (`SpectorCore`) is exposed on `window` for portability.
 - We prioritize a premium feel (glassmorphism, haptics, sounds) while keeping the code simple.
 - New features should consider both phone rehearsal and future glasses HUD use.
+- Before a release, consider a local security self-audit — see [SECURITY.md](SECURITY.md).
 
 ## Open source approach
 

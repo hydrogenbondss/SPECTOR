@@ -11,6 +11,12 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## 2026-07-04
+
+- Added `SECURITY.md`: how to report a vulnerability, plus a guide for
+  running [Shannon](https://github.com/KeygraphHQ/shannon) — an external,
+  optional AI pentesting CLI — against a local dev copy before a release.
+
 ## 2026-07-03
 
 - Fixed a site-wide reliability bug: both the landing page and the player

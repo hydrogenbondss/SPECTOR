@@ -408,17 +408,16 @@
             <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Stored only in this browser — nobody else can see these. <button id="clear-history" class="link-btn" style="font-size:10px;">Clear history</button></div>
         </section>
 
-        <!-- SUPPORT / PRO -->
+        <!-- PRO -->
         <section class="support-section" id="support">
-            <p class="section-eyebrow">Support the build</p>
-            <h2>Back Spector, get Pro for life.</h2>
-            <p>The core teleprompter is <strong>free forever</strong>. If Spector earns a place in how you prepare, become a founding supporter — a one-time unlock that funds development and gives you every Pro feature as it ships: cloud sync across devices, rehearsal history &amp; pacing trends, and script export.</p>
+            <p class="section-eyebrow">Spector Pro</p>
+            <h2>One-time purchase. Lifetime access.</h2>
+            <p>The core teleprompter is <strong>free forever</strong>. Spector Pro is a one-time, $34 purchase that unlocks every Pro feature as it ships: cloud sync across devices, extended rehearsal history &amp; pacing trends, and script export. No subscription, no recurring charge. Full details on the <a href="/pricing">Pricing page</a>.</p>
             <div class="support-cta">
-                <a href="#" id="go-pro-btn" class="btn-primary">Become a founding supporter (~$34, opening soon)</a>
-                <a href="#" id="sponsor-btn" class="btn-secondary">Sponsor instead</a>
+                <a href="#" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34 (opening soon)</a>
             </div>
             <div class="license-box">
-                <span class="license-label">Already a supporter?</span>
+                <span class="license-label">Already purchased?</span>
                 <input type="text" id="license-key" placeholder="Paste your license key" autocomplete="off" spellcheck="false">
                 <button type="button" id="activate-pro" class="btn-secondary">Activate Pro</button>
             </div>
@@ -503,12 +502,10 @@
         const STORAGE_KEY = 'spector_scripts_v1';
 
         // ── Monetization (no backend) ─────────────────────────────────────────
-        // Paste your provider URLs to switch the buttons on. Until then they show
+        // Paste your provider URL to switch the button on. Until then it shows
         // a friendly "coming soon" note instead of navigating to a dead link.
-        // CHECKOUT_URL: your Lemon Squeezy / Gumroad / Stripe buy link.
-        // SPONSOR_URL:  e.g. https://github.com/sponsors/<you> or https://ko-fi.com/<you>
+        // CHECKOUT_URL: your Paddle checkout link (see docs/MONETIZATION.md).
         const CHECKOUT_URL = '';
-        const SPONSOR_URL = '';
 
         function isPro() {
             try { return !!localStorage.getItem('spector_pro'); } catch { return false; }
@@ -518,7 +515,7 @@
             const status = document.getElementById('pro-status');
             const goPro = document.getElementById('go-pro-btn');
             if (isPro()) {
-                if (goPro) { goPro.textContent = 'Founding supporter ✓'; goPro.classList.add('owned'); }
+                if (goPro) { goPro.textContent = 'Spector Pro ✓'; goPro.classList.add('owned'); }
                 if (status) { status.textContent = 'Pro is active on this device ✓'; status.classList.add('active'); }
                 document.body.classList.add('is-pro');
             }
@@ -526,7 +523,6 @@
 
         function initSupport() {
             const goPro = document.getElementById('go-pro-btn');
-            const sponsor = document.getElementById('sponsor-btn');
             const activate = document.getElementById('activate-pro');
             const keyInput = document.getElementById('license-key');
             const status = document.getElementById('pro-status');
@@ -535,19 +531,13 @@
                 e.preventDefault();
                 if (isPro()) return;
                 if (CHECKOUT_URL) window.location.href = CHECKOUT_URL;
-                else if (status) status.textContent = "Checkout isn't live yet — email hello@spectorlabs.io to reserve founding pricing, or join the beta below.";
-            });
-
-            if (sponsor) sponsor.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (SPONSOR_URL) window.open(SPONSOR_URL, '_blank', 'noopener');
-                else if (status) status.textContent = "Not set up yet — email hello@spectorlabs.io if you'd like to sponsor early.";
+                else if (status) status.textContent = "Checkout isn't live yet — email hello@spectorlabs.io to reserve, or join the beta below.";
             });
 
             if (activate && keyInput) activate.addEventListener('click', () => {
                 const key = keyInput.value.trim();
                 // NOTE: local activation only. For real enforcement, validate the key
-                // against the Lemon Squeezy License API first (see docs/MONETIZATION.md).
+                // against Paddle's License API first (see docs/MONETIZATION.md).
                 if (key.length < 8) {
                     if (status) status.textContent = 'That key doesn\'t look right — check the email from your purchase.';
                     return;
@@ -555,7 +545,7 @@
                 try { localStorage.setItem('spector_pro', key); } catch {}
                 keyInput.value = '';
                 reflectProState();
-                if (status) status.textContent = 'Pro activated — thank you for backing Spector ✓';
+                if (status) status.textContent = 'Pro activated ✓';
             });
 
             reflectProState();

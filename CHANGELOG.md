@@ -22,6 +22,9 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
   100-character snippet of the script, not the full text — now copies
   the whole thing, and fails gracefully instead of throwing if the
   clipboard API isn't available.
+- Added a pacing trend chart to "Recent rehearsals" on the landing page —
+  a small line chart across your last 5 runs, so you can see whether
+  pacing consistency is actually improving session to session.
 
 ## v1.3 — 2026-07-04
 

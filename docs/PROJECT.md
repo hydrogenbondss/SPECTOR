@@ -29,7 +29,7 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 | **Mirror mode** | Done | Toggle for camera/mirror-facing setups |
 | **Cue markers** | Done | `**emphasis**`, `[pause]`, `[pause:3s]` inline syntax |
 | **Rehearsal analytics** | Done | End-screen pacing %, hesitations, slowest chunk |
-| **PWA / offline** | Done | `manifest.json`, `sw.js` v7, offline shell verified |
+| **PWA / offline** | Done | `manifest.json`, `sw.js` v8, offline shell verified |
 | **iOS motion fix** | Done | `ensureMotionForPlayback()` skips motion setup when already bound |
 | **Meta positioning** | Done | Landing “Glasses & Future” section; compatibility notes, not hardware sales |
 | **Modular core** | Done | `window.SpectorCore` — chunk registry, hooks, `createMotion()` |
@@ -39,6 +39,9 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 | **Punchier positioning** | Done | Condensed “Glasses & Future” to benefit-led paragraphs |
 | **Actionable beta + presets** | Done | Real mailto beta form with glasses model field; added Wedding Toast + Earnings Call presets |
 | **History clarity** | Done | Local history with explicit note on future cloud sync |
+| **Section bookmarks** | Done | `## Section` lines become chapter-marker chunks + a jump bar in the player |
+| **Rehearsal analytics v2** | Done | Pacing trend chart across last 5 runs, on the landing page's history list |
+| **Say (AAC composer)** | Done (v1) | New page at `/say` — row-column switch-scan speller, single input (tap/Space/B), no camera/translation/backend. See "Accessibility & communication direction" below |
 
 ### Infrastructure & quality
 
@@ -114,10 +117,35 @@ Not Ray-Ban exclusive. Web + PWA approach maximizes compatibility today.
 - [ ] **Optional cloud sync** — scripts across phone ↔ glasses (accounts + thin API)
 - [ ] **Plugin marketplace** — third-party chunk strategies, ASR hooks, language packs
 
+### Accessibility & communication direction
+
+A broader mission thread alongside rehearsal: Spector's display + single-input
+engine is also a communication tool for people who are non-verbal or Deaf.
+Two distinct efforts, deliberately not conflated:
+
+- **Say (shipped, v1):** `/say` — spell a message via row-column switch
+  scanning (a single tap/key/assistive-switch input), then show it large for
+  someone else to read. No camera, no translation, no backend — fits the
+  existing zero-dependency static-PWA architecture exactly. Untested with
+  real AAC users yet; next step is real-world feedback, not more features.
+- **Live translated captions (not started — needs its own plan):** wearer in
+  a foreign country sees the other person's speech live-translated as
+  captions. This is a different category of build, not an incremental
+  feature: continuous mic capture + real-time speech recognition (spotty on
+  Safari/iOS, usually needs connectivity), machine translation (a paid API —
+  meaning a backend proxy, which breaks the current no-server architecture),
+  and likely camera + face-tracking to position captions near the speaker's
+  face. It also changes the privacy story — today's promise is "your own
+  script, never uploaded"; this would mean capturing a *third party's*
+  voice, a different consent question. Needs a deliberate architecture
+  decision (new backend? separate sister app?) before any code — not yet
+  scheduled into a phase above.
+
 ### Explicit non-goals (for now)
 
 - Native App Store / Play Store binaries  
-- Server backend or user accounts (until app store requires it)  
+- Server backend or user accounts (until app store requires it, or until the
+  live-translation direction above gets a real plan)
 - Direct Bluetooth / Neural Band proprietary protocols (unavailable today)  
 - Video recording / multi-device director mode  
 
@@ -136,9 +164,10 @@ SPECTOR/
 ├── public/
 │   ├── index.html      # Landing, script library, positioning
 │   ├── app.html        # Player + SpectorCore + ?test harness
+│   ├── say.html        # Switch-scan AAC composer + ?test harness
 │   ├── style.css       # Canonical styles (landing + glasses mode)
 │   ├── manifest.json   # PWA manifest
-│   ├── sw.js           # Service worker v7
+│   ├── sw.js           # Service worker v8
 │   └── sw-prime.html   # SW registration helper
 ├── tests/
 │   └── run_verification.py

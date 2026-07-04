@@ -60,6 +60,19 @@ Keyboard: `Space`/`K` play/pause, `R` rewind 3 chunks. Tap anywhere outside the 
 
 ---
 
+## Say — switch-scan AAC composer (early)
+
+A separate mode at [/say](https://spectorlabs.io/say): spell out a message
+with a single tap, key press, or assistive switch, then show it large on
+screen for someone else to read. It scans row-by-row, then letter-by-letter
+within the row you pick — the same row-column scanning technique behind
+Stephen Hawking's speech system, not literal brainwave reading. Built for
+people who are non-verbal or Deaf; no camera, no translation, no account —
+same free-forever, nothing-uploaded promise as the rest of Spector. This is
+new and hasn't been tested with real AAC users yet — [feedback welcome](https://github.com/hydrogenbondss/SPECTOR/discussions).
+
+---
+
 ## What works on which glasses, today
 
 Honest answer, kept current on the site's [device matrix](https://spectorlabs.io/#devices):

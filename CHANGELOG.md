@@ -11,6 +11,16 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.6 — 2026-07-04
+
+- Added **Say** (`/say`) — a switch-scan AAC composer for people who are
+  non-verbal or Deaf. Spell a message with a single tap, key press, or
+  assistive switch: it scans row-by-row, then letter-by-letter within the
+  row you pick, then shows the message large on screen for someone else to
+  read. Same row-column scanning technique behind Stephen Hawking's speech
+  system — no camera, no translation, no account. New and untested with
+  real AAC users yet; feedback welcome.
+
 ## v1.5 — 2026-07-04
 
 - Added section bookmarks: mark a `## Section Name` line anywhere in your

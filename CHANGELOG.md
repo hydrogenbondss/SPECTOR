@@ -11,6 +11,14 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.4 — 2026-07-04
+
+- Fixed Mirror mode: a CSS bug had the flipped wrapper's mirroring
+  cancelled out by each line's own counter-flip, so toggling Mirror did
+  nothing — text rendered normally instead of mirrored. Now flips
+  correctly for mirror/teleprompter-glass setups, with controls staying
+  upright as intended.
+
 ## v1.3 — 2026-07-04
 
 - Added a "What's new" panel on the site itself (footer), so updates are

@@ -402,9 +402,10 @@
 
         <!-- HISTORY -->
         <section class="history-section" id="history-section" style="display:none;margin-top:8px;">
-            <h3 style="font-size:14px;font-weight:600;color:#85858E;margin:0 0 8px;letter-spacing:0.04em;text-transform:uppercase;">Recent rehearsals</h3>
-            <div id="history-list" style="font-size:12px;color:#888;"></div>
-            <div style="font-size:10px;color:#85858E;margin-top:4px;">Stored only in this browser — nobody else can see these. <button id="clear-history" class="link-btn" style="font-size:10px;">Clear history</button></div>
+            <h3 style="font-size:14px;font-weight:600;color:var(--text-dim);margin:0 0 8px;letter-spacing:0.04em;text-transform:uppercase;">Recent rehearsals</h3>
+            <div id="history-trend" class="history-trend"></div>
+            <div id="history-list" style="font-size:12px;color:var(--text-dim);"></div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Stored only in this browser — nobody else can see these. <button id="clear-history" class="link-btn" style="font-size:10px;">Clear history</button></div>
         </section>
 
         <!-- SUPPORT / PRO -->
@@ -625,6 +626,7 @@
         function renderHistory() {
             const container = document.getElementById('history-list');
             const section = document.getElementById('history-section');
+            const trend = document.getElementById('history-trend');
             if (!container) return;
             let runs = [];
             try { runs = JSON.parse(localStorage.getItem('spector_runs_v1')) || []; } catch {}
@@ -633,10 +635,29 @@
                 return;
             }
             if (section) section.style.display = '';
+            if (trend) trend.innerHTML = buildPacingTrendSvg(runs);
             container.innerHTML = runs.map(r => {
                 const d = new Date(r.ts).toLocaleDateString();
                 return `<div class="history-item">${d} · ${r.chunks} chunks · ${r.time} min · ${r.wpm} wpm · ${r.pacing} pacing<br><span style="font-size:10px;opacity:0.7;">${escapeHtml(r.scriptPreview)}</span></div>`;
             }).join('');
+        }
+
+        // Pacing trend across recent rehearsals, oldest -> newest (left to right).
+        // `runs` is stored newest-first (unshift), so reverse for chronological order.
+        function buildPacingTrendSvg(runs) {
+            const ordered = [...runs].reverse();
+            const pacings = ordered.map(r => parseInt(r.pacing, 10) || 0);
+            if (pacings.length < 2) return '';
+            const w = 240, h = 44, pad = 6;
+            const stepX = (w - pad * 2) / (pacings.length - 1);
+            const toY = (v) => h - pad - (Math.min(100, Math.max(0, v)) / 100) * (h - pad * 2);
+            const points = pacings.map((v, i) => `${(pad + i * stepX).toFixed(1)},${toY(v).toFixed(1)}`);
+            const [lastX, lastY] = points[points.length - 1].split(',');
+            return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none" role="img" aria-label="Pacing consistency trend across your last ${pacings.length} rehearsals, oldest to most recent">
+                <polyline points="${points.join(' ')}" fill="none" style="stroke:var(--accent);" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="${lastX}" cy="${lastY}" r="3.5" style="fill:#A78BFA;" />
+            </svg>
+            <div style="font-size:10px;color:var(--text-dim);margin:2px 0 8px;">Pacing consistency — oldest → most recent</div>`;
         }
 
         function escapeHtml(str) {

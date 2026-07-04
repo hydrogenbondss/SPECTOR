@@ -1234,6 +1234,10 @@ textarea:focus {
     border-bottom: 1px solid var(--border);
 }
 
+.history-trend svg {
+    display: block;
+}
+
 /* ─── Beta ─── */
 .beta-section {
     padding: 80px 0;

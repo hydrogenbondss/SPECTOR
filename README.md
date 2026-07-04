@@ -116,9 +116,8 @@ Founding testers get Spector Pro free for life.
 - Debug scaffolding (button sim, tilt sim) is behind `app.html?debug` — see [TESTING.md](TESTING.md), which also covers testing on real glasses.
 - Security: see [SECURITY.md](SECURITY.md) to report a vulnerability or run a local self-audit before a release.
 
-Working docs — the project memo, brand guidelines, and go-to-market notes — live
-in [`docs/`](docs/). They're part of building this in public; read them if you're
-curious how a solo project makes its decisions.
+Working docs — project status, brand guidelines, and domain notes — live in
+[`docs/`](docs/).
 
 ---
 

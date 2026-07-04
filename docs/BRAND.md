@@ -19,7 +19,7 @@ across the landing + player — keep this doc and the CSS in lock-step.
 - **Headline hierarchy:** lead with the job-to-be-done, not the competitive
   attribute claim — **"Talk to camera. Not to your notes."** is the hero H1.
   **"Eyes Forward"** is kept as the hero badge/brand tagline (earned equity,
-  demoted from primary hook — see `BRANDING.md` §2 for the reasoning).
+  demoted from primary hook to a supporting badge).
 - **One-liner:** *The auto-paced teleprompter built for smart glasses. Rehearse
   on your phone, perform on glasses.*
 - **The permanent promise** (state verbatim, everywhere — README, landing

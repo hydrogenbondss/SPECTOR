@@ -11,6 +11,13 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.8 — 2026-07-04
+
+- Took `docs/LAUNCH.md`, `docs/BRANDING.md`, and `docs/MONETIZATION.md`
+  out of the public repo — internal launch/marketing/pricing strategy,
+  not something that needs to be publicly readable. `docs/BRAND.md`
+  (visual/voice guidelines) and `docs/PROJECT.md` (roadmap) stay public.
+
 ## v1.7 — 2026-07-04
 
 - Added a dedicated `/pricing` page, plus `/terms`, `/privacy`, and

@@ -41,7 +41,7 @@ Keyboard: `Space`/`K` play/pause, `R` rewind 3 chunks. Tap anywhere outside the 
 |-----------------------|----------------------------------------------------|
 | **Adaptive pacing**   | Hybrid chunking (sentences → ~6-word groups), punctuation-aware timing, speed presets |
 | **Comfort spatial**   | Kalman-filtered device motion → subtle head-tilt translation/rotation/scale + breathing & drift (Comfort mode) |
-| **Cue markers**       | `**emphasis**` (stronger hold + styling), `[pause]`, `[pause:3s]` inline syntax |
+| **Cue markers**       | `**emphasis**` (stronger hold + styling), `[pause]`, `[pause:3s]`, `## Section` inline syntax |
 | **Player modes**      | Comfort (spatial + breathing), Focus (static & crisp), Presentation (larger, bold) |
 | **Rehearsal analytics** | End screen: chunks, time, avg WPM, pacing consistency %, hesitations, slowest moment |
 | **Script library**    | Save, load, delete — stored locally in your browser, file upload + drag/drop |
@@ -56,6 +56,7 @@ Keyboard: `Space`/`K` play/pause, `R` rewind 3 chunks. Tap anywhere outside the 
 | `**word or phrase**` | Visual emphasis + ~12% longer hold         |
 | `[pause]`            | ~2.8s pause chunk (1.8s mid-sentence)      |
 | `[pause:3s]`         | Explicit N-second pause                    |
+| `## Section Name`    | Section header — becomes a jump button in the player |
 
 ---
 

@@ -504,7 +504,7 @@
         // ── Monetization (no backend) ─────────────────────────────────────────
         // Paste your provider URL to switch the button on. Until then it shows
         // a friendly "coming soon" note instead of navigating to a dead link.
-        // CHECKOUT_URL: your Paddle checkout link (see docs/MONETIZATION.md).
+        // CHECKOUT_URL: your Paddle checkout link.
         const CHECKOUT_URL = '';
 
         function isPro() {
@@ -537,7 +537,7 @@
             if (activate && keyInput) activate.addEventListener('click', () => {
                 const key = keyInput.value.trim();
                 // NOTE: local activation only. For real enforcement, validate the key
-                // against Paddle's License API first (see docs/MONETIZATION.md).
+                // against Paddle's License API first.
                 if (key.length < 8) {
                     if (status) status.textContent = 'That key doesn\'t look right — check the email from your purchase.';
                     return;

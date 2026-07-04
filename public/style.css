@@ -1783,9 +1783,11 @@ body.focus-mode .chunk.active {
     text-transform: uppercase;
 }
 
-/* Mirror mode — flip the text, keep controls upright */
-body.mirror-mode #script-container #script-text-wrapper,
-body.mirror-mode #script-container .chunk {
+/* Mirror mode — flip the text, keep controls upright.
+   Only the wrapper flips: each .chunk is a descendant, so giving it its
+   own scaleX(-1) too would cancel the wrapper's flip and mirror mode would
+   render text completely normally instead of mirrored. */
+body.mirror-mode #script-container #script-text-wrapper {
     transform: scaleX(-1);
 }
 

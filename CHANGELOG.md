@@ -11,6 +11,13 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.7 — 2026-07-04
+
+- Added a dedicated `/pricing` page, plus `/terms`, `/privacy`, and
+  `/refund` — Spector's first real legal/pricing pages, needed to verify
+  a payment-provider account (Paddle) for the Founding Supporter tier.
+  Refund policy: 14 days, no questions asked.
+
 ## v1.6 — 2026-07-04
 
 - Added **Say** (`/say`) — a switch-scan AAC composer for people who are

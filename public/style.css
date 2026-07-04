@@ -3008,6 +3008,53 @@ body.say-page {
 .seo-crosslinks a { color: var(--text-muted); }
 .seo-crosslinks a:hover { color: var(--accent); }
 
+/* ─── Legal pages (terms/privacy/refund) ─── */
+.legal-body {
+    max-width: 720px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+}
+
+.legal-body h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 40px 0 12px;
+}
+
+.legal-body h2:first-child {
+    margin-top: 0;
+}
+
+.legal-body p,
+.legal-body li {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.legal-body ul {
+    padding-left: 20px;
+    margin: 0 0 16px;
+}
+
+.legal-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.legal-body code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.legal-page .hero-section {
+    max-width: 720px;
+}
+
 /* ─── See it in action (real app demo) ─── */
 .demo-section {
     text-align: center;

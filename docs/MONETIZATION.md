@@ -1,16 +1,26 @@
 # Spector — Monetization
 
-> **STATUS: PARKED (July 2026).** Setup notes for whenever this resumes:
+> **STATUS: IN PROGRESS (July 2026) — Paddle account verification underway.**
+> - **Paddle** is the chosen provider, replacing the earlier Lemon
+>   Squeezy/Gumroad options below — it's also a Merchant of Record (handles
+>   global VAT/tax and payouts without requiring a registered HK business),
+>   which was the exact blocker documented below for Lemon Squeezy.
+> - `public/pricing.html`, `public/terms.html`, `public/privacy.html`, and
+>   `public/refund.html` now exist and are linked from the site footer —
+>   Paddle's verification flow requires these to exist and be linked before
+>   approving an account. Refund policy: 14 days, no questions asked.
+> - Once Paddle approves the account and a product/price is created, wire
+>   the real checkout link into `public/index.html`'s `go-pro-btn` (see
+>   "Switch it on" below — same idea, different provider).
+> - Product framing: "Spector Pro — Founding Supporter", one-time ~$34
+>   (see the pricing rationale below).
+>
+> Earlier options, kept for reference:
 > - **Lemon Squeezy** — activation runs a Stripe-backed identity check that
 >   requires a registered business (legal name matching a tax ID) in some
->   jurisdictions. If that's a blocker, use Gumroad instead.
+>   jurisdictions. This is what pushed the decision to Paddle instead.
 > - **Gumroad** — the bank-connect flow doesn't support every region; the
->   reliable fallback is **Settings → Payments → PayPal** payout. Selling can
->   start before payouts are verified — the balance just accrues.
-> - Product framing: "Spector Pro — Founding Supporter", one-time ~$34,
->   license keys enabled (see the pricing rationale below).
-> - **Resume trigger:** the first time someone actually asks to pay. Until
->   traffic exists, distribution beats checkout.
+>   reliable fallback is **Settings → Payments → PayPal** payout.
 
 How Spector makes money, and how to switch it on. The guiding rule: **the open-source
 core stays free forever**; money comes from *hosted / account value* layered on top

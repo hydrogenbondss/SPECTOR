@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v7'; // bumped so returning visitors' caches drop the pre-fix comfort-comparison image
+const CACHE = 'spector-v8'; // bumped to add say.html (switch-scan AAC composer) to the offline shell
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {
@@ -11,6 +11,7 @@ function assetUrl(path) {
 const ASSETS = [
     '/index.html',
     '/app.html',
+    '/say.html',
     '/style.css',
     '/manifest.json',
     '/verify-sw.html',
@@ -39,6 +40,7 @@ self.addEventListener('activate', (e) => {
 
 function shellPathFor(pathname) {
     if (pathname.endsWith('app.html')) return '/app.html';
+    if (pathname.endsWith('say.html')) return '/say.html';
     if (pathname.endsWith('index.html') || pathname === '/' || pathname.endsWith('/')) return '/index.html';
     return null;
 }

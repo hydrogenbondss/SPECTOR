@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0A0A0A">
+    <title>Spector • Say — switch-scan AAC composer</title>
+    <meta name="description" content="Spell out what you want to say with a single tap, key, or switch — a free, open-source row-column scanning composer for people who are non-verbal or Deaf, built the same way Stephen Hawking's speech system worked.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="glasses say-page">
+
+    <button class="exit-btn" id="exit-btn">← Exit</button>
+
+    <div class="say-message empty" id="say-message" role="status" aria-live="polite"></div>
+
+    <div class="scan-rows" id="scan-rows"></div>
+
+    <p class="say-hint">Tap anywhere, press <strong>Space</strong>, or press <strong>B</strong> to select the highlighted row — then the highlighted letter.</p>
+
+    <div class="say-controls" id="say-controls">
+        <div class="customize-group">
+            <label for="scan-speed">Scan speed</label>
+            <input type="range" id="scan-speed" min="400" max="2000" step="100" value="900">
+            <span class="customize-value" id="scan-speed-val">900ms</span>
+        </div>
+        <button type="button" class="toggle-chip" id="pause-scan-btn">Pause</button>
+        <button type="button" class="toggle-chip" id="clear-all-btn">Clear all</button>
+    </div>
+
+    <script>
+        // ─── Pure scanning logic (testable without DOM/timers) ───
+        const ROWS = [
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+            ['H', 'I', 'J', 'K', 'L', 'M', 'N'],
+            ['O', 'P', 'Q', 'R', 'S', 'T', 'U'],
+            ['V', 'W', 'X', 'Y', 'Z'],
+            [{ action: 'space', label: 'SPACE' }, { action: 'delete', label: '⌫ DELETE' }, { action: 'clear', label: 'CLEAR' }],
+        ];
+
+        function cellLabel(cell) {
+            return typeof cell === 'string' ? cell : cell.label;
+        }
+
+        function applyCell(message, cell) {
+            if (typeof cell === 'string') return message + cell;
+            if (cell.action === 'space') return message + ' ';
+            if (cell.action === 'delete') return message.slice(0, -1);
+            if (cell.action === 'clear') return '';
+            return message;
+        }
+
+        function nextIndex(current, total) {
+            return (current + 1) % total;
+        }
+
+        const SayCore = { ROWS, cellLabel, applyCell, nextIndex };
+        window.SayCore = SayCore;
+
+        // ─── DOM-facing state machine ───
+        let message = '';
+        let phase = 'row'; // 'row' | 'cell'
+        let rowIndex = 0;
+        let cellIndex = 0;
+        let scanSpeedMs = 900;
+        let scanTimer = null;
+        let paused = false;
+
+        function renderGrid() {
+            const container = document.getElementById('scan-rows');
+            container.innerHTML = '';
+            ROWS.forEach((row, rIdx) => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'scan-row';
+                rowEl.dataset.row = rIdx;
+                row.forEach((cell, cIdx) => {
+                    const cellEl = document.createElement('div');
+                    cellEl.className = 'scan-cell';
+                    cellEl.dataset.row = rIdx;
+                    cellEl.dataset.cell = cIdx;
+                    cellEl.textContent = cellLabel(cell);
+                    rowEl.appendChild(cellEl);
+                });
+                container.appendChild(rowEl);
+            });
+        }
+
+        function renderScanState() {
+            const container = document.getElementById('scan-rows');
+            container.querySelectorAll('.scan-row').forEach((rowEl) => {
+                const rIdx = parseInt(rowEl.dataset.row, 10);
+                rowEl.classList.toggle('row-active', phase === 'row' && rIdx === rowIndex);
+                rowEl.classList.toggle('row-locked', phase === 'cell' && rIdx === rowIndex);
+                rowEl.querySelectorAll('.scan-cell').forEach((cellEl) => {
+                    const cIdx = parseInt(cellEl.dataset.cell, 10);
+                    cellEl.classList.toggle('cell-active',
+                        phase === 'cell' && rIdx === rowIndex && cIdx === cellIndex);
+                });
+            });
+        }
+
+        function renderMessage() {
+            const el = document.getElementById('say-message');
+            el.textContent = message;
+            el.classList.toggle('empty', message.length === 0);
+        }
+
+        function startScanning() {
+            stopScanning();
+            scanTimer = setInterval(advanceScan, scanSpeedMs);
+        }
+
+        function stopScanning() {
+            if (scanTimer) { clearInterval(scanTimer); scanTimer = null; }
+        }
+
+        function restartScanning() {
+            stopScanning();
+            startScanning();
+        }
+
+        function advanceScan() {
+            if (paused) return;
+            if (phase === 'row') {
+                rowIndex = nextIndex(rowIndex, ROWS.length);
+            } else {
+                cellIndex = nextIndex(cellIndex, ROWS[rowIndex].length);
+            }
+            renderScanState();
+        }
+
+        function flashCell(rIdx, cIdx) {
+            const cellEl = document.querySelector(`.scan-cell[data-row="${rIdx}"][data-cell="${cIdx}"]`);
+            if (!cellEl) return;
+            cellEl.classList.add('cell-selected');
+            setTimeout(() => cellEl.classList.remove('cell-selected'), 220);
+        }
+
+        function selectCurrent() {
+            if (paused) return;
+            navigator.vibrate?.([16]);
+            if (phase === 'row') {
+                phase = 'cell';
+                cellIndex = 0;
+                restartScanning();
+                renderScanState();
+                return;
+            }
+            const cell = ROWS[rowIndex][cellIndex];
+            flashCell(rowIndex, cellIndex);
+            message = applyCell(message, cell);
+            renderMessage();
+            phase = 'row';
+            rowIndex = 0;
+            cellIndex = 0;
+            restartScanning();
+            renderScanState();
+        }
+
+        function setupInput() {
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.say-controls') || e.target.closest('.exit-btn')) return;
+                selectCurrent();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+                if (e.code === 'Space' || e.key.toLowerCase() === 'b') {
+                    e.preventDefault();
+                    selectCurrent();
+                }
+            });
+        }
+
+        function setupControls() {
+            const speed = document.getElementById('scan-speed');
+            const speedVal = document.getElementById('scan-speed-val');
+            speed.addEventListener('input', () => {
+                scanSpeedMs = parseInt(speed.value, 10);
+                speedVal.textContent = `${scanSpeedMs}ms`;
+                if (!paused) restartScanning();
+            });
+
+            const pauseBtn = document.getElementById('pause-scan-btn');
+            pauseBtn.addEventListener('click', () => {
+                paused = !paused;
+                pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+                pauseBtn.classList.toggle('active', paused);
+            });
+
+            document.getElementById('clear-all-btn').addEventListener('click', () => {
+                message = '';
+                renderMessage();
+            });
+
+            document.getElementById('exit-btn').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        }
+
+        function init() {
+            renderGrid();
+            renderScanState();
+            renderMessage();
+            setupInput();
+            setupControls();
+            startScanning();
+        }
+
+        async function runSayCoreTests() {
+            const results = [];
+            const assert = (label, condition) => {
+                results.push({ label, pass: !!condition });
+                if (!condition) console.error('[SayTest FAIL]', label);
+            };
+
+            assert('ROWS has 5 rows', ROWS.length === 5);
+            assert('row-column layout covers all 26 letters',
+                ROWS.flat().filter(c => typeof c === 'string').length === 26);
+            assert('applyCell appends a letter', applyCell('HI', 'X') === 'HIX');
+            assert('applyCell space action appends a space', applyCell('HI', { action: 'space' }) === 'HI ');
+            assert('applyCell delete action removes last char', applyCell('HI', { action: 'delete' }) === 'H');
+            assert('applyCell delete on empty string stays empty', applyCell('', { action: 'delete' }) === '');
+            assert('applyCell clear action empties the message', applyCell('HELLO', { action: 'clear' }) === '');
+            assert('nextIndex wraps around at the end', nextIndex(4, 5) === 0);
+            assert('nextIndex advances by one', nextIndex(1, 5) === 2);
+            assert('cellLabel returns the letter itself for plain letters', cellLabel('Q') === 'Q');
+            assert('cellLabel returns the label for action cells', cellLabel({ action: 'space', label: 'SPACE' }) === 'SPACE');
+
+            const allPass = results.every(r => r.pass);
+            window.__sayTestResults = { allPass, results };
+            console.log('[SayTest]', allPass ? 'ALL PASS' : 'FAILURES', results);
+            return allPass;
+        }
+
+        if (new URLSearchParams(window.location.search).has('test')) {
+            runSayCoreTests().then((pass) => {
+                document.body.innerHTML = '<pre id="say-test-output">' +
+                    JSON.stringify(window.__sayTestResults, null, 2) + '</pre>';
+                document.title = pass ? 'SayTest: ALL PASS' : 'SayTest: FAIL';
+            });
+        } else if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

@@ -535,7 +535,7 @@ def step5_positioning():
 def step_static_verify():
     required = [
         ROOT / "vercel.json",
-        PUBLIC / "index.html", PUBLIC / "app.html", PUBLIC / "style.css",
+        PUBLIC / "index.html", PUBLIC / "app.html", PUBLIC / "say.html", PUBLIC / "style.css",
         PUBLIC / "manifest.json", PUBLIC / "sw.js",
     ]
     for p in required:
@@ -555,6 +555,12 @@ def step_static_verify():
     if "await ensureMotionForPlayback()" not in app.split("function handlePlayGesture")[1][:300]:
         fail("handlePlayGesture should await ensureMotionForPlayback only when starting")
 
+    say = (PUBLIC / "say.html").read_text(encoding="utf-8")
+    if "runSayCoreTests().then" not in say:
+        fail("runSayCoreTests should be invoked via .then in test mode")
+    if "window.SayCore" not in say:
+        fail("say.html should expose SayCore on window for testability, matching SpectorCore's pattern")
+
     css_no_comments = re.sub(r"/\*.*?\*/", "", (PUBLIC / "style.css").read_text(encoding="utf-8"), flags=re.S)
     for selectors, decl in re.findall(r"([^{}]+)\{([^{}]*)\}", css_no_comments):
         if "#script-text-wrapper" in selectors and ".chunk" in selectors and "scaleX(-1)" in decl:
@@ -565,7 +571,7 @@ def step_static_verify():
 
 def spector_deliverable_paths() -> list[str]:
     return [
-        "public/index.html", "public/app.html", "public/style.css",
+        "public/index.html", "public/app.html", "public/say.html", "public/style.css",
         "public/manifest.json", "public/sw.js", "public/sw-prime.html",
         "public/verify-sw.html", "vercel.json", "tests/run_verification.py",
         "docs/PROJECT.md", "TESTING.md",

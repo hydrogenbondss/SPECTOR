@@ -3,6 +3,7 @@
   "rewrites": [
     { "source": "/teleprompter-for-xreal", "destination": "/teleprompter-for-xreal.html" },
     { "source": "/teleprompter-for-viture", "destination": "/teleprompter-for-viture.html" },
-    { "source": "/ray-ban-meta-teleprompter", "destination": "/ray-ban-meta-teleprompter.html" }
+    { "source": "/ray-ban-meta-teleprompter", "destination": "/ray-ban-meta-teleprompter.html" },
+    { "source": "/say", "destination": "/say.html" }
   ]
 }

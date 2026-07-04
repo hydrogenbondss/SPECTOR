@@ -9,11 +9,24 @@
 >   `public/refund.html` now exist and are linked from the site footer —
 >   Paddle's verification flow requires these to exist and be linked before
 >   approving an account. Refund policy: 14 days, no questions asked.
+> - **First domain review came back rejected** — Paddle categorized
+>   spectorlabs.io as "Other/Donations" because the site framed the paid
+>   tier as "become a founding supporter" / "back the build," with a
+>   secondary "Sponsor instead" button right next to it. That reads as
+>   charitable giving, not a software purchase, and falls outside Paddle's
+>   Acceptable Use Policy. **Fix applied:** renamed the tier to plain
+>   "Spector Pro" everywhere (site copy, pricing page, terms, refund,
+>   privacy), removed the Sponsor button entirely, and led every mention
+>   with what you get, not why you're giving money. Lesson for future
+>   copy: a Paddle-reviewed domain needs to read unambiguously as "buy this
+>   product for these features," not "support/sponsor/back this project."
+>   Re-submit once this is live on main.
+> - Product framing: **"Spector Pro"**, one-time $34 (see the pricing
+>   rationale below). "Founding Supporter" as a label is retired — it read
+>   as a donation ask to Paddle's reviewer.
 > - Once Paddle approves the account and a product/price is created, wire
 >   the real checkout link into `public/index.html`'s `go-pro-btn` (see
 >   "Switch it on" below — same idea, different provider).
-> - Product framing: "Spector Pro — Founding Supporter", one-time ~$34
->   (see the pricing rationale below).
 >
 > Earlier options, kept for reference:
 > - **Lemon Squeezy** — activation runs a Stripe-backed identity check that
@@ -33,8 +46,8 @@ core stays free forever**; money comes from *hosted / account value* layered on 
 
 ## How the money reaches you
 
-1. A visitor clicks **Become a founding supporter** on the landing (`#support`).
-2. They land on a checkout hosted by your payment provider (Lemon Squeezy / Gumroad / Stripe).
+1. A visitor clicks **Buy Spector Pro** on the landing (`#support`).
+2. They land on a checkout hosted by your payment provider (Paddle).
 3. The provider charges the card and **deposits the money in your bank** on a payout schedule, minus their fee (~5% + processing).
 4. The provider emails the buyer a **license key**.
 5. They paste the key into the "Activate Pro" box; the app stores it and flips Pro on (localStorage).
@@ -47,27 +60,16 @@ No server of yours is required for the MVP. When you outgrow it, add a thin back
 
 The buttons are already wired and ship in a safe "coming soon" state until you add URLs.
 
-1. **Create a seller account.** Recommended: **[Lemon Squeezy](https://www.lemonsqueezy.com/)** — it's a *merchant of record*, so it handles global VAT/sales tax and license keys for you (a big deal for a solo seller). Alternatives: Gumroad (simplest), Stripe Payment Links (lowest fees, but you handle tax/keys).
-2. Create a product: **"Spector Pro — Founding Supporter"**, one-time, ~**$34**. Enable **license keys**.
-3. In [`public/index.html`](public/index.html), set the two constants near the top of the landing `<script>`:
+1. **Create a seller account.** **[Paddle](https://www.paddle.com/)** — it's a *merchant of record*, so it handles global VAT/sales tax and payouts for you without requiring your own registered business.
+2. Create a product: **"Spector Pro"**, one-time, **$34**. Enable **license keys** if Paddle's catalog supports them for this product type.
+3. In [`public/index.html`](public/index.html), set the constant near the top of the landing `<script>`:
    ```js
-   const CHECKOUT_URL = 'https://YOURSTORE.lemonsqueezy.com/buy/XXXXXXXX';
-   const SPONSOR_URL  = 'https://github.com/sponsors/hydrogenbondss'; // or a Ko-fi link
+   const CHECKOUT_URL = 'https://YOURSTORE.paddle.com/checkout/XXXXXXXX';
    ```
-4. Commit, push, deploy. Done — the "Become a founding supporter" button now opens checkout, and pasted keys activate Pro.
+4. Commit, push, deploy. Done — the "Buy Spector Pro" button now opens checkout, and pasted keys activate Pro.
 
 ### Optional: real key validation
-The MVP accepts any well-formed key locally (see the `NOTE` in `initSupport()`). To actually enforce, validate before storing — Lemon Squeezy exposes a browser-callable endpoint:
-```js
-const res = await fetch('https://api.lemonsqueezy.com/v1/licenses/validate', {
-    method: 'POST',
-    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ license_key: key })
-});
-const data = await res.json();
-if (data.valid) { localStorage.setItem('spector_pro', key); }
-```
-This is fine for the browser (the endpoint is designed for it). It's not piracy-proof — a determined user can bypass client-side checks — but that's an acceptable trade for a supporter-oriented v1.
+The MVP accepts any well-formed key locally (see the `NOTE` in `initSupport()`). To actually enforce, validate before storing against Paddle's License/Subscription API (check Paddle's current docs for the exact endpoint and payload shape — it's changed provider, so don't reuse the old Lemon Squeezy example that used to live here). This is not piracy-proof — a determined user can bypass client-side checks — but that's an acceptable trade for a v1.
 
 ---
 
@@ -76,11 +78,17 @@ This is fine for the browser (the endpoint is designed for it). It's not piracy-
 | Offer | Price | When |
 |-------|-------|------|
 | **Free core** | $0 | Now, forever — full teleprompter, Comfort mode, cues, analytics, PWA |
-| **Founding supporter (lifetime Pro)** | ~$34 one-time | Now — funds the build, unlocks all future Pro |
-| **Donations** | any | Now — GitHub Sponsors / Ko-fi as a floor |
+| **Spector Pro (lifetime)** | $34 one-time | Now — unlocks all current + future Pro features |
 | **Pro subscription** | ~$6/mo or ~$48/yr | Later — once a real Pro feature + traffic exist |
 
-Founding beta hardware testers get Pro free for life (already promised on the landing) — honor that; sell the founding tier to everyone else.
+Founding beta hardware testers get Pro free for life (already promised on the landing) — honor that; sell Spector Pro to everyone else.
+
+**No donation/"pay what you want" option on spectorlabs.io.** Paddle's Acceptable
+Use Policy doesn't cover donations, and having one next to the Pro purchase is
+what got the domain's first review rejected (see the status note at the top).
+If a pure-donation option is wanted later, it belongs on a surface Paddle
+doesn't review — e.g. GitHub Sponsors linked only from the GitHub repo itself,
+not from spectorlabs.io.
 
 ---
 

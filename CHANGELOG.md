@@ -15,8 +15,13 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 - Added a dedicated `/pricing` page, plus `/terms`, `/privacy`, and
   `/refund` — Spector's first real legal/pricing pages, needed to verify
-  a payment-provider account (Paddle) for the Founding Supporter tier.
-  Refund policy: 14 days, no questions asked.
+  a payment-provider account (Paddle) for the paid tier. Refund policy:
+  14 days, no questions asked.
+- Renamed the paid tier from "Founding Supporter" to **Spector Pro** and
+  removed the "Sponsor instead" donation button site-wide — Paddle's first
+  review flagged the old framing as donation-like, which falls outside
+  what they can process. Same $34 one-time price, same features; just
+  reads unambiguously as a product purchase now.
 
 ## v1.6 — 2026-07-04
 

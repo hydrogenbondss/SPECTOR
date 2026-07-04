@@ -11,13 +11,23 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
-## 2026-07-04
+## v1.3 — 2026-07-04
 
+- Added a "What's new" panel on the site itself (footer), so updates are
+  visible without leaving the page — not just in this file.
 - Added `SECURITY.md`: how to report a vulnerability, plus a guide for
   running [Shannon](https://github.com/KeygraphHQ/shannon) — an external,
   optional AI pentesting CLI — against a local dev copy before a release.
+- Aligned naming to plain "Spector" everywhere in prose (dropped the ™
+  styling entirely — no registered mark, and it read as legal pretension);
+  ALL-CAPS `SPECTOR` is now reserved solely for the letterspaced nav
+  wordmark. Codified in `docs/BRAND.md`.
+- Bumped the service-worker cache version so returning visitors stop seeing
+  stale cached images after a fix ships (images are served cache-first
+  under a versioned cache — this is why a previous logo fix didn't show up
+  for everyone right away).
 
-## 2026-07-03
+## v1.2 — 2026-07-03
 
 - Fixed a site-wide reliability bug: both the landing page and the player
   gated all interactivity behind `window.onload`, which waits on every
@@ -38,7 +48,7 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
   README.
 - Published the branding and marketing plan (now at `docs/BRANDING.md`).
 
-## 2026-07-02
+## v1.1 — 2026-07-02
 
 - Rebuilt the hero section into a live, real-engine demo (the actual pacing
   logic, cycling real lines) instead of a video.
@@ -49,7 +59,7 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
   stored rehearsal data.
 - Parked monetization setup with field notes for when it resumes.
 
-## 2026-07-01
+## v1.0 — 2026-07-01
 
 - Fixed a regression that had deleted most of the player's own stylesheet.
 - Added the go-live playbook and cross-session player preference persistence.

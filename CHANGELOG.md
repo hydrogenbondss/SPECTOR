@@ -9,6 +9,18 @@ Want to know when something new ships without checking back? **[Watch this
 repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 ("Releases only" is enough) — that's the whole notification system for now.
 
+---
+
+## v1.9 — 2026-07-04
+
+- Visual refinement pass: tightened corner radii (16/24px → 10/14px) for a
+  more precise, engineered feel, switched borders to alpha-white so they
+  adapt to whatever's behind them instead of a flat fixed gray, gave the
+  GitHub star count its own small badge in the nav, and reorganized the
+  footer from a flat link list into categorized columns (Product, Devices,
+  Company, Legal). Primary buttons stay full-pill — this is a refinement,
+  not a redesign.
+
 ## v1.7 — 2026-07-04
 
 - Added a dedicated `/pricing` page, plus `/terms`, `/privacy`, and

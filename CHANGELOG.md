@@ -11,6 +11,16 @@ repo](https://github.com/hydrogenbondss/SPECTOR/subscription)** on GitHub
 
 ---
 
+## v1.9 — 2026-07-04
+
+- Visual refinement pass: tightened corner radii (16/24px → 10/14px) for a
+  more precise, engineered feel, switched borders to alpha-white so they
+  adapt to whatever's behind them instead of a flat fixed gray, gave the
+  GitHub star count its own small badge in the nav, and reorganized the
+  footer from a flat link list into categorized columns (Product, Devices,
+  Company, Legal). Primary buttons stay full-pill — this is a refinement,
+  not a redesign.
+
 ## v1.8 — 2026-07-04
 
 - Took `docs/LAUNCH.md`, `docs/BRANDING.md`, and `docs/MONETIZATION.md`

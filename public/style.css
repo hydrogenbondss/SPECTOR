@@ -14,10 +14,10 @@
     --accent-hover: #6D28D9;
     --accent-subtle: rgba(124, 58, 237, 0.10);
     --accent-glow: rgba(124, 58, 237, 0.25);
-    --border: #1A1A1A;
-    --border-hover: #2A2A2A;
-    --radius: 16px;
-    --radius-lg: 24px;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.14);
+    --radius: 10px;
+    --radius-lg: 14px;
     --radius-pill: 9999px;
     --chunk-size: 31px;
     --chunk-leading: 1.55;
@@ -391,8 +391,25 @@ a.nav-cta:hover {
 
 /* ─── Proof of life: nav GitHub badge ─── */
 .nav-github {
-    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     white-space: nowrap;
+}
+
+.nav-star-badge {
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 2px 9px;
+}
+
+.nav-star-badge.hidden {
+    display: none;
 }
 
 /* ─── Honest device matrix ─── */
@@ -1345,15 +1362,73 @@ textarea:focus {
 
 /* ─── Footer ─── */
 .site-footer {
-    padding: 40px 0;
+    padding: 48px 0 32px;
     border-top: 1px solid var(--border);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     font-size: 13px;
     color: var(--text-dim);
-    flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
+}
+
+.footer-columns {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 32px;
+    width: 100%;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.footer-col h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    margin: 0 0 4px;
+}
+
+.footer-col a {
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.footer-col a:hover {
+    color: var(--text);
+}
+
+.footer-brand-col .nav-wordmark {
+    font-size: 15px;
+}
+
+.footer-brand-col p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin: 10px 0 0;
+}
+
+.footer-brand-col a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+    .footer-columns {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+    }
+    .footer-brand-col {
+        grid-column: 1 / -1;
+    }
 }
 
 .footer-links {

@@ -178,19 +178,29 @@
         reset() { this.X = 0; this.P = 1; }
     }
 
+    // Placeholder for a decimal point mid-number (e.g. "3.5") so the sentence
+    // splitter below doesn't mistake it for a sentence terminator; restored
+    // after splitting. Null char is never legitimate script input.
+    const DECIMAL_PLACEHOLDER = '\u0000';
+
     function splitSentences(text) {
+        const protectedText = (text || '').replace(/(\d)\.(\d)/g, `$1${DECIMAL_PLACEHOLDER}$2`);
         const sentences = [];
-        const regex = /[^.!?]+[.!?]+/g;
+        // Trailing ["'”’)]* after the terminator keeps a closing quote/paren
+        // attached to the sentence it closes (`"Hello!" she said.` would
+        // otherwise orphan the closing " onto the front of the next sentence).
+        const regex = /[^.!?]+[.!?]+["'”’)]*/g;
         let match;
         let lastIndex = 0;
-        while ((match = regex.exec(text)) !== null) {
+        while ((match = regex.exec(protectedText)) !== null) {
             sentences.push(match[0]);
             lastIndex = regex.lastIndex;
         }
-        const tail = text.slice(lastIndex).trim();
+        const tail = protectedText.slice(lastIndex).trim();
         if (tail) sentences.push(tail);
-        if (!sentences.length && text.trim()) sentences.push(text.trim());
-        return mergeDanglingEmphasis(sentences);
+        if (!sentences.length && protectedText.trim()) sentences.push(protectedText.trim());
+        const restored = sentences.map((s) => s.split(DECIMAL_PLACEHOLDER).join('.'));
+        return mergeDanglingEmphasis(restored);
     }
 
     // A sentence terminator inside a **bold** span (e.g. "**We can do better.**")
@@ -243,6 +253,18 @@
         if (/^\[pause\]$/i.test((chunkText || '').trim())) return 2800;
         if (/\[pause\]/i.test(chunkText || '')) return 1800;
         return 0;
+    }
+
+    // Word count for the WPM stat -- must exclude cue markup, or scripts using
+    // Spector's own [pause]/## Section syntax get an inflated, wrong avg WPM.
+    function countSpokenWords(text) {
+        return (text || '')
+            .replace(/^##[ \t]+[^\r\n]+$/gm, '')
+            .replace(/\[pause(?::\d+s)?\]/gi, '')
+            .replace(/\*\*/g, '')
+            .split(/\s+/)
+            .filter(Boolean)
+            .length;
     }
 
     function formatChunkHtml(chunkText) {
@@ -426,6 +448,7 @@
         getMs: computeMs,
         cuePauseMs,
         formatChunkHtml,
+        countSpokenWords,
         hybridChunkWithCues,
         buildRehearsalAnalytics,
         buildSectionAnalytics,
@@ -1245,7 +1268,7 @@
         }
 
         rawScript = getScriptFromURL();
-        totalWords = rawScript.split(/\s+/).filter(Boolean).length;
+        totalWords = SpectorCore.countSpokenWords(rawScript);
         chunks = SpectorCore.hybridChunkWithCues(rawScript);
         render();
         setupControls();
@@ -1416,6 +1439,23 @@
             emphChunks.some(c => /\*\*[^*]+\*\*/.test(c)));
         assert('formatChunkHtml renders reattached emphasis',
             emphChunks.some(c => SpectorCore.formatChunkHtml(c).includes('cue-emphasis')));
+
+        const decimalSentences = SpectorCore.splitSentences('The rate is 3.5 percent. It rose again.');
+        assert('splitSentences keeps a decimal number intact',
+            decimalSentences.some(s => s.includes('3.5 percent.')));
+        assert('splitSentences still splits after the decimal sentence ends',
+            decimalSentences.length === 2);
+
+        const quoteSentences = SpectorCore.splitSentences('"Hello!" she said. Then she left.');
+        assert('splitSentences keeps a closing quote attached to its sentence',
+            quoteSentences[0] === '"Hello!"');
+        assert('splitSentences does not orphan the quote onto the next sentence',
+            !quoteSentences[1].startsWith('"'));
+
+        const wordCountScript = '## Q&A\n\nThis has [pause] four words.';
+        assert('countSpokenWords excludes section headers and pause markers',
+            SpectorCore.countSpokenWords(wordCountScript) === 4);
+
         const analytics = SpectorCore.buildRehearsalAnalytics([
             { index: 0, expectedMs: 2000, actualMs: 2100, hesitated: false, text: 'a' },
             { index: 1, expectedMs: 2000, actualMs: 2400, hesitated: true, text: 'b' },

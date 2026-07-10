@@ -124,6 +124,8 @@
             <p class="analytics-line" style="font-size:11px; color:#888; margin-top:8px;">Tip: a pacing score above 85% means you're ready to perform eyes-up.</p>
         </div>
 
+        <div class="section-analytics hidden" id="section-analytics"></div>
+
         <div class="end-actions">
             <button id="restart-btn" class="btn-primary">Read Again</button>
             <button id="edit-script-btn" class="btn-secondary">Edit Script</button>
@@ -316,6 +318,24 @@
         };
     }
 
+    // Per-section pacing breakdown: groups chunk timings by which `## Section`
+    // bookmark they fall under and re-runs buildRehearsalAnalytics on each
+    // group. A section's own header chunk is excluded from every group (it's
+    // a label, not rehearsal content). Content before the first bookmark has
+    // no home section and is left out of the breakdown, though it's still
+    // counted in the overall run analytics.
+    function buildSectionAnalytics(timings, bookmarks) {
+        if (!bookmarks || !bookmarks.length || !timings || !timings.length) return [];
+        const sorted = [...bookmarks].sort((a, b) => a.index - b.index);
+        return sorted.map((section, i) => {
+            const nextIndex = i + 1 < sorted.length ? sorted[i + 1].index : Infinity;
+            const sectionTimings = timings.filter((t) => t.index > section.index && t.index < nextIndex);
+            if (!sectionTimings.length) return null;
+            const analytics = buildRehearsalAnalytics(sectionTimings);
+            return { label: section.label, chunkCount: sectionTimings.length, ...analytics };
+        }).filter(Boolean);
+    }
+
     function computeSpatialDeltas(filteredGamma, filteredBeta, lastGamma, lastBeta, mode) {
         const sensitivity = mode === 'comfort' ? 0.19 : 0.11;
         const rotationAmount = mode === 'comfort' ? 0.11 : 0.055;
@@ -406,6 +426,7 @@
         formatChunkHtml,
         hybridChunkWithCues,
         buildRehearsalAnalytics,
+        buildSectionAnalytics,
         computeSpatialDeltas,
         estimateWpm,
         decodeScript(encoded) {
@@ -1093,6 +1114,35 @@
         localStorage.setItem(key, JSON.stringify(runs));
     }
 
+    function renderSectionAnalytics() {
+        const container = document.getElementById('section-analytics');
+        if (!container) return;
+        const sections = SpectorCore.buildSectionAnalytics(rehearsalTimings, sectionBookmarks);
+        container.innerHTML = '';
+        if (!sections.length) {
+            container.classList.add('hidden');
+            return;
+        }
+        container.classList.remove('hidden');
+        const heading = document.createElement('p');
+        heading.className = 'section-analytics-heading';
+        heading.textContent = 'By section';
+        container.appendChild(heading);
+        sections.forEach((s) => {
+            const row = document.createElement('div');
+            row.className = 'section-analytics-row';
+            const label = document.createElement('span');
+            label.className = 'section-analytics-label';
+            label.textContent = s.label;
+            const stat = document.createElement('span');
+            stat.className = 'section-analytics-stat';
+            stat.textContent = `${s.consistency}% consistent${s.hesitations ? ` · ${s.hesitations} hesitation${s.hesitations === 1 ? '' : 's'}` : ''}`;
+            row.appendChild(label);
+            row.appendChild(stat);
+            container.appendChild(row);
+        });
+    }
+
     function showEndScreen() {
         stopPlayback();
         const endScreen = document.getElementById('end-screen');
@@ -1110,6 +1160,7 @@
             analytics.slowestRatio > 1.35
                 ? `Slowest moment: ${analytics.slowestLabel} (${Math.round(analytics.slowestRatio * 100)}% of target pace)`
                 : 'Pacing stayed even across all chunks.';
+        renderSectionAnalytics();
         endScreen.classList.remove('hidden');
         endScreen.classList.add('visible');
         Haptics.play();
@@ -1347,6 +1398,26 @@
         ]);
         assert('buildRehearsalAnalytics consistency', analytics.consistency >= 0 && analytics.consistency <= 100);
         assert('buildRehearsalAnalytics hesitations', analytics.hesitations === 1);
+
+        const sectionAnalytics = SpectorCore.buildSectionAnalytics(
+            [
+                { index: 0, expectedMs: 2000, actualMs: 2000, hesitated: false, text: 'intro (no section yet)' },
+                { index: 1, expectedMs: 2000, actualMs: 2000, hesitated: false, text: 'q&a header itself' },
+                { index: 2, expectedMs: 2000, actualMs: 2100, hesitated: false, text: 'q&a content one' },
+                { index: 3, expectedMs: 2000, actualMs: 2500, hesitated: true, text: 'q&a content two' },
+                { index: 4, expectedMs: 2000, actualMs: 2000, hesitated: false, text: 'closing header itself' },
+                { index: 5, expectedMs: 2000, actualMs: 2050, hesitated: false, text: 'closing content' },
+            ],
+            [{ label: 'Q&A', index: 1 }, { label: 'Closing', index: 4 }]
+        );
+        assert('buildSectionAnalytics groups by section', sectionAnalytics.length === 2);
+        assert('buildSectionAnalytics excludes pre-first-bookmark content',
+            sectionAnalytics[0].label === 'Q&A' && sectionAnalytics[0].chunkCount === 2);
+        assert('buildSectionAnalytics excludes header chunk from its own group',
+            sectionAnalytics[0].hesitations === 1);
+        assert('buildSectionAnalytics returns empty for scriptless bookmarks', SpectorCore.buildSectionAnalytics([], []).length === 0);
+        assert('buildSectionAnalytics returns empty when no bookmarks exist',
+            SpectorCore.buildSectionAnalytics([{ index: 0, expectedMs: 1, actualMs: 1, hesitated: false, text: 'x' }], []).length === 0);
 
         let hookCalled = false;
         SpectorCore.registerPostChunkHook(ch => { hookCalled = true; return ch; });

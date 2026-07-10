@@ -21,6 +21,7 @@
             <div id="script-text"></div>
         </div>
     </div>
+    <div id="active-line-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <button class="toggle-chip motion-chip hidden" id="motion-permit-btn" type="button" aria-label="Enable head tracking for Comfort mode spatial effects. On glasses, use right temple button for script control.">Enable head tracking</button>
 
@@ -97,7 +98,7 @@
     </div>
 
     <div id="end-screen" class="end-screen hidden">
-        <h2>Well done.</h2>
+        <h2 id="end-screen-heading" tabindex="-1">Well done.</h2>
         <p class="subtitle">Rehearsal complete. Review your pacing — then run it again until delivery feels natural.</p>
 
         <div class="stats">
@@ -428,6 +429,7 @@
         hybridChunkWithCues,
         buildRehearsalAnalytics,
         buildSectionAnalytics,
+        chunkToAnnounceText,
         computeSpatialDeltas,
         estimateWpm,
         decodeScript(encoded) {
@@ -567,6 +569,16 @@
         return Math.ceil(total);
     }
 
+    // Plain-text version of a chunk for the aria-live announcer -- strips cue
+    // markup instead of reading it aloud (no "asterisk asterisk", no pause icon).
+    function chunkToAnnounceText(raw) {
+        return (raw || '')
+            .replace(/\[section:([^\]]+)\]/g, '$1')
+            .replace(/\[pause(?::\d+s)?\]/gi, '')
+            .replace(/\*\*(.+?)\*\*/g, '$1')
+            .trim();
+    }
+
     function updateDisplay() {
         document.querySelectorAll('.chunk').forEach(el => el.classList.remove('active'));
         const active = document.querySelector(`.chunk[data-index="${currentIndex}"]`);
@@ -576,6 +588,8 @@
             const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             active.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
             settleActiveChunk();
+            const announcer = document.getElementById('active-line-announcer');
+            if (announcer) announcer.textContent = chunkToAnnounceText(chunks[currentIndex] || '');
         }
         const progress = chunks.length ? ((currentIndex + 1) / chunks.length) * 100 : 0;
         document.getElementById('progress-fill').style.width = `${progress}%`;
@@ -667,6 +681,11 @@
     function setupSpatialAnchoring() {
         playerMotion.bind((event) => {
             if (!isPlaying) return;
+            // Comfort mode's whole premise is head-motion-driven translate/rotate/scale --
+            // exactly what prefers-reduced-motion asks sites to avoid. The idle-state
+            // breathing/drift already honors this; the live per-event transform below
+            // (the actual flagship effect) needs the same guard.
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             const rawBeta = event.beta || 0;
             const rawGamma = event.gamma || 0;
             const filteredBeta = kalmanBeta.update(rawBeta);
@@ -1165,6 +1184,10 @@
         endScreen.classList.remove('hidden');
         endScreen.classList.add('visible');
         Haptics.play();
+        // Move focus to the new view so keyboard/screen-reader users are told
+        // playback ended, instead of leaving focus on a now-hidden play button.
+        const endHeading = document.getElementById('end-screen-heading');
+        if (endHeading) endHeading.focus();
 
         saveRunToHistory();
 
@@ -1419,6 +1442,13 @@
         assert('buildSectionAnalytics returns empty for scriptless bookmarks', SpectorCore.buildSectionAnalytics([], []).length === 0);
         assert('buildSectionAnalytics returns empty when no bookmarks exist',
             SpectorCore.buildSectionAnalytics([{ index: 0, expectedMs: 1, actualMs: 1, hesitated: false, text: 'x' }], []).length === 0);
+
+        assert('chunkToAnnounceText strips emphasis markers',
+            SpectorCore.chunkToAnnounceText('**Thank you** for being here.') === 'Thank you for being here.');
+        assert('chunkToAnnounceText strips pause markers entirely',
+            SpectorCore.chunkToAnnounceText('Wait for it. [pause:2s]') === 'Wait for it.');
+        assert('chunkToAnnounceText strips section wrapper, keeps label',
+            SpectorCore.chunkToAnnounceText('[section:Q&A]') === 'Q&A');
 
         let hookCalled = false;
         SpectorCore.registerPostChunkHook(ch => { hookCalled = true; return ch; });

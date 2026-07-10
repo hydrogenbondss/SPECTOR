@@ -931,8 +931,8 @@ a.nav-cta:hover {
     gap: 12px;
 }
 
-.comparison-card.basic {
-    opacity: 0.65;
+.comparison-card.basic li {
+    color: var(--text-dim);
 }
 
 .comparison-card.spector {
@@ -940,7 +940,7 @@ a.nav-cta:hover {
     background: linear-gradient(160deg, rgba(124, 58, 237, 0.06), var(--bg-elevated) 60%);
 }
 
-.comparison-card.spector h4 {
+.comparison-card.spector h3 {
     color: var(--accent);
 }
 

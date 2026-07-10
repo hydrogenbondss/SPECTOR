@@ -22,7 +22,7 @@
 
     <div class="scan-rows" id="scan-rows"></div>
 
-    <p class="say-hint">Tap anywhere, press <strong>Space</strong>, or press <strong>B</strong> to select the highlighted row — then the highlighted letter.</p>
+    <p class="say-hint">Tap anywhere, press <strong>Space</strong>, or press <strong>B</strong> to select the highlighted row — then the highlighted letter. Locked the wrong row? <strong>◀</strong> is always the first option.</p>
 
     <div class="say-controls" id="say-controls">
         <div class="customize-group">
@@ -36,12 +36,23 @@
 
     <script>
         // ─── Pure scanning logic (testable without DOM/timers) ───
+        // Every row starts with BACK so a mis-locked row is always just one
+        // scan-cycle away from escape, instead of costing a wrong letter +
+        // a delete. Curated phrases sit in their own rows ahead of the
+        // alphabet since they're the fastest path to common needs.
+        const BACK = { action: 'back', label: '◀' };
+        const PHRASE_ROWS = [
+            [{ action: 'phrase', label: 'Yes' }, { action: 'phrase', label: 'No' }, { action: 'phrase', label: 'Thank you' }],
+            [{ action: 'phrase', label: 'I need help' }, { action: 'phrase', label: 'Please wait' }, { action: 'phrase', label: 'I love you' }],
+        ];
         const ROWS = [
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-            ['H', 'I', 'J', 'K', 'L', 'M', 'N'],
-            ['O', 'P', 'Q', 'R', 'S', 'T', 'U'],
-            ['V', 'W', 'X', 'Y', 'Z'],
-            [{ action: 'space', label: 'SPACE' }, { action: 'delete', label: '⌫ DELETE' }, { action: 'clear', label: 'CLEAR' }],
+            [BACK, ...PHRASE_ROWS[0]],
+            [BACK, ...PHRASE_ROWS[1]],
+            [BACK, 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
+            [BACK, 'H', 'I', 'J', 'K', 'L', 'M', 'N'],
+            [BACK, 'O', 'P', 'Q', 'R', 'S', 'T', 'U'],
+            [BACK, 'V', 'W', 'X', 'Y', 'Z'],
+            [BACK, { action: 'space', label: 'SPACE' }, { action: 'delete', label: '⌫ DELETE' }, { action: 'clear', label: 'CLEAR' }, { action: 'speak', label: '🔊 SPEAK' }],
         ];
 
         function cellLabel(cell) {
@@ -53,6 +64,10 @@
             if (cell.action === 'space') return message + ' ';
             if (cell.action === 'delete') return message.slice(0, -1);
             if (cell.action === 'clear') return '';
+            if (cell.action === 'phrase') return message + cell.label + ' ';
+            // 'back' and 'speak' never change the message -- back just returns
+            // to row-scanning (handled by the normal post-selection reset in
+            // selectCurrent), and speak is a read-it-aloud side effect there.
             return message;
         }
 
@@ -82,6 +97,9 @@
                 row.forEach((cell, cIdx) => {
                     const cellEl = document.createElement('div');
                     cellEl.className = 'scan-cell';
+                    if (typeof cell === 'object' && cell.action === 'phrase') {
+                        cellEl.classList.add('scan-cell-phrase');
+                    }
                     cellEl.dataset.row = rIdx;
                     cellEl.dataset.cell = cIdx;
                     cellEl.textContent = cellLabel(cell);
@@ -142,6 +160,17 @@
             setTimeout(() => cellEl.classList.remove('cell-selected'), 220);
         }
 
+        // Reads the composed message aloud for non-verbal users -- Deaf users
+        // who don't need audio simply never select this cell. Message stays
+        // on screen afterward so it can be spoken again or built on further.
+        function speak(text) {
+            if (!text || !('speechSynthesis' in window)) return;
+            try {
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+            } catch { /* no-op if synthesis is unavailable */ }
+        }
+
         function selectCurrent() {
             if (paused) return;
             navigator.vibrate?.([16]);
@@ -156,6 +185,7 @@
             flashCell(rowIndex, cellIndex);
             message = applyCell(message, cell);
             renderMessage();
+            if (cell.action === 'speak') speak(message);
             phase = 'row';
             rowIndex = 0;
             cellIndex = 0;
@@ -219,18 +249,28 @@
                 if (!condition) console.error('[SayTest FAIL]', label);
             };
 
-            assert('ROWS has 5 rows', ROWS.length === 5);
+            assert('ROWS has 7 rows (2 phrase rows + 4 letter rows + 1 action row)', ROWS.length === 7);
             assert('row-column layout covers all 26 letters',
                 ROWS.flat().filter(c => typeof c === 'string').length === 26);
+            assert('every row starts with a back cell', ROWS.every(row => row[0].action === 'back'));
             assert('applyCell appends a letter', applyCell('HI', 'X') === 'HIX');
             assert('applyCell space action appends a space', applyCell('HI', { action: 'space' }) === 'HI ');
             assert('applyCell delete action removes last char', applyCell('HI', { action: 'delete' }) === 'H');
             assert('applyCell delete on empty string stays empty', applyCell('', { action: 'delete' }) === '');
             assert('applyCell clear action empties the message', applyCell('HELLO', { action: 'clear' }) === '');
+            assert('applyCell phrase action appends the phrase plus a trailing space',
+                applyCell('', { action: 'phrase', label: 'Thank you' }) === 'Thank you ');
+            assert('applyCell phrase action composes onto existing text',
+                applyCell('Well, ', { action: 'phrase', label: 'thank you' }) === 'Well, thank you ');
+            assert('applyCell back action never changes the message',
+                applyCell('HELLO', { action: 'back' }) === 'HELLO');
+            assert('applyCell speak action never changes the message',
+                applyCell('HELLO', { action: 'speak' }) === 'HELLO');
             assert('nextIndex wraps around at the end', nextIndex(4, 5) === 0);
             assert('nextIndex advances by one', nextIndex(1, 5) === 2);
             assert('cellLabel returns the letter itself for plain letters', cellLabel('Q') === 'Q');
             assert('cellLabel returns the label for action cells', cellLabel({ action: 'space', label: 'SPACE' }) === 'SPACE');
+            assert('cellLabel returns the label for phrase cells', cellLabel({ action: 'phrase', label: 'Yes' }) === 'Yes');
 
             const allPass = results.every(r => r.pass);
             window.__sayTestResults = { allPass, results };

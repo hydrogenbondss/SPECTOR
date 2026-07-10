@@ -2203,6 +2203,11 @@ body.say-page {
     transition: all 0.15s ease;
 }
 
+.scan-cell-phrase {
+    font-size: 14px;
+    line-height: 1.25;
+}
+
 .scan-cell.cell-active {
     background: var(--accent);
     color: #fff;

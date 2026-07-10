@@ -243,10 +243,6 @@
 
     const postChunkHooks = [];
 
-    function hybridChunk(text) {
-        return SpectorCore.chunk(text, 'hybrid');
-    }
-
     function cuePauseMs(chunkText) {
         const tagged = (chunkText || '').match(/\[pause:(\d+)s\]/i);
         if (tagged) return parseInt(tagged[1], 10) * 1000;
@@ -1135,7 +1131,11 @@
         let library = [];
         try { library = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch {}
         const title = rawScript.slice(0, 40).trim() + (rawScript.length > 40 ? '…' : '');
-        const entry = { id: Date.now().toString(36), title, text: rawScript, savedAt: Date.now() };
+        // Re-saving the same script (e.g. after rehearsing it again) should
+        // refresh its spot in the library, not pile up a duplicate entry.
+        const existing = library.find((s) => s.text === rawScript);
+        const entry = { id: existing ? existing.id : Date.now().toString(36), title, text: rawScript, savedAt: Date.now() };
+        library = library.filter((s) => s.text !== rawScript);
         library.unshift(entry);
         if (library.length > 20) library.length = 20;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(library));

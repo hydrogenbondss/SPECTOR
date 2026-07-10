@@ -9,7 +9,7 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "images/app-icon.png",
+      "src": "images/app-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
@@ -21,7 +21,7 @@
       "purpose": "any"
     },
     {
-      "src": "images/app-icon.png",
+      "src": "images/app-icon-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

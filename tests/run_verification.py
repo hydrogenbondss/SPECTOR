@@ -5,6 +5,7 @@ One http.server on :8088 for the full run; atomic scratch bundle at end.
 """
 from __future__ import annotations
 
+import glob
 import html
 import json
 import os
@@ -192,23 +193,60 @@ def git_grep_context(pattern: str, paths: list[str], before: int = 2, after: int
 
 
 def find_browser() -> Path | None:
-    if EDGE.is_file():
-        return EDGE
-    chrome = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
-    return chrome if chrome.is_file() else None
+    """Locate any Chromium-family browser. Checked in order: the machine's
+    real browser install (Windows/macOS/Linux), then a `which`-discoverable
+    binary, then a Playwright-managed Chromium (as used by sandboxed/CI
+    environments that have no system browser install at all)."""
+    candidates = [
+        EDGE,
+        Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"),
+        Path("/Applications/Chromium.app/Contents/MacOS/Chromium"),
+    ]
+    for c in candidates:
+        if c.is_file():
+            return c
+
+    for name in ("google-chrome-stable", "google-chrome", "chromium-browser", "chromium", "microsoft-edge"):
+        found = shutil.which(name)
+        if found:
+            return Path(found)
+
+    pw_roots = [p for p in (os.environ.get("PLAYWRIGHT_BROWSERS_PATH"), "/opt/pw-browsers") if p]
+    for root in pw_roots:
+        matches = sorted(glob.glob(os.path.join(root, "chromium-*", "chrome-linux", "chrome")))
+        matches += sorted(glob.glob(os.path.join(root, "chromium-*", "chrome-mac", "Chromium.app", "Contents", "MacOS", "Chromium")))
+        if matches:
+            return Path(matches[-1])
+
+    return None
+
+
+def _has_display() -> bool:
+    """Windows/macOS always have one; Linux only does with an X/Wayland session
+    (never true in a headless CI/sandbox container)."""
+    if sys.platform in ("win32", "darwin"):
+        return True
+    return bool(os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"))
 
 
 def edge_visit(url: str, profile: Path, seconds: float = 6.0):
     browser = find_browser()
     if not browser:
         return
-    cmd = [
-        str(browser), "--disable-gpu", "--no-sandbox", "--no-first-run",
-        "--disable-background-timer-throttling",
-        f"--user-data-dir={str(profile).replace(chr(92), '/')}",
-        "--window-size=500,400", "--window-position=-3000,-3000",
-        url,
-    ]
+    cmd = [str(browser), "--disable-gpu", "--no-sandbox", "--no-first-run",
+           "--disable-background-timer-throttling",
+           f"--user-data-dir={str(profile).replace(chr(92), '/')}"]
+    if _has_display():
+        # Real windowed visit, parked off-screen — closest to normal browser behavior.
+        cmd += ["--window-size=500,400", "--window-position=-3000,-3000"]
+    else:
+        # No display server available (headless CI/sandbox) — headless Chromium
+        # still registers service workers and populates the Cache API/IndexedDB
+        # in the same --user-data-dir, so priming still works, just invisibly.
+        cmd += ["--headless=new", "--window-size=500,400"]
+    cmd.append(url)
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     time.sleep(seconds)
     proc.terminate()
@@ -410,8 +448,10 @@ def step3_pwa_tests(server: HttpServer):
         lines.append("FALLBACK: static + source checks only")
 
     sw_src = (PUBLIC / "sw.js").read_text(encoding="utf-8")
+    cache_m = re.search(r"const CACHE = '([^']+)'", sw_src)
     lines += ["", "=== OFFLINE SW (shipped sw.js) ==="]
-    for token in ("spector-v4", "networkFirstShell", "shellPathFor", "addEventListener('fetch'", "/app.html"):
+    lines.append(f"  sw.js cache version: {cache_m.group(1) if cache_m else '(not found)'}")
+    for token in ("networkFirstShell", "shellPathFor", "addEventListener('fetch'", "/app.html"):
         lines.append(f"  sw.js has '{token}': {token in sw_src}")
 
     if browser:

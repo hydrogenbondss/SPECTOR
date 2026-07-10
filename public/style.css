@@ -811,7 +811,7 @@ a.nav-cta:hover {
     opacity: 0.5;
 }
 
-.step-card h4,
+.step-card h3,
 .step h4 {
     font-size: 18px;
     font-weight: 700;
@@ -908,7 +908,7 @@ a.nav-cta:hover {
     border-radius: var(--radius-lg);
 }
 
-.comparison-card h4 {
+.comparison-card h3 {
     font-size: 18px;
     font-weight: 700;
     margin: 0 0 24px;
@@ -3199,4 +3199,19 @@ body.say-page {
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+}
+
+/* Visually hidden but readable by screen readers and search crawlers —
+   for headings that need to exist semantically (SEO, heading-navigation)
+   without cluttering a deliberately minimal, focus-first UI (e.g. Say). */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

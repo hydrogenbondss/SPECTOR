@@ -3149,3 +3149,13 @@ body.say-page {
     background: #000;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), 0 0 44px rgba(124, 58, 237, 0.16);
 }
+
+/* ─── Accessibility: visible keyboard focus ─── */
+/* :focus-visible (not :focus) so this only shows for keyboard/Tab
+   navigation, never for a mouse or touch press. Declared last so it wins,
+   at equal specificity, over the outline:none rules on textarea/input
+   elsewhere in this file whenever an element is genuinely keyboard-focused. */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}

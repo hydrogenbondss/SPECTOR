@@ -13,8 +13,8 @@ checkout, handled entirely by Paddle.com Market Ltd as Merchant of Record**
 [`refund.html`](public/refund.html)) — Spector never sees or stores card
 details itself, but the checkout flow and any license-key validation logic
 built around it are in scope for review. A `Content-Security-Policy` header
-is deployed in report-only mode (`vercel.json`); tightening it to enforcing
-is a planned next step, not a claim that it's already blocking anything.
+(`vercel.json`) is enforcing, scoped to the site's actual third-party
+surface (Paddle, Google Fonts, the GitHub API, Formspree).
 The attack surface today is intentionally small; this will get updated as
 that changes.
 

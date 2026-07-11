@@ -366,7 +366,11 @@
                 <div class="cue-toolbar">
                     <button type="button" class="cue-btn" data-insert="**">**Bold**</button>
                     <button type="button" class="cue-btn" data-insert="[pause]">[Pause]</button>
-                    <button type="button" class="cue-btn" data-insert="[pause:3s]">[Pause 3s]</button>
+                    <button type="button" class="cue-btn" data-insert="section">## Section</button>
+                    <span class="cue-pause-custom">
+                        <input type="number" id="cue-pause-seconds" min="1" max="30" value="3" aria-label="Custom pause duration in seconds">
+                        <button type="button" class="cue-btn" id="cue-pause-custom-btn">+ Pause (s)</button>
+                    </span>
                 </div>
                 <textarea id="script-input" placeholder="Paste your speech, presentation, or notes here…"></textarea>
 
@@ -375,6 +379,8 @@
                     <span>·</span>
                     <span>~<span id="est-minutes">0</span> min at speaking pace</span>
                 </div>
+
+                <div class="cue-list" id="cue-list"></div>
 
                 <div class="samples-row">
                     <span class="samples-label">Start with a sample:</span>
@@ -781,9 +787,29 @@
             textarea.focus();
         }
 
+        // Inserts a "## Section" marker on its own line, adding blank-line
+        // padding only where the cursor isn't already at a clean line start,
+        // then selects the word "Section" so typing over it renames the label.
+        function insertSectionMarker(ta) {
+            const start = ta.selectionStart;
+            const before = ta.value.slice(0, start);
+            let prefix = '';
+            if (before.length > 0 && !before.endsWith('\n')) prefix = '\n\n';
+            else if (before.length > 0 && !before.endsWith('\n\n')) prefix = '\n';
+            insertAtCursor(ta, `${prefix}## Section\n`);
+            const afterInsertPos = ta.selectionStart;
+            ta.selectionStart = afterInsertPos - 1 - 'Section'.length;
+            ta.selectionEnd = afterInsertPos - 1;
+        }
+
+        function insertCustomPause(ta, seconds) {
+            const s = Math.max(1, Math.min(30, Math.round(Number(seconds)) || 3));
+            insertAtCursor(ta, `[pause:${s}s]`);
+        }
+
         function initCueToolbar() {
             const ta = document.getElementById('script-input');
-            document.querySelectorAll('.cue-btn').forEach(btn => {
+            document.querySelectorAll('.cue-toolbar .cue-btn[data-insert]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const insert = btn.dataset.insert;
                     if (insert === '**') {
@@ -793,14 +819,116 @@
                         const end = ta.selectionStart;
                         ta.selectionStart = end - 6;
                         ta.selectionEnd = end - 2;
+                    } else if (insert === 'section') {
+                        insertSectionMarker(ta);
                     } else {
                         insertAtCursor(ta, insert);
                     }
+                    updateScriptMeta();
                 });
             });
+
+            const pauseSeconds = document.getElementById('cue-pause-seconds');
+            const pauseCustomBtn = document.getElementById('cue-pause-custom-btn');
+            if (pauseCustomBtn && pauseSeconds) {
+                pauseCustomBtn.addEventListener('click', () => {
+                    insertCustomPause(ta, pauseSeconds.value);
+                    updateScriptMeta();
+                });
+            }
+
             ta.addEventListener('input', () => {
                 const err = document.getElementById('input-error');
                 if (err) err.style.display = 'none';
+            });
+        }
+
+        // ─── Cue marker editor: parse [pause]/[pause:Ns]/## Section markers
+        // out of the script text and render a jump-to/remove list, so markers
+        // can be managed without hunting through raw text.
+        function parseCueMarkers(text) {
+            const cues = [];
+            let offset = 0;
+            for (const line of text.split('\n')) {
+                const sectionMatch = line.match(/^##[ \t]+(.+)$/);
+                if (sectionMatch) {
+                    cues.push({ type: 'section', label: sectionMatch[1].trim(), start: offset, end: offset + line.length });
+                }
+                offset += line.length + 1;
+            }
+            const pauseRe = /\[pause(?::(\d+)s)?\]/gi;
+            let m;
+            while ((m = pauseRe.exec(text))) {
+                cues.push({ type: 'pause', seconds: m[1] ? parseInt(m[1], 10) : null, start: m.index, end: m.index + m[0].length });
+            }
+            cues.sort((a, b) => a.start - b.start);
+            return cues;
+        }
+
+        function jumpToCue(cue) {
+            const ta = document.getElementById('script-input');
+            ta.focus();
+            ta.setSelectionRange(cue.start, cue.end);
+            const lineNumber = ta.value.slice(0, cue.start).split('\n').length;
+            const lineHeight = parseFloat(getComputedStyle(ta).lineHeight) || 20;
+            ta.scrollTop = Math.max(0, (lineNumber - 3) * lineHeight);
+        }
+
+        function removeCueMarker(cue) {
+            const ta = document.getElementById('script-input');
+            let end = cue.end;
+            // For a section line, also eat its trailing newline so removal
+            // doesn't leave a blank line behind.
+            if (cue.type === 'section' && ta.value[end] === '\n') end += 1;
+            ta.value = ta.value.slice(0, cue.start) + ta.value.slice(end);
+            updateScriptMeta();
+        }
+
+        function renderCueList() {
+            const container = document.getElementById('cue-list');
+            if (!container) return;
+            const textarea = document.getElementById('script-input');
+            const cues = parseCueMarkers(textarea.value);
+            container.innerHTML = '';
+            if (cues.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'cue-list-empty';
+                empty.textContent = 'No pause or section markers yet — use the buttons above to add one.';
+                container.appendChild(empty);
+                return;
+            }
+            cues.forEach((cue) => {
+                const row = document.createElement('div');
+                row.className = 'cue-list-item';
+
+                const jumpBtn = document.createElement('button');
+                jumpBtn.type = 'button';
+                jumpBtn.className = 'cue-list-jump';
+
+                const typeSpan = document.createElement('span');
+                typeSpan.className = 'cue-list-type';
+                typeSpan.textContent = cue.type === 'section' ? 'Section' : 'Pause';
+
+                const labelSpan = document.createElement('span');
+                labelSpan.className = 'cue-list-label';
+                labelSpan.textContent = cue.type === 'section'
+                    ? (cue.label || '(untitled)')
+                    : (cue.seconds ? `${cue.seconds}s` : 'default');
+
+                jumpBtn.appendChild(typeSpan);
+                jumpBtn.appendChild(labelSpan);
+                jumpBtn.addEventListener('click', () => jumpToCue(cue));
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'cue-list-remove';
+                removeBtn.setAttribute('aria-label', 'Remove this marker');
+                removeBtn.textContent = '×';
+                removeBtn.addEventListener('click', () => removeCueMarker(cue));
+
+                row.appendChild(jumpBtn);
+                row.appendChild(removeBtn);
+                container.appendChild(row);
             });
         }
 
@@ -861,6 +989,7 @@
             const minEl = document.getElementById('est-minutes');
             if (countEl) countEl.textContent = `${words} words`;
             if (minEl) minEl.textContent = estMinutes;
+            renderCueList();
         }
 
         function initButtons() {

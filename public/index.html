@@ -41,6 +41,7 @@
       "description": "A free, open-source, auto-paced teleprompter for smart glasses. Rehearse on phone, perform eyes-up on glasses."
     }
     </script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (typeof initPaddle === 'function') initPaddle();"></script>
 </head>
 <body class="landing">
 
@@ -537,10 +538,33 @@
         const STORAGE_KEY = 'spector_scripts_v1';
 
         // ── Monetization (no backend) ─────────────────────────────────────────
-        // Paste your provider URL to switch the button on. Until then it shows
-        // a friendly "coming soon" note instead of navigating to a dead link.
-        // CHECKOUT_URL: your Paddle checkout link.
-        const CHECKOUT_URL = '';
+        // Paddle client-side tokens are safe to expose in frontend code (unlike
+        // API keys) -- see developer.paddle.com/paddlejs/about/client-side-tokens.
+        // Paste yours + the Spector Pro price ID below to switch checkout on;
+        // until both are set, the button shows a "coming soon" note instead of
+        // opening a broken checkout.
+        const PADDLE_CLIENT_TOKEN = '';
+        const PADDLE_PRICE_ID = '';
+
+        function initPaddle() {
+            if (!PADDLE_CLIENT_TOKEN || typeof Paddle === 'undefined') return;
+            // The token prefix picks the environment, so a sandbox token can
+            // never accidentally run as if it were live, or vice versa.
+            if (PADDLE_CLIENT_TOKEN.startsWith('test_')) Paddle.Environment.set('sandbox');
+            Paddle.Initialize({
+                token: PADDLE_CLIENT_TOKEN,
+                eventCallback(event) {
+                    if (event.name === 'checkout.completed') {
+                        // No backend: mirror the manual license-key path below
+                        // and mark Pro active locally on this device.
+                        try { localStorage.setItem('spector_pro', event.data?.transaction_id || 'paddle'); } catch {}
+                        reflectProState();
+                        const status = document.getElementById('pro-status');
+                        if (status) status.textContent = 'Pro activated ✓ — thank you!';
+                    }
+                },
+            });
+        }
 
         function isPro() {
             try { return !!localStorage.getItem('spector_pro'); } catch { return false; }
@@ -562,11 +586,16 @@
             const keyInput = document.getElementById('license-key');
             const status = document.getElementById('pro-status');
 
+            initPaddle();
+
             if (goPro) goPro.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (isPro()) return;
-                if (CHECKOUT_URL) window.location.href = CHECKOUT_URL;
-                else if (status) status.textContent = "Checkout isn't live yet — email hello@spectorlabs.io to reserve, or join the beta below.";
+                if (PADDLE_CLIENT_TOKEN && PADDLE_PRICE_ID && typeof Paddle !== 'undefined') {
+                    Paddle.Checkout.open({ items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }] });
+                } else if (status) {
+                    status.textContent = "Checkout isn't live yet — email hello@spectorlabs.io to reserve, or join the beta below.";
+                }
             });
 
             if (activate && keyInput) activate.addEventListener('click', () => {

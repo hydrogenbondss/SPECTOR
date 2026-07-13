@@ -74,17 +74,17 @@
         <section class="hero-section">
             <div class="hero-badge">Eyes Forward</div>
             <h1 class="hero-headline">Talk to camera. <span class="text-purple">Not to your notes.</span></h1>
-            <p class="hero-subhead">Spector is a free, open-source teleprompter — rehearse on your phone, then perform eyes-up on <strong>any</strong> smart glasses: Ray-Ban Meta, XREAL, Viture, not just one brand's. No account.</p>
+            <p class="hero-subhead">Spector is a free, open-source teleprompter. Rehearse on your phone, then perform eyes-up on <strong>any</strong> smart glasses: Ray-Ban Meta, XREAL, Viture, not just one brand's. No account.</p>
             <div class="hero-cta-group">
-                <a href="app.html" class="btn-primary btn-hero">Try it now — no sign-up</a>
-                <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="hero-ghost-link">★ Star on GitHub</a>
+                <a href="app.html" class="btn-primary btn-hero">Try it now, no sign-up</a>
+                <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="hero-ghost-link">Star on GitHub</a>
             </div>
         </section>
 
         <!-- HERO LIVE DEMO — this is the real engine, not a video -->
         <a class="hero-demo" id="hero-demo" href="app.html" title="Open the full player">
             <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
-            <div class="hero-demo-line active" id="hd-active">This is <span class="hd-emphasis">Spector</span> — running live, right now.</div>
+            <div class="hero-demo-line active" id="hd-active"><span class="hd-emphasis">Spector</span> is running live now.</div>
             <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
             <div class="hero-demo-footer">
                 <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill"></div></div>
@@ -160,7 +160,7 @@
         <section class="features-section reveal" id="features">
             <div class="section-header">
                 <p class="section-eyebrow">The product</p>
-                <h2>Not just another teleprompter.</h2>
+                <h2>A teleprompter built for smart glasses.</h2>
             </div>
             <div class="feature-grid">
                 <div class="feature-card">
@@ -204,7 +204,7 @@
                 <h2>Text that holds still while you don't.</h2>
             </div>
             <div class="showcase-card">
-                <img src="images/comfort-comparison.webp" alt="Standard mode vs Spector Comfort mode: standard teleprompter text jitters with head movement, Comfort mode keeps the script spatially anchored and stable" loading="lazy" width="1600" height="900">
+                <img src="images/comfort-comparison-clean.svg" alt="Standard mode vs Comfort mode: standard teleprompter text follows head movement, Comfort mode keeps the script spatially anchored and stable" loading="lazy" width="1600" height="900">
                 <div class="showcase-label">
                     <p class="showcase-title">Spatially anchored. Calm by design.</p>
                     <p class="showcase-desc">Standard teleprompters shake with every head movement — causing eye strain and that frozen "reading" look. Comfort mode locks your script in space so it stays stable and readable through an entire rehearsal.</p>
@@ -1206,7 +1206,8 @@
             const updated = document.getElementById('last-updated');
             const apply = (d) => {
                 if (stars && d.stargazers_count >= 10) {
-                    stars.textContent = `★ ${d.stargazers_count}`;
+                    stars.textContent = `${d.stargazers_count}`;
+                    stars.setAttribute('aria-label', `${d.stargazers_count} GitHub stars`);
                     stars.classList.remove('hidden');
                 }
                 if (updated && d.pushed_at) {
@@ -1245,13 +1246,13 @@
 
             const LINES = [
                 'Good evening, everyone.',
-                'This is <span class="hd-emphasis">Spector</span> — running live, right now.',
+                '<span class="hd-emphasis">Spector</span> is running live now.',
                 'No video. No mockup.',
                 'It paces itself to your punctuation…',
                 '…holds on <span class="hd-emphasis">emphasis</span>,',
                 'and breathes at pauses.',
                 'Eyes up. No script-face.',
-                'Works on any smart glasses — and this phone.',
+                'Works on any smart glasses and this phone.',
             ];
             const ms = (html) => {
                 const text = html.replace(/<[^>]+>/g, '');
@@ -1321,20 +1322,6 @@
             }, { threshold: 0.6 });
             document.querySelectorAll('.stat-num').forEach(s => countObserver.observe(s));
 
-            // Subtle hero parallax — the visual lags the scroll a touch
-            const hero = document.querySelector('.hero-demo');
-            if (hero) {
-                let ticking2 = false;
-                const move = () => {
-                    const shift = Math.max(-44, Math.min(44, window.pageYOffset * 0.06));
-                    hero.style.transform = `translateY(${shift}px)`;
-                    ticking2 = false;
-                };
-                window.addEventListener('scroll', () => {
-                    if (!ticking2) { ticking2 = true; requestAnimationFrame(move); }
-                }, { passive: true });
-                move();
-            }
         }
 
         function init() {

@@ -7,24 +7,18 @@
     <meta name="theme-color" content="#000000">
     <meta property="og:title" content="Spector — Eyes Forward">
     <meta property="og:description" content="The auto-paced teleprompter built for smart glasses. Rehearse on phone, perform on glasses.">
-    <meta property="og:image" content="https://spectorlabs.io/images/og-card.png">
+    <meta property="og:image" content="https://www.spectorlabs.io/images/og-card.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://spectorlabs.io">
+    <meta property="og:url" content="https://www.spectorlabs.io">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Spector — Eyes Forward">
     <meta name="twitter:description" content="Auto-paced teleprompter for smart glasses. Rehearse on phone, perform on glasses.">
-    <meta name="twitter:image" content="https://spectorlabs.io/images/og-card.png">
+    <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png">
     <title>Spector — Teleprompter for Smart Glasses</title>
-    <link rel="canonical" href="https://spectorlabs.io/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts without blocking first paint (Lighthouse: render-blocking resources) -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"></noscript>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="canonical" href="https://www.spectorlabs.io/">
+    <link rel="stylesheet" href="landing.min.css?v=5">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
@@ -32,24 +26,47 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Spector",
-      "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "Web, iOS, Android",
-      "url": "https://spectorlabs.io",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": "A free, open-source, auto-paced teleprompter for smart glasses. Rehearse on phone, perform eyes-up on glasses."
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.spectorlabs.io/#organization",
+          "name": "Spector Labs",
+          "url": "https://www.spectorlabs.io/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.spectorlabs.io/images/app-icon.png"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.spectorlabs.io/#website",
+          "url": "https://www.spectorlabs.io/",
+          "name": "Spector",
+          "publisher": { "@id": "https://www.spectorlabs.io/#organization" }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.spectorlabs.io/#webpage",
+          "url": "https://www.spectorlabs.io/",
+          "name": "Spector - Teleprompter for Smart Glasses",
+          "description": "A free, open-source, auto-paced teleprompter for smart glasses. Rehearse on phone, perform eyes-up on glasses.",
+          "isPartOf": { "@id": "https://www.spectorlabs.io/#website" },
+          "about": { "@type": "Thing", "name": "Smart glasses teleprompter" },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://www.spectorlabs.io/images/og-card.png"
+          }
+        }
+      ]
     }
     </script>
 </head>
 <body class="landing">
 
-    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
-
     <!-- NAV -->
     <nav class="site-nav">
         <a href="#" class="nav-brand">
-            <img class="nav-logo" src="images/logo-mark.png" alt="Spector" width="32" height="32">
+            <img class="nav-logo" src="images/logo-mark-64.png" alt="Spector" width="32" height="32">
             <span class="nav-wordmark">SPECTOR</span>
         </a>
         <div class="nav-links" id="nav-links">
@@ -59,7 +76,7 @@
             <a href="#try">Try Spector</a>
             <a href="/say" title="Switch-scan AAC composer — for non-verbal/Deaf communication">Say</a>
             <a href="#faq">FAQ</a>
-            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge hidden" id="gh-stars"></span></a>
+            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub</a>
             <a href="#beta" class="nav-cta">Join beta</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false">
@@ -70,27 +87,36 @@
     <div class="container" role="main">
 
         <!-- HERO -->
-        <section class="hero-section">
-            <p class="hero-badge">Teleprompter for smart glasses</p>
-            <h1 class="hero-headline">Keep eye contact.<span>Bring your script.</span></h1>
-            <p class="hero-subhead">Spector is a free, open-source teleprompter. Rehearse in any browser and perform eyes-up on supported display glasses such as XREAL and Viture. No account; scripts stay local.</p>
+        <section class="hero-section hero-editorial">
+            <p class="hero-kicker"><span aria-hidden="true"></span>Open source. Browser native. Built for display glasses.</p>
+            <h1 class="hero-headline">Spector is the teleprompter built for smart glasses.</h1>
+            <p class="hero-subhead">Paste a script, rehearse at a natural pace, then perform eyes-up on supported display glasses including XREAL and Viture. No account. Your words stay on your device.</p>
             <div class="hero-cta-group">
-                <a href="#try" class="btn-primary btn-hero">Try the live editor</a>
-                <a href="#devices" class="hero-ghost-link">Check device support</a>
+                <a href="app.html" class="btn-primary btn-hero" data-quick-demo>Run the 45-second demo</a>
+                <a href="#try" class="btn-secondary">Paste your own script</a>
             </div>
+            <p class="hero-compatibility">Works today in any modern browser and as a mirrored display on XREAL and Viture.</p>
         </section>
 
         <!-- HERO LIVE DEMO — this is the real engine, not a video -->
-        <a class="hero-demo" id="hero-demo" href="app.html" title="Open the full player">
-            <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
-            <div class="hero-demo-line active" id="hd-active"><span class="hd-emphasis">Spector</span> is running live now.</div>
-            <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
-            <div class="hero-demo-footer">
-                <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill"></div></div>
-                <span class="hero-demo-pacing" id="hd-pacing">auto-pacing · punctuation-aware</span>
+        <a class="hero-demo product-stage" id="hero-demo" href="app.html" data-quick-demo>
+            <span class="sr-only">Run the Spector product demo</span>
+            <div class="product-stage-toolbar" aria-hidden="true">
+                <span class="product-stage-status"><i aria-hidden="true"></i>Live rehearsal</span>
+                <span>Spector browser player</span>
+                <span>Focus mode</span>
+            </div>
+            <div class="product-stage-body" aria-hidden="true">
+                <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
+                <div class="hero-demo-line active" id="hd-active"><span class="hd-emphasis">Spector</span> is running live now.</div>
+                <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
+                <div class="hero-demo-footer">
+                    <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill"></div></div>
+                    <span class="hero-demo-pacing" id="hd-pacing">auto-pacing · punctuation-aware</span>
+                </div>
             </div>
         </a>
-        <p class="hero-note">The pacing engine is running above. Open it to rehearse the full sample.</p>
+        <p class="hero-note">This is the real pacing engine. Open it and the sample is ready.</p>
 
         <!-- TRUST BAR -->
         <div class="trust-bar" aria-label="Product principles">
@@ -283,21 +309,6 @@
             <p class="matrix-note">We'd rather under-promise: if your device isn't honestly covered here, tell us and we'll test it.</p>
         </section>
 
-        <!-- WHY NOW -->
-        <section class="whynow-section reveal" id="why-now">
-            <div class="section-header section-header-left">
-                <p class="section-eyebrow">Why now</p>
-                <h2>Glasses are becoming a software platform.</h2>
-                <p class="section-deck">The hardware is reaching mainstream scale while tools for speaking, presenting, and reading in a field of view remain early.</p>
-            </div>
-            <div class="stat-strip">
-                <div class="stat"><span class="stat-num">7M+</span><span class="stat-label">Ray-Ban Meta AI glasses sold in 2025</span></div>
-                <div class="stat"><span class="stat-num">110%+</span><span class="stat-label">year-over-year shipment growth in 2025</span></div>
-                <div class="stat"><span class="stat-num">73%</span><span class="stat-label">Meta share of the smart-glasses market</span></div>
-            </div>
-            <p class="stat-source">Sources: <a href="https://www.cnbc.com/2026/02/11/ray-ban-maker-essilorluxottica-triples-sales-of-meta-ai-glasses.html" target="_blank" rel="noopener">EssilorLuxottica / CNBC</a> and <a href="https://counterpointresearch.com/en/insights/post-insight-research-briefs-blogs-global-smart-glasses-shipments-soared-110-yoy-in-h1-2025-with-meta-capturing-over-70-share" target="_blank" rel="noopener">Counterpoint Research</a>.</p>
-        </section>
-
         <!-- FAQ -->
         <section class="faq-section reveal" id="faq">
             <div class="section-header">
@@ -358,14 +369,55 @@
                 <li>Early feedback on real-device HUD readability and Comfort mode</li>
                 <li>Help shape glasses-specific features before wider release</li>
             </ul>
-            <form id="beta-form" action="https://formspree.io/f/mzdlddkp" method="POST">
-                <input type="email" name="email" placeholder="your@email.com" required>
-                <input type="text" name="glasses" placeholder="Your glasses model">
-                <textarea name="message" placeholder="Any notes or hardware details (optional)" rows="2"></textarea>
+            <form id="beta-form" class="beta-form" action="https://formspree.io/f/mzdlddkp" method="POST">
+                <label class="form-field form-field-wide">
+                    <span>Email</span>
+                    <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                </label>
+                <label class="form-field">
+                    <span>Device family</span>
+                    <select name="device_family" required>
+                        <option value="" selected disabled>Select your glasses</option>
+                        <option>Ray-Ban Meta</option>
+                        <option>XREAL</option>
+                        <option>Viture</option>
+                        <option>Brilliant Labs</option>
+                        <option>Even Realities</option>
+                        <option>Another device</option>
+                    </select>
+                </label>
+                <label class="form-field">
+                    <span>Exact model</span>
+                    <input type="text" name="glasses" placeholder="e.g. XREAL One Pro" required>
+                </label>
+                <label class="form-field">
+                    <span>Phone or computer</span>
+                    <select name="platform" required>
+                        <option value="" selected disabled>Select your setup</option>
+                        <option>iPhone / iPad</option>
+                        <option>Android</option>
+                        <option>macOS</option>
+                        <option>Windows</option>
+                        <option>Linux</option>
+                    </select>
+                </label>
+                <label class="form-field">
+                    <span>Testing availability</span>
+                    <select name="availability" required>
+                        <option value="" selected disabled>Choose a timeframe</option>
+                        <option>This week</option>
+                        <option>Within two weeks</option>
+                        <option>Later this month</option>
+                    </select>
+                </label>
+                <label class="form-field form-field-wide">
+                    <span>Anything we should know? <small>Optional</small></span>
+                    <textarea name="message" placeholder="Browser, prescription inserts, accessibility needs, or the kind of speaking you do" rows="3"></textarea>
+                </label>
                 <button type="submit">Join the founding beta</button>
             </form>
             <div id="beta-error" class="form-status form-status-error" role="alert" hidden>We could not send the form. Email hello@spectorlabs.io instead.</div>
-            <div id="beta-success" class="form-status" role="status" aria-live="polite" hidden>Thanks. We'll reach out from hello@spectorlabs.io soon.</div>
+            <div id="beta-success" class="form-status beta-success" role="status" aria-live="polite" hidden><strong>You're on the list.</strong><span>We'll email a short test plan and confirm whether your setup is ready.</span></div>
             <p class="beta-footer-note">
                 Prefer email? <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a>
             </p>
@@ -375,55 +427,39 @@
         <section class="founder-section reveal" id="founder">
             <img src="images/founder.png" alt="Jeffrey, who builds Spector" class="founder-photo" width="72" height="72" loading="lazy" onerror="this.style.display='none'">
             <div class="founder-text">
-                <p>Hi, I'm <strong>Jeffrey</strong>. I build Spector on my own from Hong Kong. It started because I kept watching people, myself included, read <em>at</em> a camera instead of talking to it. Smart glasses finally make that fixable. If you try it, I'd genuinely like to hear what broke or what felt good.</p>
+                <p>Hi, I'm <strong>Jeffrey</strong>, an independent builder based in Hong Kong. I made Spector because traditional teleprompters still make people look like they are reading. Smart glasses can keep the script in your line of sight, so you can speak naturally and stay connected to the room or camera. If you try it, I'd love to hear what worked and what did not.</p>
                 <p class="founder-links"><a href="https://github.com/hydrogenbondss" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></p>
             </div>
-        </section>
-
-        <!-- INVESTOR / PARTNER NOTE -->
-        <section class="investor-note reveal" id="investors">
-            <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/docs/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
         </section>
 
         <!-- FOOTER -->
         <footer class="site-footer">
             <p class="footer-promise">Free core, forever. No account, no cloud, nothing uploaded.</p>
-            <details class="whats-new">
-                <summary>What's new <span class="whats-new-version">v1.9</span></summary>
-                <div class="whats-new-body">
-                    <ul>
-                        <li><strong>Jul 4</strong> — Visual refinement: tighter corners, adaptive borders, a GitHub star badge in the nav, and a reorganized footer; added a <a href="/pricing">Pricing</a> page and legal policies; added <a href="/say">Say</a>, a switch-scan AAC composer for non-verbal/Deaf communication, and section bookmarks (mark <code>## Section</code> in your script, jump to it in the player); fixed Mirror mode (text wasn't actually flipping) and "Copy Script + Stats" (was only copying 100 characters); added a pacing trend chart to your rehearsal history, this "what's new" panel, a security policy, and consistent "Spector" naming everywhere.</li>
-                        <li><strong>Jul 3</strong> — Fixed a bug that could silently freeze the site for some visitors; sharper homepage headline; fixed custom pause timing and the Bold button.</li>
-                        <li><strong>Jul 2</strong> — Real live demo in the hero; honest per-device compatibility matrix.</li>
-                    </ul>
-                    <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Full changelog →</a>
-                </div>
-            </details>
             <div class="footer-columns">
                 <div class="footer-col footer-brand-col">
                     <span class="nav-wordmark">SPECTOR</span>
                     <p>The teleprompter for the smart-glasses era.<br>&copy; 2026 Spector Labs · updated <a id="last-updated" href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener">recently</a></p>
                 </div>
                 <div class="footer-col">
-                    <h4>Product</h4>
+                    <p class="footer-heading">Product</p>
                     <a href="#try">Try it</a>
                     <a href="/pricing">Pricing</a>
                     <a href="/say" title="Switch-scan AAC composer — early, for non-verbal/Deaf communication">Say (AAC)</a>
                 </div>
                 <div class="footer-col">
-                    <h4>Devices</h4>
+                    <p class="footer-heading">Devices</p>
                     <a href="/teleprompter-for-xreal">XREAL</a>
                     <a href="/teleprompter-for-viture">Viture</a>
                     <a href="/ray-ban-meta-teleprompter">Ray-Ban Meta</a>
                 </div>
                 <div class="footer-col">
-                    <h4>Company</h4>
+                    <p class="footer-heading">Company</p>
                     <a href="mailto:hello@spectorlabs.io">Contact</a>
                     <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">GitHub</a>
                     <a href="https://github.com/hydrogenbondss/SPECTOR/discussions" target="_blank" rel="noopener">Discussions</a>
                 </div>
                 <div class="footer-col">
-                    <h4>Legal</h4>
+                    <p class="footer-heading">Legal</p>
                     <a href="/terms">Terms</a>
                     <a href="/privacy">Privacy</a>
                     <a href="/refund">Refunds</a>
@@ -469,6 +505,10 @@
         function launchScript(text) {
             const encoded = btoa(encodeURIComponent(text));
             window.location.href = `app.html?script=${encoded}`;
+        }
+
+        function trackEvent(name, data = {}) {
+            if (typeof window.va === 'function') window.va('event', name, data);
         }
 
         function renderLibrary() {
@@ -620,7 +660,8 @@
                     document.getElementById('script-title').value = sample.title;
                     document.getElementById('script-input').value = sample.text;
                     updateScriptMeta();
-                    btn.textContent = 'Loaded ✓';
+                    trackEvent('Sample loaded', { sample: key });
+                    btn.textContent = 'Loaded';
                     setTimeout(() => {
                         const labels = { keynote:'Keynote Opener', pitch:'Investor Pitch', demo:'Product Demo', ted:'TEDx Opener', wedding:'Wedding Toast', earnings:'Earnings Call' };
                         btn.textContent = labels[btn.dataset.sample] || 'Sample';
@@ -851,6 +892,7 @@
             launchBtn.addEventListener('click', () => {
                 const text = textarea.value.trim();
                 if (!text) { showInputError('Please paste or choose a sample script first.'); return; }
+                trackEvent('Teleprompter launched', { source: 'editor' });
                 launchScript(text);
             });
 
@@ -858,8 +900,18 @@
                 const text = textarea.value.trim();
                 if (!text) { showInputError('Add some text to your script before saving.'); return; }
                 saveScript(titleEl.value.trim() || 'Untitled Script', text);
-                saveBtn.textContent = 'Saved ✓';
+                saveBtn.textContent = 'Saved';
                 setTimeout(() => { saveBtn.textContent = 'Save'; }, 1500);
+            });
+        }
+
+        function initQuickDemo() {
+            document.querySelectorAll('[data-quick-demo]').forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    trackEvent('Teleprompter launched', { source: 'quick-demo' });
+                    launchScript(SAMPLE_SCRIPTS.demo.text);
+                });
             });
         }
 
@@ -923,6 +975,7 @@
                 if (response.ok) {
                     form.hidden = true;
                     success.hidden = false;
+                    trackEvent('Beta application submitted', { device: String(formData.get('device_family') || 'unknown') });
                     try { localStorage.setItem('spector_beta_email', formData.get('email')); } catch {}
                     form.reset();
                 } else {
@@ -1059,40 +1112,6 @@
             });
         }
 
-        // Proof of life: live GitHub stars in the nav + "updated N days ago" in the footer.
-        // One cached API call; degrades silently to plain "GitHub"/"recently" offline.
-        function initProofOfLife() {
-            const stars = document.getElementById('gh-stars');
-            const updated = document.getElementById('last-updated');
-            const apply = (d) => {
-                if (stars && d.stargazers_count >= 10) {
-                    stars.textContent = `${d.stargazers_count}`;
-                    stars.setAttribute('aria-label', `${d.stargazers_count} GitHub stars`);
-                    stars.classList.remove('hidden');
-                }
-                if (updated && d.pushed_at) {
-                    const days = Math.max(0, Math.floor((Date.now() - new Date(d.pushed_at)) / 864e5));
-                    updated.textContent = days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
-                }
-            };
-            try {
-                const cached = JSON.parse(localStorage.getItem('spector_gh') || 'null');
-                if (cached && Date.now() - cached.t < 36e5) { apply(cached.d); return; }
-            } catch {}
-            const go = () => fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
-                .then(r => r.ok ? r.json() : null)
-                .then(d => {
-                    if (!d) return;
-                    const slim = { stargazers_count: d.stargazers_count || 0, pushed_at: d.pushed_at };
-                    try { localStorage.setItem('spector_gh', JSON.stringify({ t: Date.now(), d: slim })); } catch {}
-                    apply(slim);
-                })
-                .catch(() => {});
-            // off the critical path — wait for idle so it never competes with first paint
-            if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 5000 });
-            else setTimeout(go, 3500);
-        }
-
         // Live hero demo — same pacing rules as the player (mode base × punctuation),
         // so the hero shows real product behavior instead of a video.
         function initHeroDemo() {
@@ -1102,7 +1121,7 @@
             const fill = document.getElementById('hd-fill');
             const pacing = document.getElementById('hd-pacing');
             if (!prev || !active || !next) return;
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // static frame
+            if (window.matchMedia('(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse)').matches) return;
 
             const LINES = [
                 'Good evening, everyone.',
@@ -1143,22 +1162,6 @@
         function initMotion() {
             const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            // Scroll progress bar (kept even for reduced motion — it's a position indicator)
-            const bar = document.getElementById('scroll-progress');
-            if (bar) {
-                let ticking = false;
-                const update = () => {
-                    const h = document.documentElement;
-                    const max = h.scrollHeight - h.clientHeight;
-                    bar.style.width = (max > 0 ? (window.pageYOffset / max) * 100 : 0) + '%';
-                    ticking = false;
-                };
-                window.addEventListener('scroll', () => {
-                    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-                }, { passive: true });
-                update();
-            }
-
             if (reduce) return; // no count-up / parallax when reduced motion is requested
 
             // Count-up the market stats when they scroll into view
@@ -1188,11 +1191,11 @@
             initFileUpload();
             initButtons();
             initSampleButtons();
+            initQuickDemo();
             initCueToolbar();
             renderLibrary();
             renderHistory();
             initHeroDemo();
-            initProofOfLife();
             initMotion();
             registerServiceWorker();
             initInstallPrompt();
@@ -1241,11 +1244,7 @@
             } catch {}
         }
 
-        // DOMContentLoaded, not window.onload: init() only needs the DOM parsed, not
-        // every resource finished — onload waits on the Google Fonts stylesheet too,
-        // and that request hangs indefinitely (no error, just pending) for any visitor
-        // whose network/extensions block fonts.googleapis.com, which would otherwise
-        // leave every button and form on the page permanently non-functional.
+        // DOMContentLoaded is sufficient because initialization only needs parsed DOM.
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
@@ -1253,10 +1252,6 @@
         }
     </script>
 
-    <!-- Vercel Web Analytics (enable "Web Analytics" in the Vercel project dashboard for data to flow) -->
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/analytics.js"></script>
 </body>
 </html>

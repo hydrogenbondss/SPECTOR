@@ -6,21 +6,21 @@
     <meta name="theme-color" content="#0A0A0A">
     <meta name="robots" content="noindex">
     <title>Spector • Glasses Mode</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.min.css?v=5">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
     <link rel="apple-touch-icon" href="images/app-icon.png">
 </head>
-<body class="glasses">
+<body class="glasses player-loading">
 
-    <button class="exit-btn" id="exit-btn">← Exit</button>
+    <button class="exit-btn" id="exit-btn" type="button" aria-label="Exit the teleprompter">← Exit</button>
 
-    <div id="script-container">
+    <main id="script-container">
         <div id="script-text-wrapper">
             <div id="script-text"></div>
         </div>
-    </div>
+    </main>
     <div id="active-line-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <button class="toggle-chip motion-chip hidden" id="motion-permit-btn" type="button" aria-label="Enable head tracking for Comfort mode spatial effects. On glasses, use right temple button for script control.">Enable head tracking</button>
@@ -58,9 +58,9 @@
     </div>
 
     <div class="controls">
-        <button id="rewind-btn" class="control-btn">⟨⟨</button>
-        <button id="play-btn" class="control-btn">▶</button>
-        <button id="forward-btn" class="control-btn">⟩⟩</button>
+        <button id="rewind-btn" class="control-btn" type="button" aria-label="Previous line" title="Previous line"></button>
+        <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">▶</button>
+        <button id="forward-btn" class="control-btn" type="button" aria-label="Next line" title="Next line"></button>
     </div>
 
     <div class="mode-switcher">
@@ -84,22 +84,22 @@
 
     <!-- Tester scaffolding below (button sim, tilt sim, hardware legend) only renders with ?debug -->
 
-    <div class="glasses-button-test" style="max-width:620px;margin:4px auto 12px;text-align:center;">
-        <button id="glasses-button-sim" class="btn-secondary" style="padding:6px 12px;font-size:12px;">Simulate right temple button (advance)</button>
-        <span style="font-size:10px;color:#666;margin-left:8px;">Press <strong>B</strong> key or click above to simulate. On real Ray-Ban Meta Display: single right-temple button press = next chunk. Test desktop here, then validate on glasses.</span>
+    <div class="glasses-button-test">
+        <button id="glasses-button-sim" class="btn-secondary glasses-button-sim">Simulate right temple button (advance)</button>
+        <span class="glasses-button-help">Press <strong>B</strong> key or click above to simulate. On real Ray-Ban Meta Display: single right-temple button press = next chunk. Test desktop here, then validate on glasses.</span>
     </div>
 
     <!-- Desktop Comfort tilt simulator (for testing spatial effects without real device sensors) -->
-    <div id="desktop-tilt-sim" style="max-width:620px;margin:4px auto 8px;text-align:center;display:none;font-size:11px;color:#777;">
+    <div id="desktop-tilt-sim" class="desktop-tilt-sim">
         <div>Desktop tilt sim (Comfort only):</div>
-        <label style="margin:0 6px;">Gamma <input type="range" id="tilt-gamma" min="-90" max="90" value="0" step="1" style="width:140px;vertical-align:middle;"></label>
-        <label>Beta <input type="range" id="tilt-beta" min="-90" max="90" value="0" step="1" style="width:140px;vertical-align:middle;"></label>
-        <button id="tilt-reset" type="button" style="font-size:10px;padding:1px 6px;margin-left:4px;">Reset</button>
+        <label class="tilt-label">Gamma <input type="range" id="tilt-gamma" min="-90" max="90" value="0" step="1"></label>
+        <label>Beta <input type="range" id="tilt-beta" min="-90" max="90" value="0" step="1"></label>
+        <button id="tilt-reset" class="tilt-reset" type="button">Reset</button>
     </div>
 
     <div id="end-screen" class="end-screen hidden">
         <h2 id="end-screen-heading" tabindex="-1">Well done.</h2>
-        <p class="subtitle">Rehearsal complete. Review your pacing — then run it again until delivery feels natural.</p>
+        <p class="subtitle">Rehearsal complete. Review your pacing, then run it again until delivery feels natural.</p>
 
         <div class="stats">
             <div>
@@ -123,7 +123,7 @@
         <div class="analytics-panel" id="analytics-panel">
             <p class="analytics-line" id="analytics-hesitations">—</p>
             <p class="analytics-line" id="analytics-slowest">—</p>
-            <p class="analytics-line" style="font-size:11px; color:#888; margin-top:8px;">Tip: a pacing score above 85% means you're ready to perform eyes-up.</p>
+            <p class="analytics-line analytics-tip">Tip: a pacing score above 85% means you're ready to perform eyes-up.</p>
         </div>
 
         <div class="section-analytics hidden" id="section-analytics"></div>
@@ -478,13 +478,19 @@
     const kalmanBeta = new KalmanFilter();
     const kalmanGamma = new KalmanFilter();
 
+    const vibrate = (pattern) => {
+        if (!navigator.userActivation || navigator.userActivation.hasBeenActive) {
+            navigator.vibrate?.(pattern);
+        }
+    };
+
     const Haptics = {
-        tick: () => navigator.vibrate?.([8]),
-        play: () => navigator.vibrate?.([28, 14, 42]),
-        rewind: () => navigator.vibrate?.([18, 8, 28]),
-        forward: () => navigator.vibrate?.([18, 8, 28]),
-        modeChange: () => navigator.vibrate?.([12, 6, 18]),
-        preset: () => navigator.vibrate?.([10]),
+        tick: () => vibrate([8]),
+        play: () => vibrate([28, 14, 42]),
+        rewind: () => vibrate([18, 8, 28]),
+        forward: () => vibrate([18, 8, 28]),
+        modeChange: () => vibrate([12, 6, 18]),
+        preset: () => vibrate([10]),
     };
 
     // First run should never be an empty prompter — land on a real sample so the
@@ -605,7 +611,12 @@
         if (active) {
             active.classList.add('active');
             const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            active.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+            const scriptContainer = document.getElementById('script-container');
+            const targetTop = active.offsetTop - (scriptContainer.clientHeight - active.offsetHeight) / 2;
+            scriptContainer.scrollTo({
+                top: Math.max(0, targetTop),
+                behavior: reduced ? 'auto' : 'smooth',
+            });
             settleActiveChunk();
             const announcer = document.getElementById('active-line-announcer');
             if (announcer) announcer.textContent = chunkToAnnounceText(chunks[currentIndex] || '');
@@ -637,7 +648,10 @@
             rehearsalTimings = [];
         }
         lastChunkAdvanceAt = Date.now();
-        document.getElementById('play-btn').textContent = '⏸ Pause';
+        const playButton = document.getElementById('play-btn');
+        playButton.textContent = 'Pause';
+        playButton.setAttribute('aria-label', 'Pause teleprompter');
+        playButton.title = 'Pause';
         Haptics.play();
 
         const tick = () => {
@@ -667,7 +681,10 @@
         }
         isPlaying = false;
         clearTimeout(interval);
-        document.getElementById('play-btn').textContent = '▶';
+        const playButton = document.getElementById('play-btn');
+        playButton.textContent = '▶';
+        playButton.setAttribute('aria-label', 'Play teleprompter');
+        playButton.title = 'Play';
         if (window.__refreshTiltPanel) window.__refreshTiltPanel();
     }
 
@@ -1195,6 +1212,9 @@
         document.getElementById('end-wpm').textContent = SpectorCore.estimateWpm(totalWords, elapsed);
         const analytics = SpectorCore.buildRehearsalAnalytics(rehearsalTimings);
         document.getElementById('end-consistency').textContent = `${analytics.consistency}%`;
+        if (typeof window.va === 'function') {
+            window.va('event', 'Rehearsal completed', { mode: currentMode });
+        }
         document.getElementById('analytics-hesitations').textContent =
             analytics.hesitations
                 ? `${analytics.hesitations} hesitation${analytics.hesitations === 1 ? '' : 's'} — natural pauses are fine; aim to reduce forced stops.`
@@ -1291,6 +1311,9 @@
 
         applyMode(restorePlayerPrefs());
         updateDisplay();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            document.body.classList.remove('player-loading');
+        }));
 
         if (firstRun) {
             setTimeout(() => {
@@ -1570,5 +1593,7 @@
         init();
     }
     </script>
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+    <script defer src="/analytics.js"></script>
 </body>
 </html>

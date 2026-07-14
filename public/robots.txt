@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://spectorlabs.io/sitemap.xml
+Sitemap: https://www.spectorlabs.io/sitemap.xml

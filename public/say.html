@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#0A0A0A">
     <title>Spector • Say — switch-scan AAC composer</title>
     <meta name="description" content="Spell out what you want to say with a single tap, key, or switch — a free, open-source row-column scanning composer for people who are non-verbal or Deaf, built the same way Stephen Hawking's speech system worked.">
-    <link rel="canonical" href="https://spectorlabs.io/say">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="canonical" href="https://www.spectorlabs.io/say">
+    <link rel="stylesheet" href="style.min.css?v=5">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
@@ -16,13 +16,14 @@
 <body class="glasses say-page">
 
     <h1 class="sr-only">Say — switch-scan AAC composer</h1>
-    <button class="exit-btn" id="exit-btn">← Exit</button>
+    <button class="exit-btn" id="exit-btn" type="button" aria-label="Exit Say">← Exit</button>
 
+    <main class="say-main">
     <div class="say-message empty" id="say-message" role="status" aria-live="polite"></div>
 
     <div class="scan-rows" id="scan-rows"></div>
 
-    <p class="say-hint">Tap anywhere, press <strong>Space</strong>, or press <strong>B</strong> to select the highlighted row — then the highlighted letter. Locked the wrong row? <strong>◀</strong> is always the first option.</p>
+    <p class="say-hint">Tap anywhere, press <strong>Space</strong>, or press <strong>B</strong> to select the highlighted row, then the highlighted letter. Locked the wrong row? <strong>◀</strong> is always the first option.</p>
 
     <div class="say-controls" id="say-controls">
         <div class="customize-group">
@@ -33,6 +34,7 @@
         <button type="button" class="toggle-chip" id="pause-scan-btn">Pause</button>
         <button type="button" class="toggle-chip" id="clear-all-btn">Clear all</button>
     </div>
+    </main>
 
     <script>
         // ─── Pure scanning logic (testable without DOM/timers) ───
@@ -52,7 +54,7 @@
             [BACK, 'H', 'I', 'J', 'K', 'L', 'M', 'N'],
             [BACK, 'O', 'P', 'Q', 'R', 'S', 'T', 'U'],
             [BACK, 'V', 'W', 'X', 'Y', 'Z'],
-            [BACK, { action: 'space', label: 'SPACE' }, { action: 'delete', label: '⌫ DELETE' }, { action: 'clear', label: 'CLEAR' }, { action: 'speak', label: '🔊 SPEAK' }],
+            [BACK, { action: 'space', label: 'SPACE' }, { action: 'delete', label: '⌫ DELETE' }, { action: 'clear', label: 'CLEAR' }, { action: 'speak', label: 'SPEAK' }],
         ];
 
         function cellLabel(cell) {
@@ -290,5 +292,6 @@
             init();
         }
     </script>
+    <script defer src="/analytics.js"></script>
 </body>
 </html>

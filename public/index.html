@@ -21,10 +21,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Load fonts without blocking first paint (Lighthouse: render-blocking resources) -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"></noscript>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"></noscript>
     <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="landing-v2.css?v=1">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
@@ -45,8 +46,6 @@
 </head>
 <body class="landing">
 
-    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
-
     <!-- NAV -->
     <nav class="site-nav">
         <a href="#" class="nav-brand">
@@ -55,13 +54,12 @@
         </a>
         <div class="nav-links" id="nav-links">
             <span class="nav-indicator" aria-hidden="true"></span>
-            <a href="#why-now">Why now</a>
             <a href="#features">Product</a>
-            <a href="#try">Try it</a>
+            <a href="/pricing">Pricing</a>
             <a href="/say" title="Switch-scan AAC composer — for non-verbal/Deaf communication">Say</a>
-            <a href="#faq">FAQ</a>
-            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge hidden" id="gh-stars"></span></a>
-            <a href="#beta" class="nav-cta">Join beta</a>
+            <a href="#beta">Beta</a>
+            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub&nbsp;↗<span class="nav-star-badge hidden" id="gh-stars"></span></a>
+            <a href="app.html" class="nav-cta">Open Spector</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
             <span></span><span></span><span></span>
@@ -72,17 +70,21 @@
 
         <!-- HERO -->
         <section class="hero-section">
-            <div class="hero-badge">Eyes Forward</div>
-            <h1 class="hero-headline">Talk to camera. <span class="text-purple">Not to your notes.</span></h1>
-            <p class="hero-subhead">Spector is a free, open-source teleprompter — rehearse on your phone, then perform eyes-up on <strong>any</strong> smart glasses: Ray-Ban Meta, XREAL, Viture, not just one brand's. No account.</p>
+            <h1 class="hero-headline">The teleprompter that reads your punctuation.</h1>
+            <p class="hero-subhead">Write with commas and full stops — Spector paces itself. <strong>No mic. No listening.</strong> Rehearse on your phone, perform eyes-up on any smart glasses. Free and open source.</p>
             <div class="hero-cta-group">
-                <a href="app.html" class="btn-primary btn-hero">Try it now — no sign-up</a>
-                <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="hero-ghost-link">★ Star on GitHub</a>
+                <a href="app.html" class="btn-primary btn-hero">Open Spector — free, no account</a>
+                <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="hero-ghost-link">View source ↗</a>
             </div>
+            <p class="hero-trust-row">No account&nbsp;&nbsp;·&nbsp;&nbsp;No subscription&nbsp;&nbsp;·&nbsp;&nbsp;<b>$34 once</b>&nbsp;&nbsp;·&nbsp;&nbsp;Open source</p>
         </section>
 
         <!-- HERO LIVE DEMO — this is the real engine, not a video -->
         <a class="hero-demo" id="hero-demo" href="app.html" title="Open the full player">
+            <div class="hero-demo-bar-row">
+                <span class="hero-demo-live"><span class="pip"></span>Pacing to punctuation</span>
+                <span class="hero-demo-hint"><kbd>Space</kbd> pauses · click to open</span>
+            </div>
             <div class="hero-demo-line prev" id="hd-prev">Good evening, everyone.</div>
             <div class="hero-demo-line active" id="hd-active">This is <span class="hd-emphasis">Spector</span> — running live, right now.</div>
             <div class="hero-demo-line next" id="hd-next">No video. No mockup.</div>
@@ -91,25 +93,19 @@
                 <span class="hero-demo-pacing" id="hd-pacing">auto-pacing · punctuation-aware</span>
             </div>
         </a>
-        <p class="hero-note">This is the actual engine — click it to load a full sample script.</p>
+        <p class="hero-note">This is the actual engine — not a video. Click it to load a full sample script.</p>
 
-        <!-- TRUST BAR -->
+        <!-- COMPATIBILITY STRIP -->
         <div class="trust-bar">
-            <span>Works today on phone</span>
-            <span class="trust-dot"></span>
-            <span>Built for glasses HUD</span>
-            <span class="trust-dot"></span>
-            <span>Open source on GitHub</span>
+            <span>Eyes-up on&nbsp;&nbsp;Ray-Ban Meta&nbsp;&nbsp;·&nbsp;&nbsp;XREAL&nbsp;&nbsp;·&nbsp;&nbsp;Viture&nbsp;&nbsp;·&nbsp;&nbsp;any phone</span>
         </div>
 
         <!-- WHY NOW -->
-        <section class="whynow-section reveal" id="why-now">
-            <div class="section-header">
-                <p class="section-eyebrow">Why now</p>
-                <h2>The glasses era is arriving — fast.</h2>
-            </div>
-            <p class="problem-statement" style="margin-bottom:40px;">
-                Meta's Ray-Ban smart glasses became the category's first mainstream hit. Google (Android XR), Samsung, and Apple are racing in behind them. For the first time, <strong>millions of people now have a display in their field of view</strong> — and almost none of today's software was designed for it.
+        <section class="band reveal" id="why-now">
+            <p class="kicker">Why now</p>
+            <h2>Millions of people suddenly have a display in their field of view.</h2>
+            <p>
+                Ray-Ban Meta made smart glasses a mainstream product; Android XR, Samsung, and Apple are racing in behind. The hardware shipped — but the software for <strong>speaking and presenting eyes-up</strong> hasn't been built yet. Reading a script still means looking away: broken eye contact, a frozen "reading" voice. That's the opening Spector is built for.
             </p>
             <div class="stat-strip">
                 <div class="stat">
@@ -126,98 +122,56 @@
                 </div>
             </div>
             <p class="stat-source">Sources: <a href="https://www.cnbc.com/2026/02/11/ray-ban-maker-essilorluxottica-triples-sales-of-meta-ai-glasses.html" target="_blank" rel="noopener">EssilorLuxottica / CNBC</a> · <a href="https://counterpointresearch.com/en/insights/post-insight-research-briefs-blogs-global-smart-glasses-shipments-soared-110-yoy-in-h1-2025-with-meta-capturing-over-70-share" target="_blank" rel="noopener">Counterpoint Research, 2025</a></p>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <p class="feature-label">Hardware</p>
-                    <h3>It has shipped</h3>
-                    <p>Smart glasses left the lab. Ray-Ban Meta, XREAL, Viture and Brilliant Labs are in real customers' hands today — selling faster than anyone predicted.</p>
-                </div>
-                <div class="feature-card">
-                    <p class="feature-label">Platforms</p>
-                    <h3>Big tech is all-in</h3>
-                    <p>Android XR, Samsung, and Apple are pouring resources into head-worn computing. The platform war for your field of view has officially started.</p>
-                </div>
-                <div class="feature-card">
-                    <p class="feature-label">Software</p>
-                    <h3>It hasn't caught up</h3>
-                    <p>The apps are still phone apps. The native tools for speaking and presenting on glasses haven't been built yet. That's the opening.</p>
-                </div>
+        </section>
+
+        <!-- PRODUCT: PACING -->
+        <section class="product-row reveal" id="features">
+            <div class="product-copy">
+                <p class="kicker">Pacing</p>
+                <h2>Your punctuation sets the pace.</h2>
+                <p>Spector advances on its own at speaking pace — <strong>breathing at commas, holding at full stops, lingering on emphasis</strong>. No scroll wheel, no foot pedal.</p>
+                <p>And unlike voice-following prompters, there's <strong>no mic and no listening</strong>: the pace comes from the script itself, so it's deterministic, private, and works even when you go off-book for a beat. After each rehearsal you get the numbers — average WPM, consistency, where you hesitated.</p>
+            </div>
+            <div class="product-media pace-visual" aria-hidden="true">
+                <p class="pv-line">Good evening, everyone.<span class="pv-mark pv-hold">hold</span></p>
+                <p class="pv-line on">Tonight I want to show you something,<span class="pv-mark">breathe</span></p>
+                <p class="pv-line">something we've been building quietly for a year.<span class="pv-mark pv-hold">hold</span></p>
+                <p class="pv-line">Eyes up. No script-face.<span class="pv-mark pv-hold">hold</span></p>
             </div>
         </section>
 
-        <!-- PROBLEM -->
-        <section class="problem-section reveal">
-            <div class="section-header">
-                <p class="section-eyebrow">The problem</p>
-                <h2>Reading a script still means looking away.</h2>
+        <!-- PRODUCT: GLASSES -->
+        <section class="product-row flip reveal">
+            <div class="product-copy">
+                <p class="kicker">Eyes up</p>
+                <h2>Any glasses. Not one brand's.</h2>
+                <p>Rehearse on your phone, then perform eyes-up on XREAL or Viture today — with Ray-Ban Meta and others as their platforms open up. <strong>Comfort mode</strong> spatially anchors the text with Kalman-filtered head-tracking, so the script holds still while you don't.</p>
+                <p class="fine">What works on your exact device, honestly: <a href="#devices">the device matrix</a>.</p>
             </div>
-            <p class="problem-statement">
-                Every teleprompter today assumes a screen you stare at. On stage, on camera, or on a sales call, that means <strong>broken eye contact, a frozen "reading" voice, and notes you can't glance at without it being obvious.</strong> The hardware to fix this finally exists. The software didn't — until Spector.
-            </p>
-        </section>
-
-        <!-- FEATURES -->
-        <section class="features-section reveal" id="features">
-            <div class="section-header">
-                <p class="section-eyebrow">The product</p>
-                <h2>Not just another teleprompter.</h2>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                    </div>
-                    <p class="feature-label">Pacing</p>
-                    <h3>Auto-paced, punctuation-aware</h3>
-                    <p>Advances at speaking pace on its own — lingering on sentence ends, breathing at commas, holding on <strong>emphasis</strong>. No manual scroll.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </div>
-                    <p class="feature-label">Comfort</p>
-                    <h3>Spatial anchoring</h3>
-                    <p>Kalman-filtered head-tilt stabilizes text to reduce eye strain. Breathing animations create natural, immersive flow.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                            <path d="M18 20V10M12 20V4M6 20v-6"/>
-                        </svg>
-                    </div>
-                    <p class="feature-label">Analytics</p>
-                    <h3>Post-run intelligence</h3>
-                    <p>Avg WPM, pacing consistency, hesitation detection, and slowest-moment analysis after every rehearsal run.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- COMFORT MODE -->
-        <section class="comfort-section reveal">
-            <div class="section-header">
-                <p class="section-eyebrow">Comfort mode</p>
-                <h2>Text that holds still while you don't.</h2>
-            </div>
-            <div class="showcase-card">
+            <div class="product-media">
                 <img src="images/comfort-comparison.webp" alt="Standard mode vs Spector Comfort mode: standard teleprompter text jitters with head movement, Comfort mode keeps the script spatially anchored and stable" loading="lazy" width="1600" height="900">
-                <div class="showcase-label">
-                    <p class="showcase-title">Spatially anchored. Calm by design.</p>
-                    <p class="showcase-desc">Standard teleprompters shake with every head movement — causing eye strain and that frozen "reading" look. Comfort mode locks your script in space so it stays stable and readable through an entire rehearsal.</p>
-                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCT: YOURS -->
+        <section class="product-row reveal">
+            <div class="product-copy">
+                <p class="kicker">Yours</p>
+                <h2>No account. Nothing uploaded. Ever.</h2>
+                <p>Spector is a PWA — it opens in your browser, installs like an app, and <strong>works offline</strong>. Scripts and rehearsal history live in your browser's local storage and never leave your device. The whole app is open source, so you don't have to take our word for any of this.</p>
+            </div>
+            <div class="product-media pace-visual" aria-hidden="true">
+                <p class="pv-line on">scripts&nbsp;&nbsp;→&nbsp;&nbsp;this device only</p>
+                <p class="pv-line on">cloud&nbsp;&nbsp;→&nbsp;&nbsp;none</p>
+                <p class="pv-line on">telemetry&nbsp;&nbsp;→&nbsp;&nbsp;none</p>
+                <p class="pv-line on">source&nbsp;&nbsp;→&nbsp;&nbsp;github.com/hydrogenbondss/SPECTOR</p>
             </div>
         </section>
 
         <!-- HOW IT WORKS -->
-        <section id="how-it-works" class="steps-section reveal">
-            <div class="section-header">
-                <p class="section-eyebrow">How it works</p>
-                <h2>From script to stage in three steps.</h2>
-            </div>
+        <section id="how-it-works" class="band reveal">
+            <p class="kicker">How it works</p>
+            <h2>From script to stage in three steps.</h2>
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">01</div>
@@ -237,40 +191,10 @@
             </div>
         </section>
 
-        <!-- COMPARISON -->
-        <section class="comparison-section reveal">
-            <div class="section-header">
-                <p class="section-eyebrow">Why Spector</p>
-                <h2>One prompter, any glasses.</h2>
-            </div>
-            <div class="comparison-grid">
-                <div class="comparison-card basic">
-                    <h3>Single-brand glasses prompters</h3>
-                    <ul>
-                        <li><span class="x-mark">&#x2715;</span> Locked to one brand's glasses</li>
-                        <li><span class="x-mark">&#x2715;</span> $600–800+ just to start</li>
-                        <li><span class="x-mark">&#x2715;</span> Account required, closed source</li>
-                        <li><span class="x-mark">&#x2715;</span> Nothing to rehearse with on your phone</li>
-                    </ul>
-                </div>
-                <div class="comparison-card spector">
-                    <h3>Spector</h3>
-                    <ul>
-                        <li><span class="check-mark">&#x2713;</span> Works on any glasses — and your phone</li>
-                        <li><span class="check-mark">&#x2713;</span> Free &amp; open source</li>
-                        <li><span class="check-mark">&#x2713;</span> Rehearse on phone → perform on glasses</li>
-                        <li><span class="check-mark">&#x2713;</span> No account, no lock-in</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
         <!-- DEVICE MATRIX -->
-        <section class="matrix-section reveal" id="devices">
-            <div class="section-header">
-                <p class="section-eyebrow">The honest device matrix</p>
-                <h2>What works on <em>your</em> glasses, today.</h2>
-            </div>
+        <section class="band reveal" id="devices">
+            <p class="kicker">The honest device matrix</p>
+            <h2>What works on <em>your</em> glasses, today.</h2>
             <div class="device-matrix">
                 <div class="matrix-row">
                     <span class="matrix-device">Any phone or computer</span>
@@ -307,12 +231,16 @@
         </section>
 
         <!-- FAQ -->
-        <section class="faq-section reveal" id="faq">
-            <div class="section-header">
-                <p class="section-eyebrow">FAQ</p>
-                <h2>The honest answers.</h2>
-            </div>
+        <section class="band reveal" id="faq">
+            <p class="kicker">FAQ</p>
+            <h2>The honest answers.</h2>
             <div class="faq-list">
+                <details class="faq-item">
+                    <summary>How is this different from teleprompters that follow your voice?</summary>
+                    <div class="faq-answer">
+                        <p>Voice-following prompters listen to you through a mic and try to keep up. Spector doesn't listen at all — <strong>the pace comes from your script's punctuation</strong>, so it's deterministic (the same script always paces the same way), it keeps flowing when you ad-lib or pause, nothing you say is ever processed, and it works where a mic can't — like on a glasses HUD while you're mid-presentation.</p>
+                    </div>
+                </details>
                 <details class="faq-item">
                     <summary>Which devices actually work today?</summary>
                     <div class="faq-answer">
@@ -334,7 +262,7 @@
                 <details class="faq-item">
                     <summary>What does it cost?</summary>
                     <div class="faq-answer">
-                        <p>The core teleprompter — on phone and glasses — is <strong>free, today</strong>, and the open-source core stays free. Down the line, a paid tier may add power-user extras like deeper rehearsal analytics and sync. Nothing's behind a paywall right now, and founding beta testers get any future Pro free for life (see below). Full breakdown on the <a href="/pricing">Pricing page</a>.</p>
+                        <p>The core teleprompter — on phone and glasses — is <strong>free forever</strong>, and open source. Spector Pro is a <strong>one-time $34 purchase</strong> (no subscription) that unlocks power-user extras as they ship, and it's how the project stays independent. Founding beta testers get Pro free for life (see below). Full breakdown on the <a href="/pricing">Pricing page</a>.</p>
                     </div>
                 </details>
                 <details class="faq-item">
@@ -353,11 +281,9 @@
         </section>
 
         <!-- EDITOR -->
-        <section class="editor-section" id="try">
-            <div class="section-header">
-                <p class="section-eyebrow">Live editor</p>
-                <h2>Try it now.</h2>
-            </div>
+        <section class="band-wide" id="try">
+            <p class="kicker">Live editor</p>
+            <h2>Try it now.</h2>
 
             <div class="editor-card">
                 <label for="script-title">Script title</label>
@@ -430,9 +356,9 @@
 
         <!-- PRO -->
         <section class="support-section" id="support">
-            <p class="section-eyebrow">Spector Pro</p>
-            <h2>One-time purchase. Lifetime access.</h2>
-            <p>The core teleprompter is <strong>free forever</strong>. Spector Pro is a one-time, $34 purchase that unlocks every Pro feature as it ships: cloud sync across devices, extended rehearsal history &amp; pacing trends, and script export. No subscription, no recurring charge. Full details on the <a href="/pricing">Pricing page</a>.</p>
+            <p class="kicker">Pricing</p>
+            <h2>Free core, forever. Pro is $34 — once.</h2>
+            <p>The open-source core is a complete teleprompter, free with no account. Spector Pro is a <strong>one-time $34 purchase</strong> — no subscription — that unlocks every Pro feature as it ships: cloud sync across devices, extended rehearsal history &amp; pacing trends, and script export. It's also how this project stays independent. Full details on the <a href="/pricing">Pricing page</a>.</p>
             <div class="support-cta">
                 <a href="#" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34 (opening soon)</a>
             </div>
@@ -447,7 +373,7 @@
 
         <!-- BETA -->
         <section class="beta-section" id="beta">
-            <p class="section-eyebrow">Founding beta — open now</p>
+            <p class="kicker">Founding beta — open now</p>
             <h2>Become a founding tester.</h2>
             <p><strong>No glasses? Start in 10 seconds</strong> — <a href="#try">try the full rehearsal experience in your browser</a>, no sign-up needed. Own smart glasses? Help validate Spector on real hardware and shape the product.</p>
             <div class="beta-offer">
@@ -483,6 +409,12 @@
         <!-- INVESTOR / PARTNER NOTE -->
         <section class="investor-note reveal" id="investors">
             <p>Investor, partner, or just curious? <a href="mailto:hello@spectorlabs.io?subject=Spector%20%E2%80%94%20Hello">Say hello</a>, <a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/docs/PROJECT.md" target="_blank" rel="noopener">read the project memo</a>, or <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">see the code</a>.</p>
+        </section>
+
+        <!-- ECHO CTA -->
+        <section class="echo-cta reveal">
+            <h2>Start reading with Spector.</h2>
+            <a href="app.html" class="btn-primary btn-hero">Open Spector — free, no account</a>
         </section>
 
         <!-- FOOTER -->
@@ -1262,6 +1194,8 @@
                 return base;
             };
             let i = 1;
+            let timer = null;
+            let paused = false;
             const step = () => {
                 prev.innerHTML = LINES[(i - 1 + LINES.length) % LINES.length];
                 active.innerHTML = LINES[i % LINES.length];
@@ -1274,9 +1208,33 @@
                 }
                 const delay = ms(LINES[i % LINES.length]);
                 i++;
-                setTimeout(step, delay);
+                timer = setTimeout(step, delay);
             };
-            setTimeout(step, 1800);
+            timer = setTimeout(step, 1800);
+
+            // Space pauses/resumes — mirrors the player, but only while the demo
+            // is on screen and never while typing in a form field.
+            const demo = document.getElementById('hero-demo');
+            let demoInView = true;
+            if (demo && 'IntersectionObserver' in window) {
+                new IntersectionObserver((entries) => {
+                    demoInView = entries[0]?.isIntersecting ?? false;
+                }, { threshold: 0.3 }).observe(demo);
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.code !== 'Space' || !demoInView) return;
+                const t = e.target;
+                if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+                e.preventDefault();
+                paused = !paused;
+                if (paused) {
+                    clearTimeout(timer);
+                    if (pacing) pacing.textContent = 'paused — Space to resume';
+                } else {
+                    if (pacing) pacing.textContent = 'auto-pacing · punctuation-aware';
+                    step();
+                }
+            });
         }
 
         function initMotion() {

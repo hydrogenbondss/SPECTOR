@@ -255,9 +255,39 @@ body.landing .product-media {
 }
 body.landing .product-media img { display: block; width: 100%; height: auto; }
 
+/* comfort comparison — live behavior, not a render */
+body.landing .comfort-compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--hair2); overflow: hidden;
+}
+body.landing .cc-pane { background: var(--panel); padding: 26px 24px 28px; }
+body.landing .cc-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--t4); margin: 0 0 16px;
+}
+body.landing .cc-script p {
+    font-size: 15.5px; line-height: 1.6; letter-spacing: -0.011em;
+    color: var(--t2); margin: 0;
+}
+body.landing .cc-shake { animation: cc-jitter 1.6s infinite steps(2, jump-none); }
+@keyframes cc-jitter {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    25%  { transform: translate(1.5px, -1px) rotate(.2deg); }
+    50%  { transform: translate(-1px, 1.5px) rotate(-.15deg); }
+    75%  { transform: translate(1px, .5px) rotate(.1deg); }
+    100% { transform: translate(-.5px, -1px) rotate(-.2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.landing .cc-shake { animation: none; opacity: .55; filter: blur(.4px); }
+}
+@media (max-width: 640px) {
+    body.landing .comfort-compare { grid-template-columns: 1fr; }
+}
+
 /* pacing visual — pure CSS text with punctuation states */
 body.landing .pace-visual { padding: 30px 34px; }
-body.landing .pace-visual .pv-line { font-size: 21px; line-height: 1.75; letter-spacing: -0.014em; color: var(--t4); }
+body.landing .pace-visual .pv-line { font-size: 21px; line-height: 1.75; letter-spacing: -0.014em; color: var(--t4); overflow-wrap: anywhere; }
+body.landing .product-row .pace-visual .pv-line { font-size: 18px; }
 body.landing .pace-visual .pv-line.on { color: var(--t1); }
 body.landing .pace-visual .pv-mark {
     display: inline-block; font-family: var(--mono); font-size: 11px;

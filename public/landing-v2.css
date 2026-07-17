@@ -14,7 +14,7 @@ body.landing {
     --t1: #F7F8F8;
     --t2: #D0D6E0;
     --t3: #8A8F98;
-    --t4: #62666D;
+    --t4: #787D86; /* dimmest tier that still clears WCAG AA (4.5:1) on --bg — it carries real content */
     --hair1: rgba(255, 255, 255, .05);
     --hair2: rgba(255, 255, 255, .08);
     --hair3: rgba(255, 255, 255, .15);
@@ -359,6 +359,15 @@ body.landing .btn-secondary {
 body.landing .btn-secondary:hover { color: var(--t1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); background: none; }
 body.landing .file-upload { background: none; border: 1px dashed var(--hair3); color: var(--t4); border-radius: 8px; }
 body.landing .install-hint { color: var(--t4); font-size: 12.5px; }
+body.landing .install-tip { color: var(--t3); font-size: 12.5px; }
+body.landing .script-meta { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--t4); margin-bottom: 8px; }
+body.landing .syntax-hint { font-size: 12.5px; color: var(--t4); margin-bottom: 12px; line-height: 1.5; }
+body.landing .syntax-hint code { background: rgba(255, 255, 255, .06); padding: 2px 6px; border-radius: 4px; color: var(--t3); }
+body.landing .input-error { color: #e88; font-size: 12.5px; margin-bottom: 8px; }
+body.landing .history-heading {
+    font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--t4);
+    letter-spacing: .06em; text-transform: uppercase; margin: 0 0 8px;
+}
 body.landing .link-btn { color: #A78BFA; }
 
 /* pro / pricing band */
@@ -400,7 +409,8 @@ body.landing .site-footer { border-top: 1px solid var(--hair1); margin-top: 104p
 body.landing .whats-new { border: 1px solid var(--hair2); border-radius: 10px; background: none; }
 body.landing .whats-new summary { color: var(--t2); }
 body.landing .whats-new-version { color: #A78BFA; font-family: var(--mono); font-size: 12px; }
-body.landing .footer-col h4 { color: var(--t4); font-family: var(--mono); font-size: 11px; letter-spacing: .06em; }
+body.landing .footer-col h4,
+body.landing .footer-col .footer-heading { color: var(--t4); font-family: var(--mono); font-size: 11px; letter-spacing: .06em; margin: 0 0 10px; font-weight: 600; }
 body.landing .footer-col a { color: var(--t3); font-size: 13.5px; }
 body.landing .footer-col a:hover { color: var(--t1); }
 body.landing .footer-brand-col p { color: var(--t4); }
@@ -413,11 +423,11 @@ body.landing .echo-cta h2 {
 }
 body.landing .echo-cta .btn-hero { display: inline-block; margin-top: 24px; }
 
-/* reveal (kept, subtler) */
-body.landing .reveal { opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
-body.landing .reveal.revealed { opacity: 1; transform: none; }
+/* reveal (kept, subtler) — gated on .js so content stays visible when JS never runs */
+.js body.landing .reveal { opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.js body.landing .reveal.revealed { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-    body.landing .reveal { opacity: 1; transform: none; transition: none; }
+    .js body.landing .reveal { opacity: 1; transform: none; transition: none; }
     body.landing .hero-demo-fill, body.landing .hero-demo-pacing { transition: none; animation: none; }
 }
 

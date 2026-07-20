@@ -43,6 +43,7 @@
       "description": "A free, open-source, auto-paced teleprompter for smart glasses. Rehearse on phone, perform eyes-up on glasses."
     }
     </script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (typeof initPaddle === 'function') initPaddle();"></script>
 </head>
 <body class="landing">
 
@@ -373,9 +374,9 @@
         <section class="support-section" id="support">
             <p class="kicker">Pricing</p>
             <h2>Free core, forever. Pro is $34 — once.</h2>
-            <p>The open-source core is a complete teleprompter, free with no account. Spector Pro is a <strong>one-time $34 purchase</strong> — no subscription — that unlocks every Pro feature as it ships: cross-device sync (strictly opt-in — the no-cloud default never changes), extended rehearsal history &amp; pacing trends, and script export. It's also how this project stays independent. Checkout opens soon; full details on the <a href="/pricing">Pricing page</a>.</p>
+            <p>The open-source core is a complete teleprompter, free with no account. Spector Pro is a <strong>one-time $34 purchase</strong> — no subscription — that unlocks every Pro feature as it ships: cross-device sync (strictly opt-in — the no-cloud default never changes), extended rehearsal history &amp; pacing trends, and script export. It's also how this project stays independent. Full details on the <a href="/pricing">Pricing page</a>.</p>
             <div class="support-cta">
-                <a href="#beta" id="go-pro-btn" class="btn-primary">Get notified when Pro opens — $34, once</a>
+                <a href="#" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</a>
             </div>
             <div class="license-box">
                 <span class="license-label">Already purchased?</span>
@@ -487,15 +488,11 @@
         // ── Monetization (no backend) ─────────────────────────────────────────
         // Paddle client-side tokens are safe to expose in frontend code (unlike
         // API keys) -- see developer.paddle.com/paddlejs/about/client-side-tokens.
-        // Paste yours + the Spector Pro price ID below to switch checkout on;
-        // until both are set, the Pro button is a plain link to the notify/beta
-        // form instead of opening a checkout.
-        // Checkout is deliberately OFF until the purchase flow is verified
-        // end-to-end and license validation is real. To re-enable: restore the
-        // price ID (pri_01kx8xyrewyg78qw3hvcf9edak), re-add the paddle.js
-        // <script> tag in <head>, and flip the button copy here and on /pricing.
+        // Live Paddle account verification is complete and checkout is on. No
+        // backend: checkout.completed just flags Pro locally (see initPaddle
+        // below) -- known, accepted, documented in docs/PADDLE.md.
         const PADDLE_CLIENT_TOKEN = 'live_8212ac5b4b5470643f03bb7c7a7';
-        const PADDLE_PRICE_ID = '';
+        const PADDLE_PRICE_ID = 'pri_01kx8xyrewyg78qw3hvcf9edak';
 
         function initPaddle() {
             if (!PADDLE_CLIENT_TOKEN || typeof Paddle === 'undefined') return;
@@ -1087,6 +1084,73 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
+        // Animates each .stat-num up to its real, sourced value once the strip scrolls
+        // into view. Never invents or rounds the displayed figure — the exact original
+        // string (e.g. "110%+") is restored verbatim when the count finishes, so the
+        // animation can't drift from the sourced copy in stat-strip's markup.
+        function initStatCounters() {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const nums = document.querySelectorAll('.stat-num');
+            if (!nums.length) return;
+            if (reduceMotion) return; // leave the static sourced text as-is
+
+            const animate = (el) => {
+                const original = el.textContent.trim();
+                const match = original.match(/^(\d+(?:\.\d+)?)(.*)$/);
+                if (!match) return;
+                const target = parseFloat(match[1]);
+                const suffix = match[2];
+                const duration = 900;
+                const start = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - start) / duration);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    el.textContent = Math.round(target * eased) + suffix;
+                    if (t < 1) requestAnimationFrame(step);
+                    else el.textContent = original; // exact sourced string, no reconstruction drift
+                };
+                requestAnimationFrame(step);
+            };
+
+            const strip = document.querySelector('.stat-strip');
+            if (!strip) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        nums.forEach(animate);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.4 });
+            observer.observe(strip);
+        }
+
+        // Subtle cursor-follow on the primary hero CTA — desktop fine-pointer only,
+        // capped displacement so it reads as weight/response, not a gimmick.
+        function initMagneticCTA() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+            const MAX_OFFSET = 6; // px, capped so the button never drifts far from its layout position
+            const RADIUS = 90; // px padding around the button that starts attracting the cursor
+
+            document.querySelectorAll('.btn-hero').forEach((btn) => {
+                const reset = () => { btn.style.transform = ''; };
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = e.clientX - cx;
+                    const dy = e.clientY - cy;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist > RADIUS + Math.max(rect.width, rect.height) / 2) { reset(); return; }
+                    const pull = Math.min(1, MAX_OFFSET / (dist || 1));
+                    btn.style.transform = `translate(${dx * pull * 0.3}px, ${dy * pull * 0.3}px)`;
+                });
+                btn.addEventListener('mouseleave', reset);
+            });
+        }
+
         function initMobileNav() {
             const toggle = document.getElementById('nav-toggle');
             const links = document.getElementById('nav-links');
@@ -1220,6 +1284,8 @@
             initInstallPrompt();
             wireGlassButtons();
             initScrollReveal();
+            initStatCounters();
+            initMagneticCTA();
             initMobileNav();
             initSupport();
 

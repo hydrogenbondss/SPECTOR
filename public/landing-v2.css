@@ -426,8 +426,35 @@ body.landing .echo-cta .btn-hero { display: inline-block; margin-top: 24px; }
 /* reveal (kept, subtler) — gated on .js so content stays visible when JS never runs */
 .js body.landing .reveal { opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
 .js body.landing .reveal.revealed { opacity: 1; transform: none; }
+
+/* staggered children within a revealed section — same fade/rise, offset per item so a
+   row of cards settles in sequence instead of all at once. Capped at 5 so a long FAQ
+   list doesn't crawl in one at a time. */
+.js body.landing .reveal .stat-strip > .stat,
+.js body.landing .reveal .steps-grid > .step-card {
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+.js body.landing .reveal.revealed .stat-strip > .stat,
+.js body.landing .reveal.revealed .steps-grid > .step-card {
+    opacity: 1; transform: none;
+}
+.js body.landing .reveal.revealed .stat-strip > .stat:nth-child(2),
+.js body.landing .reveal.revealed .steps-grid > .step-card:nth-child(2) { transition-delay: .06s; }
+.js body.landing .reveal.revealed .stat-strip > .stat:nth-child(3),
+.js body.landing .reveal.revealed .steps-grid > .step-card:nth-child(3) { transition-delay: .12s; }
+
+/* magnetic primary CTA — subtle cursor-follow within a bounded radius, desktop-hover only (see JS gate) */
+body.landing .btn-hero, body.landing .hero-section .btn-primary {
+    transition: background .15s var(--ease), transform .12s var(--ease);
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .js body.landing .reveal { opacity: 1; transform: none; transition: none; }
+    .js body.landing .reveal,
+    .js body.landing .reveal .stat-strip > .stat,
+    .js body.landing .reveal .steps-grid > .step-card {
+        opacity: 1; transform: none; transition: none;
+    }
     body.landing .hero-demo-fill, body.landing .hero-demo-pacing { transition: none; animation: none; }
 }
 

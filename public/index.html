@@ -1087,6 +1087,73 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
+        // Animates each .stat-num up to its real, sourced value once the strip scrolls
+        // into view. Never invents or rounds the displayed figure — the exact original
+        // string (e.g. "110%+") is restored verbatim when the count finishes, so the
+        // animation can't drift from the sourced copy in stat-strip's markup.
+        function initStatCounters() {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const nums = document.querySelectorAll('.stat-num');
+            if (!nums.length) return;
+            if (reduceMotion) return; // leave the static sourced text as-is
+
+            const animate = (el) => {
+                const original = el.textContent.trim();
+                const match = original.match(/^(\d+(?:\.\d+)?)(.*)$/);
+                if (!match) return;
+                const target = parseFloat(match[1]);
+                const suffix = match[2];
+                const duration = 900;
+                const start = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - start) / duration);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    el.textContent = Math.round(target * eased) + suffix;
+                    if (t < 1) requestAnimationFrame(step);
+                    else el.textContent = original; // exact sourced string, no reconstruction drift
+                };
+                requestAnimationFrame(step);
+            };
+
+            const strip = document.querySelector('.stat-strip');
+            if (!strip) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        nums.forEach(animate);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.4 });
+            observer.observe(strip);
+        }
+
+        // Subtle cursor-follow on the primary hero CTA — desktop fine-pointer only,
+        // capped displacement so it reads as weight/response, not a gimmick.
+        function initMagneticCTA() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+            const MAX_OFFSET = 6; // px, capped so the button never drifts far from its layout position
+            const RADIUS = 90; // px padding around the button that starts attracting the cursor
+
+            document.querySelectorAll('.btn-hero').forEach((btn) => {
+                const reset = () => { btn.style.transform = ''; };
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = e.clientX - cx;
+                    const dy = e.clientY - cy;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist > RADIUS + Math.max(rect.width, rect.height) / 2) { reset(); return; }
+                    const pull = Math.min(1, MAX_OFFSET / (dist || 1));
+                    btn.style.transform = `translate(${dx * pull * 0.3}px, ${dy * pull * 0.3}px)`;
+                });
+                btn.addEventListener('mouseleave', reset);
+            });
+        }
+
         function initMobileNav() {
             const toggle = document.getElementById('nav-toggle');
             const links = document.getElementById('nav-links');
@@ -1220,6 +1287,8 @@
             initInstallPrompt();
             wireGlassButtons();
             initScrollReveal();
+            initStatCounters();
+            initMagneticCTA();
             initMobileNav();
             initSupport();
 

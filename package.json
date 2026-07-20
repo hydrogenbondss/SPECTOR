@@ -1,0 +1,10 @@
+{
+  "name": "spector-site",
+  "private": true,
+  "scripts": {
+    "build": "cleancss -O2 -o public/style.min.css public/style.css && cleancss -O2 -o public/landing-v2.min.css public/landing-v2.css"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3"
+  }
+}

@@ -43,6 +43,7 @@
       "description": "A free, open-source, auto-paced teleprompter for smart glasses. Rehearse on phone, perform eyes-up on glasses."
     }
     </script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (typeof initPaddle === 'function') initPaddle();"></script>
 </head>
 <body class="landing">
 
@@ -373,9 +374,9 @@
         <section class="support-section" id="support">
             <p class="kicker">Pricing</p>
             <h2>Free core, forever. Pro is $34 — once.</h2>
-            <p>The open-source core is a complete teleprompter, free with no account. Spector Pro is a <strong>one-time $34 purchase</strong> — no subscription — that unlocks every Pro feature as it ships: cross-device sync (strictly opt-in — the no-cloud default never changes), extended rehearsal history &amp; pacing trends, and script export. It's also how this project stays independent. Checkout opens soon; full details on the <a href="/pricing">Pricing page</a>.</p>
+            <p>The open-source core is a complete teleprompter, free with no account. Spector Pro is a <strong>one-time $34 purchase</strong> — no subscription — that unlocks every Pro feature as it ships: cross-device sync (strictly opt-in — the no-cloud default never changes), extended rehearsal history &amp; pacing trends, and script export. It's also how this project stays independent. Full details on the <a href="/pricing">Pricing page</a>.</p>
             <div class="support-cta">
-                <a href="#beta" id="go-pro-btn" class="btn-primary">Get notified when Pro opens — $34, once</a>
+                <a href="#" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</a>
             </div>
             <div class="license-box">
                 <span class="license-label">Already purchased?</span>
@@ -487,15 +488,11 @@
         // ── Monetization (no backend) ─────────────────────────────────────────
         // Paddle client-side tokens are safe to expose in frontend code (unlike
         // API keys) -- see developer.paddle.com/paddlejs/about/client-side-tokens.
-        // Paste yours + the Spector Pro price ID below to switch checkout on;
-        // until both are set, the Pro button is a plain link to the notify/beta
-        // form instead of opening a checkout.
-        // Checkout is deliberately OFF until the purchase flow is verified
-        // end-to-end and license validation is real. To re-enable: restore the
-        // price ID (pri_01kx8xyrewyg78qw3hvcf9edak), re-add the paddle.js
-        // <script> tag in <head>, and flip the button copy here and on /pricing.
+        // Live Paddle account verification is complete and checkout is on. No
+        // backend: checkout.completed just flags Pro locally (see initPaddle
+        // below) -- known, accepted, documented in docs/PADDLE.md.
         const PADDLE_CLIENT_TOKEN = 'live_8212ac5b4b5470643f03bb7c7a7';
-        const PADDLE_PRICE_ID = '';
+        const PADDLE_PRICE_ID = 'pri_01kx8xyrewyg78qw3hvcf9edak';
 
         function initPaddle() {
             if (!PADDLE_CLIENT_TOKEN || typeof Paddle === 'undefined') return;

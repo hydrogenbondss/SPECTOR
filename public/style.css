@@ -29,6 +29,7 @@
 
     /* Type */
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
     --font-size-xs: 11px;
     --font-size-sm: 13px;
     --font-size-md: 14.5px;
@@ -647,7 +648,7 @@ a.nav-cta:hover {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0;
-    color: var(--accent);
+    color: var(--text-dim);
     margin: 0 0 14px;
 }
 
@@ -2583,8 +2584,15 @@ body.mirror-mode .bookmarks {
 
 #play-btn:hover { background: var(--accent-border); }
 
-#rewind-btn::before { content: '⟨⟨'; }
-#forward-btn::before { content: '⟩⟩'; }
+.control-btn .ctrl-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+}
+#play-btn .icon-pause { display: none; }
+#play-btn.is-playing .icon-play { display: none; }
+#play-btn.is-playing .icon-pause { display: block; }
 
 /* Mode switcher */
 .mode-switcher {
@@ -3179,7 +3187,7 @@ body.say-page {
     content: '+';
     font-size: 22px;
     font-weight: 400;
-    color: var(--accent);
+    color: var(--text-dim);
     flex-shrink: 0;
     transition: transform var(--duration-base) var(--ease-standard);
 }
@@ -4961,3 +4969,20 @@ form[aria-busy="true"] button[type="submit"]::after {
         animation-duration: 1400ms;
     }
 }
+
+/* --------------------------------------------------------------------------
+   Display typeface — Fraunces for headline moments, Inter/system for the rest.
+   Opt-in per page via body.display-type so pages that don't load the face keep
+   their existing sans headings (no half-applied fallback). A three-way system —
+   editorial serif display / sans body / mono data — reads as authored, not default.
+   -------------------------------------------------------------------------- */
+.display-type .hero-headline,
+.display-type .band h2,
+.display-type .band-wide h2,
+.display-type .echo-cta h2,
+.display-type .section-header h2 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    text-wrap: balance;
+}
+.display-type .hero-headline { letter-spacing: -0.02em; }

@@ -58,9 +58,9 @@
     </div>
 
     <div class="controls">
-        <button id="rewind-btn" class="control-btn" type="button" aria-label="Previous line" title="Previous line"></button>
-        <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">▶</button>
-        <button id="forward-btn" class="control-btn" type="button" aria-label="Next line" title="Next line"></button>
+        <button id="rewind-btn" class="control-btn" type="button" aria-label="Previous line" title="Previous line"><svg class="ctrl-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 4L5 8l3.5 4M12 4L8.5 8l3.5 4"/></svg></button>
+        <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play"><svg class="ctrl-icon icon-play" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.5 2.6a1 1 0 0 1 1.5-.87l7.2 4.4a1 1 0 0 1 0 1.74l-7.2 4.4a1 1 0 0 1-1.5-.87z"/></svg><svg class="ctrl-icon icon-pause" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="3.75" y="2.5" width="3" height="11" rx="1"/><rect x="9.25" y="2.5" width="3" height="11" rx="1"/></svg></button>
+        <button id="forward-btn" class="control-btn" type="button" aria-label="Next line" title="Next line"><svg class="ctrl-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4L11 8l-3.5 4M4 4l3.5 4L4 12"/></svg></button>
     </div>
 
     <div class="mode-switcher">
@@ -649,7 +649,7 @@
         }
         lastChunkAdvanceAt = Date.now();
         const playButton = document.getElementById('play-btn');
-        playButton.textContent = 'Pause';
+        playButton.classList.add('is-playing');
         playButton.setAttribute('aria-label', 'Pause teleprompter');
         playButton.title = 'Pause';
         Haptics.play();
@@ -682,7 +682,7 @@
         isPlaying = false;
         clearTimeout(interval);
         const playButton = document.getElementById('play-btn');
-        playButton.textContent = '▶';
+        playButton.classList.remove('is-playing');
         playButton.setAttribute('aria-label', 'Play teleprompter');
         playButton.title = 'Play';
         if (window.__refreshTiltPanel) window.__refreshTiltPanel();

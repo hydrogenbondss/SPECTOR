@@ -1,7 +1,7 @@
 {
   "name": "Spector — Teleprompter for Smart Glasses",
   "short_name": "Spector",
-  "description": "The auto-paced teleprompter built for smart glasses. Rehearse on phone, perform on glasses. Comfort-tuned and installable for daily rehearsal.",
+  "description": "The teleprompter that reads your punctuation. No mic. No cloud. Rehearse on phone, perform eyes-up on smart glasses.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",

@@ -13,20 +13,23 @@ across the landing + player — keep this doc and the CSS in lock-step.
 
 - **Name:** **Spector** — plain title case, everywhere in prose (site copy,
   README, docs, emails, posts). No ™, ever — it reads as legal pretension the
-  voice doesn't want. ALL-CAPS `SPECTOR` is reserved for exactly one role:
-  the letterspaced nav wordmark (a graphic lockup, not a spelling). The repo
-  name `SPECTOR` stays as-is and reads as that same lockup.
-- **Headline hierarchy:** lead with the job-to-be-done, not the competitive
-  attribute claim — **"Talk to camera. Not to your notes."** is the hero H1.
-  **"Eyes Forward"** is kept as the hero badge/brand tagline (earned equity,
-  demoted from primary hook to a supporting badge).
-- **One-liner:** *The auto-paced teleprompter built for smart glasses. Rehearse
-  on your phone, perform on glasses.*
-- **The permanent promise** (state verbatim, everywhere — README, landing
-  footer, FAQ, never paraphrased): **"Free core, forever. No account, no
-  cloud, nothing uploaded — ever."**
+  voice doesn't want. ALL-CAPS `SPECTOR` is reserved for graphic lockups: the
+  letterspaced nav wordmark and the homepage hero kicker (not prose spelling).
+  The repo name `SPECTOR` stays as-is and reads as that same lockup.
+- **Headline hierarchy:** lead with the falsifiable claim — **"The teleprompter
+  that reads your punctuation."** is the hero H1. **"Eyes Forward"** is earned
+  equity only (badge / secondary), never the primary share title.
+- **One-liner:** *The teleprompter that reads your punctuation. No mic. No
+  listening. Rehearse on phone, perform eyes-up on smart glasses.*
+- **Two distinct lines — do not paraphrase either:**
+  - **Pairing / footer tagline** (contrarian association): **"Punctuation-paced.
+    No mic. No cloud."** — site footers, trust rows, OG titles.
+  - **Permanent promise** (state verbatim — README, landing footer strip, FAQ):
+    **"Free core, forever. No account, no cloud, nothing uploaded — ever."**
 - Always write **Spector**, never "the Spector app" or "Spector Labs product."
   Footer entity line: `© Spector Labs`.
+- **Primary try CTA:** label **"Try Spector free"** → `/#try` (live editor).
+  Demo tile may deep-link to `app.html`.
 
 ---
 

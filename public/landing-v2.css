@@ -1,32 +1,30 @@
 /* ==========================================================================
-   Spector landing v2 — homepage-only skin, loaded AFTER style.css.
-   System (from measured Linear/Vercel/Raycast + Palmier/YC research):
-   - 4-level text ramp, 3 alpha-white hairlines, black-alpha shadows only
-   - accent #7C3AED demoted: logo dot, pacing pip, links/focus. Never CTA.
-   - closed type scale, weight-400 display w/ -0.03em, mono as material
-   - 8px spacing scale, sections 96-140px, transitions 0.12-0.2s
+   Spector landing v2 — homepage skin, loaded AFTER style.css.
+   Tokens live in :root (style.css). This layer owns homepage rhythm/layout.
+   System: accent demoted (links/focus/live pip only — never CTA);
+   closed type scale; weight-400 display; mono kickers; machined panels.
    ========================================================================== */
 
 body.landing {
-    /* tokens */
+    /* local aliases → site tokens (kept for readable homepage rules) */
     --bg: #0A0A0C;
-    --panel: #101014;
+    --panel: var(--bg-elevated);
     --t1: #F7F8F8;
     --t2: #D0D6E0;
     --t3: #8A8F98;
-    --t4: #787D86; /* dimmest tier that still clears WCAG AA (4.5:1) on --bg — it carries real content */
+    --t4: #787D86;
     --hair1: rgba(255, 255, 255, .05);
     --hair2: rgba(255, 255, 255, .08);
     --hair3: rgba(255, 255, 255, .15);
     --accent: #7C3AED;
-    --accent-soft: rgba(124, 58, 237, .14);
-    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --accent-soft: var(--accent-surface);
+    --mono: var(--font-mono);
     --ease: cubic-bezier(.25, .46, .45, .94);
     --machined: inset 0 0 0 1px rgba(255, 255, 255, .08), inset 0 1px rgba(255, 255, 255, .05);
 
     background: var(--bg);
     color: var(--t2);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans);
     font-size: 16px;
     line-height: 1.6;
     letter-spacing: -0.011em;
@@ -97,11 +95,13 @@ body.landing .hero-section {
 }
 body.landing .hero-headline {
     color: var(--t1);
+    font-family: var(--font-display);
     font-size: clamp(2.5rem, 4.5vw, 3.55rem);
     font-weight: 400;
     letter-spacing: -0.03em;
     line-height: 1.06;
     margin: 0;
+    text-wrap: balance;
 }
 body.landing .hero-subhead {
     margin: 20px 0 0; max-width: 56ch;
@@ -216,9 +216,11 @@ body.landing .kicker {
 }
 body.landing h2, body.landing .band h2, body.landing .band-wide h2 {
     color: var(--t1);
+    font-family: var(--font-display);
     font-size: clamp(1.65rem, 2.6vw, 2.15rem);
     font-weight: 400; letter-spacing: -0.022em; line-height: 1.15;
     margin: 0 0 16px; text-align: left;
+    text-wrap: balance;
 }
 body.landing .band p, body.landing .band-wide > p { color: var(--t3); font-size: 16px; max-width: 62ch; }
 body.landing .band p strong, body.landing .band-wide p strong { color: var(--t2); font-weight: 510; }

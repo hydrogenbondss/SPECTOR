@@ -32,45 +32,50 @@ across the landing + player — keep this doc and the CSS in lock-step.
 
 ## 2. Color
 
-Dark-first. Black canvas, white text, a single purple accent. No second accent.
+Dark-first. Near-black canvas, soft-white text, a single purple accent used
+sparingly. White CTAs — purple is never the primary button fill.
 
 ### Core tokens (`:root`)
 
 | Token | Hex / value | Use |
 |-------|-------------|-----|
-| `--bg` | `#0A0A0C` | Page background (near-black — pure `#000` glares against text) |
-| `--bg-elevated` | `#101012` | Cards, panels |
-| `--bg-card` | `#0D0D0F` | Nested/inset surfaces |
-| `--text` | `#F4F4F6` | Primary text, active teleprompter line (soft white, not `#FFF`) |
-| `--text-muted` | `#A1A1AA` | Secondary copy |
-| `--text-dim` | `#85858E` | Labels, captions, metadata (kept ≥4.5:1 contrast on the near-black canvas) |
-| `--accent` | `#7C3AED` | Primary purple — CTAs, links, emphasis |
-| `--accent-hover` | `#6D28D9` | Hover / gradient end |
-| `--accent-subtle` | `rgba(124,58,237,0.10)` | Tinted fills |
-| `--accent-glow` | `rgba(124,58,237,0.25)` | Focus glow, shadows |
-| `--border` | `#1A1A1A` | Hairline borders |
-| `--border-hover` | `#2A2A2A` | Border on hover |
-| Light purple | `#A78BFA` | Active button labels, end-screen headings, stat values |
+| `--bg` | `#0A0A0C` | Page background |
+| `--bg-elevated` / `--panel` | `#101014` | Cards, panels, machined surfaces |
+| `--text` / `--t1` | `#F7F8F8` | Primary text, active teleprompter line |
+| `--text-muted` / `--t2` | `#D0D6E0` | Secondary copy |
+| `--text-dim` / `--t3`–`--t4` | `#8A8F98` / `#787D86` | Labels, kickers, metadata (≥4.5:1 on `--bg`) |
+| `--cta-bg` | `rgba(255,255,255,0.92)` | Primary buttons / nav CTA |
+| `--cta-text` | `#0A0A0C` | Ink on white CTAs |
+| `--accent` | `#7C3AED` | Links, focus rings, live pip — **not** CTAs |
+| `--accent-text` | `#A78BFA` | Link tint / soft emphasis |
+| `--accent-subtle` / `--accent-surface` | `color-mix(in oklch, …)` | Hover fills (perceptual ramp) |
+| `--hair1`–`--hair3` | white alpha 5% / 8% / 15% | Hairline borders |
+| `--machined` | inset hairline stack | Panel edge treatment |
 
 ### Rules
 
-- **One accent only.** Purple (`#7C3AED`). The lighter `#A78BFA` is a tint of
-  it for active states — not a separate brand color.
+- **One accent only.** Purple (`#7C3AED`). Lighter `#A78BFA` is a tint of it —
+  not a separate brand color.
+- **CTAs are white/ink**, never purple fills. Purple's jobs: live indicator,
+  inline links, focus rings.
 - The **active reading line** in the player is white (`--text`) for maximum
-  legibility; purple is reserved for emphasis, glow, and controls.
-- Success/confirmation uses green (`#22c55e`) sparingly (beta form only).
-- Never introduce warm/tan tones — an earlier iteration used a beige accent
-  (`rgba(232,213,183,…)`); it has been fully retired. If you see it, it's a bug.
+  legibility.
+- No light “inverse” full-bleed bands on the dark site — stay dark editorial.
+- Never introduce warm/tan tones or indigo→violet gradients. If you see them,
+  it's a bug.
 
 ---
 
 ## 3. Typography
 
-- **Typeface:** [Inter](https://fonts.google.com/specimen/Inter) — weights
-  `400, 500, 600, 700, 900`. System fallback:
-  `system-ui, -apple-system, sans-serif`.
-- **Hero headline:** heavy (900), tight tracking (`letter-spacing: -0.03em`).
-- **Body:** 400–500, `--text-muted` for secondary copy.
+- **Body:** [Inter](https://fonts.google.com/specimen/Inter) variable
+  (`100–900`). System fallback: `system-ui, -apple-system, sans-serif`.
+- **Display (H1/H2):** [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans)
+  — a characterful grotesque paired with Inter so the site is not Inter-only.
+  Weights **400–500**, tight tracking (`-0.02em` to `-0.03em`). Use
+  `text-wrap: balance` on headings.
+- **Kickers / metadata:** `ui-monospace` stack (`--font-mono`) — uppercase,
+  tracked, dim color. Not purple eyebrows.
 - **Teleprompter chunk:** `--chunk-size: 31px`, `--chunk-leading: 1.55`
   (user-adjustable 22–42px / 1.3–2.0 in the player).
 - Numbers in the player (timer, stats) use `font-variant-numeric: tabular-nums`.
@@ -79,26 +84,29 @@ Dark-first. Black canvas, white text, a single purple accent. No second accent.
 
 ## 4. Shape, depth & motion
 
-- **Radii:** `--radius: 16px`, `--radius-lg: 24px`, `--radius-pill: 9999px`
-  (all buttons/chips are pills).
-- **Surfaces:** subtle glassmorphism — low-opacity white fills
-  (`rgba(255,255,255,0.03–0.08)`) with `backdrop-filter: blur()`.
-- **Easing:** `--transition-smooth: cubic-bezier(0.23, 1, 0.32, 1)` for the
-  premium settle; 0.2–0.25s for hovers.
-- **Motion is meaningful, not decorative:** scroll reveals on the landing;
-  Comfort-mode breathing/drift + Kalman-smoothed spatial anchoring in the player.
-- Always respect `prefers-reduced-motion` (already wired in CSS + JS).
+- **Radii:** `--radius: 8px`, `--radius-lg: 12px`. No pill CTAs (`9999px`).
+- **Surfaces:** machined inset hairlines + black-alpha shadows. Glass only on
+  the sticky nav blur — nowhere else.
+- **Easing:** short settles (0.12–0.2s). Prefer transform/opacity; respect
+  `prefers-reduced-motion`.
+- **View transitions:** cross-document `@view-transition { navigation: auto }`
+  with the nav wordmark as a shared `view-transition-name` (self-gates where
+  unsupported).
+- Motion is meaningful, not decorative: scroll reveals on the landing; Comfort
+  mode spatial anchoring in the player.
 
 ---
 
 ## 5. Feel & voice
 
 - **Feel:** premium, calm, editorial. Confident but honest — no vanity metrics,
-  no fake screenshots. "Early, live, and open."
+  no fake screenshots. "Early, live, and open." Must not read as vibe-coded
+  SaaS (no purple primary buttons, no pastel pill badges, no heavy Inter-only
+  display).
 - **Voice:** direct, second-person, short sentences. Lead with the benefit
   ("Eyes up, no script-face"), not the mechanism.
-- **Haptics + audio:** subtle vibration and a soft click on interaction give the
-  "liquid glass" tactile feel — keep them understated.
+- **Haptics + audio:** subtle vibration and a soft click on interaction — keep
+  them understated.
 
 ---
 

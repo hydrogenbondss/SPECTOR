@@ -41,8 +41,8 @@
     --inverse-muted: var(--text-dim);
     --inverse-border: var(--border);
 
-    /* Type — Inter body + Instrument Sans display (not Inter-only) */
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Type — Instrument Sans for body + display (no Inter default stack) */
+    --font-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-display: 'Instrument Sans', var(--font-sans);
     --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
     --mono: var(--font-mono);

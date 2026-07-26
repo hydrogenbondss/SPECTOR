@@ -71,11 +71,11 @@ sparingly. White CTAs — purple is never the primary button fill.
 
 ## 3. Typography
 
-- **Body:** [Inter](https://fonts.google.com/specimen/Inter) variable
-  (`100–900`). System fallback: `system-ui, -apple-system, sans-serif`.
-- **Display (H1/H2):** [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans)
-  — a characterful grotesque paired with Inter so the site is not Inter-only.
-  Weights **400–500**, tight tracking (`-0.02em` to `-0.03em`). Use
+- **Body + display:** [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans)
+  only — one deliberate grotesque for both prose and H1/H2. Never Inter /
+  Roboto / system-default as the loaded webfont (reads as vibe-coded SaaS).
+  System fallback: `system-ui, -apple-system, sans-serif`. Display weights
+  **400–500**, tight tracking (`-0.02em` to `-0.03em`). Use
   `text-wrap: balance` on headings.
 - **Kickers / metadata:** `ui-monospace` stack (`--font-mono`) — uppercase,
   tracked, dim color. Not purple eyebrows.
@@ -104,7 +104,7 @@ sparingly. White CTAs — purple is never the primary button fill.
 
 - **Feel:** premium, calm, editorial. Confident but honest — no vanity metrics,
   no fake screenshots. "Early, live, and open." Must not read as vibe-coded
-  SaaS (no purple primary buttons, no pastel pill badges, no heavy Inter-only
+  SaaS (no purple primary buttons, no pastel pill badges, no Inter webfont,
   display).
 - **Voice:** direct, second-person, short sentences. Lead with the benefit
   ("Eyes up, no script-face"), not the mechanism.

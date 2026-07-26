@@ -62,9 +62,7 @@ body.landing .site-nav {
     transform: none; width: auto;
     display: flex; align-items: center; justify-content: space-between;
     max-width: 1120px; margin: 0 auto; padding: 16px 32px;
-    background: rgba(10, 10, 12, .88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #0A0A0C;
     border: none; border-bottom: 1px solid var(--hair2);
     border-radius: 0; box-shadow: none;
 }
@@ -476,9 +474,8 @@ body.landing .btn-hero, body.landing .hero-section .btn-primary {
         display: none;
         position: absolute; top: calc(100% + 8px); left: 16px; right: 16px;
         flex-direction: column; gap: 4px; padding: 12px;
-        background: rgba(10, 10, 12, .97);
+        background: #0A0A0C;
         border: 1px solid var(--hair2); border-radius: 12px;
-        backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     }
     body.landing .nav-links.open { display: flex; }
     body.landing .nav-links a { padding: 12px 14px; }

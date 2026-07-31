@@ -6,7 +6,7 @@
     <title>Pricing — Spector</title>
     <meta name="description" content="Spector’s teleprompter is free forever — no account, no mic listening. Spector Pro is $34 once, never a subscription.">
     <link rel="canonical" href="https://www.spectorlabs.io/pricing">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#F7F7F8">
     <meta property="og:title" content="Pricing — Spector">
     <meta property="og:description" content="Free core forever. Spector Pro is $34 once — no subscription. Scripts stay on your device.">
     <meta property="og:image" content="https://www.spectorlabs.io/images/og-card.png">
@@ -21,7 +21,8 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
-    <link rel="stylesheet" href="/style.min.css?v=7">
+    <link rel="stylesheet" href="/style.min.css?v=9">
+    <link rel="stylesheet" href="/landing-v2.min.css?v=13">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="/images/logo-mark.png" sizes="256x256">
     <link rel="apple-touch-icon" href="/images/app-icon.png">
@@ -41,6 +42,8 @@
       "about": { "@type": "Thing", "name": "Spector pricing" }
     }
     </script>
+    <script src="/js/paddle-pro.js"></script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (window.SpectorPro) SpectorPro.initPaddle({ onCompleted: function () { if (typeof reflectProState === 'function') reflectProState(); } });"></script>
 </head>
 <body class="landing pricing-page">
     <header class="seo-nav">
@@ -52,80 +55,79 @@
     </header>
 
     <main class="container">
-        <section class="hero-section hero-editorial pricing-hero">
-            <p class="hero-kicker"><span aria-hidden="true"></span>Pricing</p>
-            <h1 class="hero-headline">Spector is free. Pro is $34 — once.</h1>
-            <p class="hero-subhead">Paste a talk, hit play — commas breathe, periods hold, and nothing listens through a mic. The core stays free forever. Pro is how a solo project stays independent: <strong>$34 once</strong>, never a subscription.</p>
+        <section class="hero-section pricing-hero">
+            <p class="hero-brand">PRICING</p>
+            <h1 class="hero-headline">Spector is free. Pro is $34, once.</h1>
+            <p class="hero-subhead">Core stays free forever. Pro is one payment through Paddle — never a subscription.</p>
         </section>
 
         <section class="comparison-section pricing-ledger" aria-label="Spector plans">
             <article class="pricing-plan pricing-plan-current">
-                <div class="pricing-plan-name"><span>Available now</span><h2>Free core</h2></div>
+                <div class="pricing-plan-name"><span>Now</span><h2>Free core</h2></div>
                 <p class="pricing-value">$0</p>
-                <p class="pricing-plan-summary">The full teleprompter in your browser — no account, no watermark, no trial clock.</p>
+                <p class="pricing-plan-summary">Full teleprompter in your browser. No account, no watermark, no trial clock.</p>
                 <ul>
-                    <li>Paste a .txt or type — your script never leaves this device</li>
-                    <li>Pace from punctuation: commas pause, periods hold, emphasis lingers</li>
-                    <li>No mic. No listening. Same run every time you press play</li>
-                    <li>Comfort, Focus, and Presentation modes on the phone you already own</li>
-                    <li>End-of-run pacing feedback stored locally; install as an app for offline</li>
+                    <li>Paste a script — it stays on this device</li>
+                    <li>Commas breathe, periods hold — no mic listening</li>
+                    <li>Comfort, Focus, and Presentation modes</li>
+                    <li>Last 5 rehearsals remembered here</li>
                 </ul>
                 <a href="/#try" class="btn-primary">Try Spector free</a>
             </article>
             <article class="pricing-plan pricing-plan-future">
-                <div class="pricing-plan-name"><span>Available now</span><h2>Spector Pro</h2></div>
-                <p class="pricing-value pricing-value-planned">$34 <span style="font-size:.55em;font-weight:500;">one-time</span></p>
-                <p class="pricing-plan-summary">One payment. Lifetime access. Funds the person building it — not a subscription machine.</p>
+                <div class="pricing-plan-name"><span>Now</span><h2>Spector Pro</h2></div>
+                <p class="pricing-value pricing-value-planned">$34 <span class="pricing-once">once</span></p>
+                <p class="pricing-plan-summary">One payment. Lifetime access on this device. Never billed again.</p>
                 <ul>
-                    <li>Turn on sync only when you want the same script on phone and laptop — off by default, forever</li>
-                    <li>See last month’s rehearsals: which runs felt rushed, which commas you actually used</li>
-                    <li>Export the talk you just finished — take it with you when the take is done</li>
-                    <li>Pay once; you keep Pro for life — never billed again</li>
+                    <li>After the take — export script + stats in one copy</li>
+                    <li>Keep up to 50 rehearsals on this device (free keeps 5)</li>
+                    <li>Funds the person building Spector</li>
+                    <li>Cloud sync is not included yet — we won’t sell vapor</li>
                 </ul>
-                <a href="/#support" class="btn-primary">Buy Spector Pro — $34, once</a>
-                <p class="support-note">Founding beta hardware testers get Pro free for life.</p>
+                <button type="button" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</button>
+                <div class="license-box pricing-license">
+                    <span class="license-label">Already purchased?</span>
+                    <input type="text" id="license-key" placeholder="Paste your license key" autocomplete="off" spellcheck="false">
+                    <button type="button" id="activate-pro" class="btn-secondary">Activate Pro</button>
+                </div>
+                <p id="pro-status" class="pro-status" role="status"></p>
+                <p class="support-note">Founding hardware testers get Pro free for life. Checkout via Paddle.</p>
             </article>
         </section>
 
         <section class="faq-section" id="pricing-faq">
-            <div class="section-header">
-                <p class="section-eyebrow">Pricing FAQ</p>
-                <h2>Questions about paying for Spector.</h2>
-            </div>
+            <p class="kicker">FAQ</p>
+            <h2>Billing questions.</h2>
             <div class="faq-list">
                 <details class="faq-item">
-                    <summary>Is the free tier actually free forever?</summary>
-                    <div class="faq-answer"><p>Yes. Free means you paste a script, hit play, and commas pause / periods hold — on the phone you already own, with no account and nothing uploaded. Forever. Because Spector is open source and works offline, even if this project ended tomorrow, the copy on your device keeps working. Pro is optional.</p></div>
+                    <summary>Is free actually forever?</summary>
+                    <div class="faq-answer"><p>Yes. Paste, play, commas breathe / periods hold — no account, nothing uploaded. Open source and offline, so the copy on your device keeps working. Pro is optional.</p></div>
                 </details>
                 <details class="faq-item">
-                    <summary>Is Spector Pro a subscription?</summary>
-                    <div class="faq-answer"><p>No — Spector Pro is a one-time $34 purchase, never a subscription. You pay once and keep Pro for life. The core teleprompter stays free either way.</p></div>
+                    <summary>What does Pro unlock today?</summary>
+                    <div class="faq-answer"><p>Longer rehearsal history on this device (50 runs vs 5) and export of script + stats from the end screen. Sync across devices is not shipping yet — when it does, it will stay optional and off by default.</p></div>
                 </details>
                 <details class="faq-item">
-                    <summary>Do beta testers have to pay later?</summary>
-                    <div class="faq-answer"><p>No. Joining the hardware beta does not start a trial, deadline, subscription, or automatic paid conversion. Founding hardware testers who complete feedback get Spector Pro free for life.</p></div>
+                    <summary>Is Pro a subscription?</summary>
+                    <div class="faq-answer"><p>No — $34 once via Paddle. You keep Pro for life on this device. Core stays free either way.</p></div>
                 </details>
                 <details class="faq-item">
-                    <summary>Can I buy Pro today?</summary>
-                    <div class="faq-answer"><p>Yes — $34, one-time, right on this page or the <a href="/#support">home page</a>. Founding hardware testers who join the <a href="/#beta">beta</a> get Pro free for life instead.</p></div>
+                    <summary>Refunds?</summary>
+                    <div class="faq-answer"><p>14-day no-questions refund via the <a href="/refund">refund policy</a>. Purchases run through Paddle; you can also request a refund from your order email.</p></div>
                 </details>
                 <details class="faq-item">
-                    <summary>What's your refund policy?</summary>
-                    <div class="faq-answer"><p>Spector Pro comes with a 14-day no-questions refund — see the <a href="/refund">refund policy</a>. Purchases run through Paddle, an independent Merchant of Record, so you can also request a refund directly through Paddle using the link in your order email — you never depend on us replying. The free core needs no refunds: there's nothing to pay.</p></div>
-                </details>
-                <details class="faq-item">
-                    <summary>Who do I contact about billing?</summary>
-                    <div class="faq-answer"><p>Email <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a>. This is a solo-built project, so replies are best-effort, but every message gets read.</p></div>
+                    <summary>Billing contact?</summary>
+                    <div class="faq-answer"><p><a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a> — solo-built, every message gets read.</p></div>
                 </details>
             </div>
         </section>
 
         <section class="seo-crosslinks">
-            <p><a href="/terms">Terms of Service</a> · <a href="/privacy">Privacy Policy</a> · <a href="/refund">Refund Policy</a> · <a href="/">Spector home</a></p>
+            <p><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund">Refunds</a> · <a href="/">Home</a></p>
         </section>
 
         <footer class="site-footer">
-            <p class="footer-promise">Free core, forever. No account, no cloud, nothing uploaded.</p>
+            <p class="footer-promise">Free core, forever. No account, no cloud, nothing uploaded — ever.</p>
             <div class="footer-columns">
                 <div class="footer-col footer-brand-col">
                     <span class="nav-wordmark">SPECTOR</span>
@@ -135,7 +137,7 @@
                     <p class="footer-heading">Product</p>
                     <a href="/#try">Try it</a>
                     <a href="/pricing">Pricing</a>
-                    <a href="/say" title="Switch-scan AAC composer — early, for non-verbal/Deaf communication">Say (AAC)</a>
+                    <a href="/say">Say (AAC)</a>
                 </div>
                 <div class="footer-col">
                     <p class="footer-heading">Devices</p>
@@ -147,7 +149,6 @@
                     <p class="footer-heading">Company</p>
                     <a href="mailto:hello@spectorlabs.io">Contact</a>
                     <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://github.com/hydrogenbondss/SPECTOR/discussions" target="_blank" rel="noopener">Discussions</a>
                 </div>
                 <div class="footer-col">
                     <p class="footer-heading">Legal</p>
@@ -158,6 +159,55 @@
             </div>
         </footer>
     </main>
+    <script>
+        function isPro() {
+            return window.SpectorPro ? SpectorPro.isPro() : false;
+        }
+        function reflectProState() {
+            const status = document.getElementById('pro-status');
+            const goPro = document.getElementById('go-pro-btn');
+            if (!isPro()) return;
+            if (goPro) { goPro.textContent = 'Spector Pro ✓'; goPro.classList.add('owned'); goPro.disabled = true; }
+            if (status) { status.textContent = 'Pro is active on this device ✓'; status.classList.add('active'); }
+            document.body.classList.add('is-pro');
+        }
+        function init() {
+            const status = document.getElementById('pro-status');
+            if (window.SpectorPro) {
+                SpectorPro.initPaddle({
+                    onCompleted() {
+                        reflectProState();
+                        if (status) status.textContent = 'Pro activated ✓ — thank you!';
+                    },
+                });
+            }
+            const goPro = document.getElementById('go-pro-btn');
+            if (goPro) goPro.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (isPro()) return;
+                if (window.SpectorPro && SpectorPro.openCheckout()) return;
+                if (status) status.textContent = 'Checkout couldn’t load — try again, or email hello@spectorlabs.io.';
+            });
+            const activate = document.getElementById('activate-pro');
+            const keyInput = document.getElementById('license-key');
+            if (activate && keyInput) activate.addEventListener('click', () => {
+                const result = window.SpectorPro
+                    ? SpectorPro.activateLicenseKey(keyInput.value)
+                    : { ok: false, message: 'Activation unavailable.' };
+                if (!result.ok) {
+                    if (status) status.textContent = result.message;
+                    return;
+                }
+                keyInput.value = '';
+                reflectProState();
+                if (status) status.textContent = result.message;
+            });
+            reflectProState();
+            window.addEventListener('spector:pro', reflectProState);
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+    </script>
     <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script defer src="/analytics.js"></script>
 </body>

@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v8'; // bumped to add say.html (switch-scan AAC composer) to the offline shell
+const CACHE = 'spector-v9'; // Pro gating, paddle-pro.js, landing receipts/tips
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {

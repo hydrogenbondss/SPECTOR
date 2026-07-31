@@ -7,11 +7,12 @@ step-by-step tutorial.
 ## Architecture
 
 Static site, no backend, no server. Checkout is Paddle's own **overlay**
-(`Paddle.Checkout.open(...)`), loaded via Paddle.js directly in
-`public/index.html`. No webhook, no signing secret, nothing server-side.
+(`Paddle.Checkout.open(...)`), loaded via Paddle.js. Shared helpers live in
+`public/js/paddle-pro.js` and are used by `index.html`, `pricing.html`, and
+`app.html` (export upgrade path).
 
 - `PADDLE_CLIENT_TOKEN` / `PADDLE_PRICE_ID` — plain constants in
-  `index.html`. Client-side tokens are **safe to hardcode** (unlike API
+  `public/js/paddle-pro.js`. Client-side tokens are **safe to hardcode** (unlike API
   keys) — they can only open checkouts and preview prices/transactions.
   See [developer.paddle.com/paddlejs/about/client-side-tokens](https://developer.paddle.com/paddlejs/about/client-side-tokens).
 - The token's `test_`/`live_` prefix auto-selects sandbox vs live
@@ -90,6 +91,16 @@ Name** live in Account Settings and are **account-wide**, not tied to a
 specific product. Company Legal Name **locks after signup** — the
 dashboard field can't be edited directly; email `sellers@paddle.com`
 with the correction and why.
+
+## What Pro unlocks (honesty)
+
+Today, `localStorage.spector_pro` gates in the player:
+
+- Rehearsal history cap: **5** free / **50** Pro (`spector_runs_v1`)
+- End-screen **export** (copy script + stats)
+
+Cloud sync is **not** sold and not implemented. Comfort / offline / punctuation
+pacing stay free.
 
 ## Current live product
 

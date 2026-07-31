@@ -3,7 +3,7 @@
 Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.
 **Free core, forever. No account, no cloud, nothing uploaded — ever.**
 
-[![Live](https://img.shields.io/badge/Live-spectorlabs.io-7C3AED?style=flat-square)](https://spectorlabs.io)
+[![Live](https://img.shields.io/badge/Live-spectorlabs.io-0E7C74?style=flat-square)](https://spectorlabs.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-000?style=flat-square)](LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-Installable-000?style=flat-square)](https://spectorlabs.io)
 

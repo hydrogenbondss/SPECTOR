@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0A0A0A">
+    <meta name="theme-color" content="#0A0A0C">
     <meta name="robots" content="noindex">
     <title>Spector — Teleprompter</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Inter:wght@100..900&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Inter:wght@100..900&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Inter:wght@100..900&display=swap"></noscript>
-    <link rel="stylesheet" href="style.min.css?v=7">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
+    <link rel="stylesheet" href="style.min.css?v=8">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
     <link rel="apple-touch-icon" href="images/app-icon.png">
+    <script src="/js/paddle-pro.js"></script>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (window.SpectorPro) SpectorPro.initPaddle();"></script>
 </head>
 <body class="glasses player-loading">
 
@@ -138,6 +140,7 @@
             <button id="edit-script-btn" class="btn-secondary">Edit Script</button>
             <button id="save-end-btn" class="btn-secondary">Save to Library</button>
             <button id="export-btn" class="btn-secondary">Copy Script + Stats</button>
+            <p id="export-pro-hint" class="export-pro-hint hidden">Export is a Pro perk — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy here</button>.</p>
             <button id="new-script-btn" class="btn-secondary">New Script</button>
             <button id="exit-end-btn" class="btn-secondary">Exit</button>
         </div>
@@ -269,13 +272,17 @@
     }
 
     function formatChunkHtml(chunkText) {
-        const escaped = (chunkText || '')
+        let html = (chunkText || '')
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return escaped
+        html = html
             .replace(/\*\*([^*]+)\*\*/g, '<span class="cue-emphasis">$1</span>')
             .replace(/\[emphasis\]/gi, '')
             .replace(/\[pause(?::\d+s)?\]/gi, '<span class="cue-pause" aria-hidden="true">⏸</span>')
             .replace(/\[section:([^\]]+)\]/g, '$1');
+        // Visual receipt of punctuation pacing (engine already uses these marks).
+        html = html.replace(/,(?!\d)/g, '<span class="cue-breathe" aria-hidden="true">,</span>');
+        html = html.replace(/([.!?]+)(["'”’)]*)$/g, '<span class="cue-hold" aria-hidden="true">$1</span>$2');
+        return html;
     }
 
     function hybridChunkWithCues(text) {
@@ -1163,6 +1170,22 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
     }
 
+    function isPro() {
+        try {
+            if (window.SpectorPro && typeof window.SpectorPro.isPro === 'function') {
+                return window.SpectorPro.isPro();
+            }
+            return !!localStorage.getItem('spector_pro');
+        } catch { return false; }
+    }
+
+    function historyCap() {
+        if (window.SpectorPro && typeof window.SpectorPro.historyLimit === 'function') {
+            return window.SpectorPro.historyLimit();
+        }
+        return isPro() ? 50 : 5;
+    }
+
     function saveRunToHistory() {
         const key = 'spector_runs_v1';
         let runs = [];
@@ -1175,7 +1198,8 @@
             pacing: document.getElementById('end-consistency').textContent,
             scriptPreview: (rawScript || '').slice(0, 60).replace(/\n/g, ' ') + '...'
         });
-        if (runs.length > 5) runs.length = 5;
+        const cap = historyCap();
+        if (runs.length > cap) runs.length = cap;
         localStorage.setItem(key, JSON.stringify(runs));
     }
 
@@ -1262,11 +1286,27 @@
             saveToLibrary();
             document.getElementById('save-end-btn').textContent = 'Saved ✓';
         };
-        document.getElementById('export-btn').onclick = () => {
+        const exportBtn = document.getElementById('export-btn');
+        const exportHint = document.getElementById('export-pro-hint');
+        const exportBuy = document.getElementById('export-buy-btn');
+        if (exportHint) exportHint.classList.toggle('hidden', isPro());
+        if (exportBtn && !isPro()) exportBtn.textContent = 'Export (Pro)';
+        if (exportBuy) {
+            exportBuy.onclick = () => {
+                if (window.SpectorPro && window.SpectorPro.openCheckout()) return;
+                window.location.href = '/pricing';
+            };
+        }
+        exportBtn.onclick = () => {
+            if (!isPro()) {
+                if (exportHint) exportHint.classList.remove('hidden');
+                if (window.SpectorPro && window.SpectorPro.openCheckout()) return;
+                window.location.href = '/pricing';
+                return;
+            }
             const summary = `Script:\n${rawScript}\n\nChunks: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
-            const btn = document.getElementById('export-btn');
-            const orig = btn.textContent;
-            const flash = (label) => { btn.textContent = label; setTimeout(() => btn.textContent = orig, 1500); };
+            const orig = 'Copy Script + Stats';
+            const flash = (label) => { exportBtn.textContent = label; setTimeout(() => { exportBtn.textContent = orig; }, 1500); };
             if (!navigator.clipboard) { flash('Copy not supported here'); return; }
             navigator.clipboard.writeText(summary).then(() => flash('Copied!')).catch(() => flash('Copy failed'));
         };
@@ -1467,6 +1507,12 @@
             emphChunks.some(c => /\*\*[^*]+\*\*/.test(c)));
         assert('formatChunkHtml renders reattached emphasis',
             emphChunks.some(c => SpectorCore.formatChunkHtml(c).includes('cue-emphasis')));
+        assert('formatChunkHtml marks a comma as breathe',
+            SpectorCore.formatChunkHtml('Hello, world').includes('cue-breathe'));
+        assert('formatChunkHtml marks a period as hold',
+            SpectorCore.formatChunkHtml('Hello.').includes('cue-hold'));
+        assert('formatChunkHtml leaves European decimal commas alone',
+            SpectorCore.formatChunkHtml('Rate is 3,5 percent.').includes('3,5'));
 
         const decimalSentences = SpectorCore.splitSentences('The rate is 3.5 percent. It rose again.');
         assert('splitSentences keeps a decimal number intact',

@@ -1,48 +1,48 @@
 /* SPECTOR Design System */
 
 :root {
-    /* Color — aligned with landing-v2 (site-wide source of truth) */
-    --bg: #0A0A0C;
-    --bg-elevated: #101014;
-    --bg-card: #101014;
-    --panel: #101014;
-    --surface: rgba(255, 255, 255, 0.035);
-    --surface-raised: rgba(255, 255, 255, 0.055);
-    --surface-hover: rgba(255, 255, 255, 0.075);
-    --text: #F7F8F8;
-    --text-muted: #D0D6E0;
-    --text-dim: #8A8F98;
-    --t1: #F7F8F8;
-    --t2: #D0D6E0;
-    --t3: #8A8F98;
-    --t4: #787D86;
+    /* Color — light marketing SaaS (ink CTAs; muted teal accent only for live/focus) */
+    --bg: #F7F7F8;
+    --bg-elevated: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --panel: #FFFFFF;
+    --surface: rgba(10, 10, 12, 0.035);
+    --surface-raised: rgba(10, 10, 12, 0.045);
+    --surface-hover: rgba(10, 10, 12, 0.07);
+    --text: #0A0A0C;
+    --text-muted: #3D3D45;
+    --text-dim: #6B6B76;
+    --t1: #0A0A0C;
+    --t2: #3D3D45;
+    --t3: #6B6B76;
+    --t4: #8E8E99;
     --text-on-accent: #FFFFFF;
-    --cta-bg: rgba(255, 255, 255, 0.92);
-    --cta-bg-hover: #FFFFFF;
-    --cta-text: #0A0A0C;
-    --accent: #7C3AED;
-    --accent-hover: #6D28D9;
-    --accent-text: #A78BFA;
+    --cta-bg: #0A0A0C;
+    --cta-bg-hover: #1C1C1F;
+    --cta-text: #FFFFFF;
+    --accent: #0E7C74;
+    --accent-hover: #0A635C;
+    --accent-text: #0E7C74;
     --accent-subtle: color-mix(in oklch, var(--accent) 10%, transparent);
-    --accent-surface: color-mix(in oklch, var(--accent) 14%, transparent);
-    --accent-border: color-mix(in oklch, var(--accent) 32%, transparent);
-    --accent-soft: color-mix(in oklch, var(--accent) 14%, transparent);
-    --success: #34D399;
-    --danger: #F87171;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(255, 255, 255, 0.15);
-    --hair1: rgba(255, 255, 255, 0.05);
-    --hair2: rgba(255, 255, 255, 0.08);
-    --hair3: rgba(255, 255, 255, 0.15);
-    --machined: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px rgba(255, 255, 255, 0.05);
-    /* Inverse band retired — dark editorial only. Kept as aliases so old refs don't flash light. */
+    --accent-surface: color-mix(in oklch, var(--accent) 12%, transparent);
+    --accent-border: color-mix(in oklch, var(--accent) 28%, transparent);
+    --accent-soft: color-mix(in oklch, var(--accent) 12%, transparent);
+    --success: #0F766E;
+    --danger: #DC2626;
+    --border: rgba(10, 10, 12, 0.08);
+    --border-hover: rgba(10, 10, 12, 0.16);
+    --hair1: rgba(10, 10, 12, 0.05);
+    --hair2: rgba(10, 10, 12, 0.08);
+    --hair3: rgba(10, 10, 12, 0.14);
+    --machined: inset 0 0 0 1px rgba(10, 10, 12, 0.08), inset 0 1px rgba(255, 255, 255, 0.7);
+    /* Inverse aliases → elevated light surface */
     --inverse-bg: var(--bg-elevated);
     --inverse-text: var(--text);
     --inverse-muted: var(--text-dim);
     --inverse-border: var(--border);
 
-    /* Type — Inter body + Instrument Sans display (not Inter-only) */
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Type — Instrument Sans for body + display (no Inter default stack) */
+    --font-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-display: 'Instrument Sans', var(--font-sans);
     --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
     --mono: var(--font-mono);
@@ -82,10 +82,10 @@
     --space-20: 80px;
     --space-24: 96px;
 
-    /* Elevation */
-    --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.28), 0 8px 22px -14px rgba(0, 0, 0, 0.55);
-    --shadow-panel: 0 12px 30px -22px rgba(0, 0, 0, 0.65);
-    --shadow-control: 0 1px 2px rgba(0, 0, 0, 0.3);
+    /* Elevation — soft light-mode depth, no glow */
+    --shadow-raised: 0 1px 2px rgba(10, 10, 12, 0.04), 0 8px 24px -12px rgba(10, 10, 12, 0.12);
+    --shadow-panel: 0 12px 32px -20px rgba(10, 10, 12, 0.14);
+    --shadow-control: 0 1px 2px rgba(10, 10, 12, 0.06);
 
     /* Motion */
     --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -141,7 +141,8 @@ h1,
 h2 { text-wrap: balance; }
 
 ::selection { background: var(--accent-surface); }
-.text-purple { color: var(--accent); }
+.text-accent { color: var(--accent); }
+.text-purple { color: var(--accent); } /* legacy alias — do not introduce purple */
 
 /* Landing page */
 
@@ -592,9 +593,9 @@ a.nav-cta:hover {
 }
 
 .founder-photo {
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-pill);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
     object-fit: cover;
     border: 1px solid var(--border-hover);
     flex-shrink: 0;
@@ -675,11 +676,11 @@ a.nav-cta:hover {
 }
 
 .section-eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 550;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: var(--text-dim);
     margin: 0 0 14px;
 }
@@ -1851,8 +1852,8 @@ textarea:focus {
 
 #beta-form button[type="submit"] {
     padding: 14px 32px;
-    background: var(--accent);
-    color: var(--text-on-accent);
+    background: var(--cta-bg);
+    color: var(--cta-text);
     border: none;
     border-radius: var(--radius);
     font-size: 16px;
@@ -1881,8 +1882,8 @@ textarea:focus {
 .form-status-error { color: var(--danger); }
 
 #beta-form button[type="submit"]:hover {
-    background: var(--accent-hover);
-    box-shadow: var(--shadow-control);
+    background: var(--cta-bg-hover);
+    box-shadow: none;
 }
 
 .beta-section > .beta-footer-note {
@@ -2291,9 +2292,47 @@ textarea:focus {
     }
 }
 
-/* Player / glasses mode */
+/* Player / glasses mode
+   Marketing is light; the reading stage stays dark for legibility.
+   Same accent family (muted teal), same type, ink/white CTAs. */
 
 body.glasses {
+    --bg: #0A0A0C;
+    --bg-elevated: #101014;
+    --bg-card: #101014;
+    --panel: #101014;
+    --surface: rgba(255, 255, 255, 0.035);
+    --surface-raised: rgba(255, 255, 255, 0.055);
+    --surface-hover: rgba(255, 255, 255, 0.075);
+    --text: #F7F8F8;
+    --text-muted: #D0D6E0;
+    --text-dim: #8A8F98;
+    --t1: #F7F8F8;
+    --t2: #D0D6E0;
+    --t3: #8A8F98;
+    --t4: #787D86;
+    --cta-bg: #FFFFFF;
+    --cta-bg-hover: #F7F7F8;
+    --cta-text: #0A0A0C;
+    --accent: #2A9B90;
+    --accent-hover: #238B81;
+    --accent-text: #5EC4B8;
+    --accent-subtle: color-mix(in oklch, var(--accent) 12%, transparent);
+    --accent-surface: color-mix(in oklch, var(--accent) 16%, transparent);
+    --accent-border: color-mix(in oklch, var(--accent) 36%, transparent);
+    --accent-soft: color-mix(in oklch, var(--accent) 16%, transparent);
+    --success: #34D399;
+    --danger: #F87171;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.15);
+    --hair1: rgba(255, 255, 255, 0.05);
+    --hair2: rgba(255, 255, 255, 0.08);
+    --hair3: rgba(255, 255, 255, 0.15);
+    --machined: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.28), 0 8px 22px -14px rgba(0, 0, 0, 0.55);
+    --shadow-panel: 0 12px 30px -22px rgba(0, 0, 0, 0.65);
+    --shadow-control: 0 1px 2px rgba(0, 0, 0, 0.3);
+
     background: var(--bg);
     display: flex;
     flex-direction: column;
@@ -2417,6 +2456,37 @@ body.focus-mode .chunk.active {
     margin: 0 4px;
     opacity: 0.55;
     font-size: 0.85em;
+}
+
+.cue-breathe,
+.cue-hold {
+    font-weight: inherit;
+    color: inherit;
+}
+
+body.glasses .chunk.active .cue-breathe {
+    color: var(--accent-text);
+    border-bottom: 1px solid color-mix(in oklch, var(--accent) 55%, transparent);
+}
+
+body.glasses .chunk.active .cue-hold {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, var(--accent) 70%, transparent);
+    text-underline-offset: 0.18em;
+}
+
+.export-pro-hint {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    width: 100%;
+}
+
+.export-pro-hint a,
+.export-pro-hint .link-btn {
+    color: var(--accent-text);
 }
 
 .chunk.cue-pause-chunk {
@@ -4035,10 +4105,10 @@ body.say-page {
     gap: 10px;
     margin: 0 0 var(--space-8);
     color: var(--text-dim);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    font-weight: 550;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 }
 
@@ -4073,18 +4143,18 @@ body.say-page {
 .landing .btn-primary,
 .device-detail-page .btn-primary,
 .pricing-page .btn-primary {
-    color: #090909;
-    background: var(--text);
-    border-color: var(--text);
+    color: var(--cta-text);
+    background: var(--cta-bg);
+    border-color: var(--cta-bg);
     box-shadow: none;
 }
 
 .landing .btn-primary:hover,
 .device-detail-page .btn-primary:hover,
 .pricing-page .btn-primary:hover {
-    color: #090909;
-    background: #FFFFFF;
-    border-color: #FFFFFF;
+    color: var(--cta-text);
+    background: var(--cta-bg-hover);
+    border-color: var(--cta-bg-hover);
     box-shadow: none;
 }
 
@@ -4109,16 +4179,16 @@ body.say-page {
     padding: 0;
     min-height: 620px;
     overflow: hidden;
-    background: #0C0C0E;
+    background: var(--panel);
     border: 1px solid var(--border-hover);
     border-radius: var(--radius-lg);
-    box-shadow: none;
+    box-shadow: var(--shadow-panel);
 }
 
 .product-stage:hover {
     transform: translateY(var(--lift-sm));
-    border-color: rgba(255, 255, 255, 0.24);
-    box-shadow: none;
+    border-color: var(--hair3);
+    box-shadow: var(--shadow-raised);
 }
 
 .product-stage-toolbar {
@@ -4296,7 +4366,7 @@ body.say-page {
     padding: 12px 14px;
     color: var(--text);
     font: inherit;
-    background: #0B0B0C;
+    background: var(--bg);
     border: 1px solid var(--border-hover);
     border-radius: var(--radius);
 }
@@ -4309,10 +4379,10 @@ body.say-page {
     min-height: 48px;
     margin-top: var(--space-2);
     padding: 0 22px;
-    color: #090909;
-    background: var(--text);
-    border-color: var(--text);
-    border-radius: var(--radius-pill);
+    color: var(--cta-text);
+    background: var(--cta-bg);
+    border-color: var(--cta-bg);
+    border-radius: var(--radius);
 }
 
 .beta-success {
@@ -4409,7 +4479,7 @@ body.say-page {
 
 /* Homepage rhythm: one editorial grid with restrained tonal separation. */
 .landing {
-    color-scheme: dark;
+    color-scheme: light;
 }
 
 .landing .product-workbench,
@@ -4432,7 +4502,7 @@ body.say-page {
 .landing .product-stage {
     width: 100%;
     max-width: none;
-    background: #101012;
+    background: var(--panel);
 }
 .landing .editor-card,
 .landing .device-matrix,
@@ -4483,7 +4553,7 @@ body.say-page {
 .landing #beta-form.beta-form select,
 .landing #beta-form.beta-form textarea {
     color: var(--text);
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--bg);
     border-color: var(--hair2);
 }
 
@@ -4795,7 +4865,7 @@ form[aria-busy="true"] button[type="submit"]::after {
 }
 
 .landing .beta-section {
-    color-scheme: dark;
+    color-scheme: light;
 }
 
 .device-detail-page .beta-section .btn-primary {
@@ -4836,7 +4906,7 @@ form[aria-busy="true"] button[type="submit"]::after {
     width: 100vw;
     content: '';
     transform: translateX(-50%);
-    background: #101011;
+    background: var(--bg);
 }
 
 .legal-body a,

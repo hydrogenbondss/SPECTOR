@@ -3162,11 +3162,58 @@ body.say-page {
 
 .end-actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
     gap: 12px;
-    justify-content: center;
     width: 100%;
     max-width: 420px;
+}
+
+.end-actions > .btn-primary {
+    width: 100%;
+}
+
+.end-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.end-actions-row .btn-secondary {
+    flex: 1 1 140px;
+}
+
+.end-export-block {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+}
+
+.end-export-block .btn-secondary {
+    width: 100%;
+}
+
+.end-actions-quiet {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 4px;
+}
+
+.end-actions-quiet .link-btn {
+    font-size: 13px;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.end-actions-quiet .link-btn:hover {
+    color: var(--text-muted);
 }
 
 /* Comfort discovery tip */

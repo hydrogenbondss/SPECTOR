@@ -11,11 +11,12 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.min.css?v=8">
+    <link rel="stylesheet" href="style.min.css?v=9">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="favicon.ico" sizes="48x48">
-    <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
-    <link rel="apple-touch-icon" href="images/app-icon.png">
+    <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="images/favicon-32.png?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="images/logo-mark.png?v=2" sizes="256x256">
+    <link rel="apple-touch-icon" href="images/app-icon.png?v=2">
     <script src="/js/paddle-pro.js"></script>
     <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (window.SpectorPro) SpectorPro.initPaddle();"></script>
 </head>
@@ -30,21 +31,41 @@
     </main>
     <div id="active-line-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-    <button class="toggle-chip motion-chip hidden" id="motion-permit-btn" type="button" aria-label="Enable head tracking for Comfort mode spatial effects. On glasses, use right temple button for script control.">Enable head tracking</button>
+    <button class="toggle-chip motion-chip hidden" id="motion-permit-btn" type="button" aria-label="Enable head tracking, used only by Comfort mode">Enable head tracking</button>
 
-    <div class="customize-panel" id="customize-panel">
-        <div class="customize-group">
-            <label for="text-size">Text</label>
-            <input type="range" id="text-size" min="22" max="42" value="31" step="1">
-            <span class="customize-value" id="text-size-val">31px</span>
+    <div class="hud-sheet" id="hud-sheet">
+        <div class="hud-sheet-header">
+            <span>Stage settings</span>
+            <button type="button" class="hud-sheet-close" id="hud-sheet-close" aria-label="Close settings">Close</button>
         </div>
-        <div class="customize-group">
-            <label for="line-spacing">Leading</label>
-            <input type="range" id="line-spacing" min="1.3" max="2.0" value="1.55" step="0.05">
-            <span class="customize-value" id="line-spacing-val">1.55</span>
+        <div class="customize-panel" id="customize-panel">
+            <div class="customize-group">
+                <label for="text-size">Text</label>
+                <input type="range" id="text-size" min="22" max="42" value="31" step="1">
+                <span class="customize-value" id="text-size-val">31px</span>
+            </div>
+            <div class="customize-group">
+                <label for="line-spacing">Leading</label>
+                <input type="range" id="line-spacing" min="1.3" max="2.0" value="1.55" step="0.05">
+                <span class="customize-value" id="line-spacing-val">1.55</span>
+            </div>
+            <button class="toggle-chip" id="mirror-toggle" type="button" title="Flip text for camera/mirror setups">Mirror</button>
         </div>
-        <button class="toggle-chip" id="compact-toggle" type="button">Compact HUD</button>
-        <button class="toggle-chip" id="mirror-toggle" type="button" title="Flip text for camera/mirror setups">Mirror</button>
+
+        <div class="speed-presets">
+            <button class="preset-btn" data-speed="slow">Slow</button>
+            <button class="preset-btn active" data-speed="normal">Normal</button>
+            <button class="preset-btn" data-speed="fast">Fast</button>
+        </div>
+
+        <div class="mode-switcher">
+            <button class="mode-btn" data-mode="comfort">Comfort</button>
+            <button class="mode-btn active" data-mode="focus">Focus</button>
+            <button class="mode-btn" data-mode="presentation">Presentation</button>
+        </div>
+        <p class="mode-legend" id="mode-legend">Focus — steady center read</p>
+
+        <button class="toggle-chip hud-layout-toggle" id="compact-toggle" type="button">Compact stage</button>
     </div>
 
     <div class="progress-container">
@@ -53,27 +74,18 @@
         </div>
         <div class="timer">
             <span id="time-elapsed">0:00</span>
-            <span id="pacing-indicator" class="pacing-indicator" aria-hidden="true">auto-pacing · punctuation-aware</span>
-            <span id="time-remaining">– remaining</span>
+            <span id="pacing-indicator" class="pacing-indicator" aria-hidden="true">commas breathe · periods hold</span>
+            <span id="time-remaining">— remaining</span>
         </div>
     </div>
 
-    <div class="speed-presets">
-        <button class="preset-btn" data-speed="slow">Slow</button>
-        <button class="preset-btn active" data-speed="normal">Normal</button>
-        <button class="preset-btn" data-speed="fast">Fast</button>
-    </div>
-
-    <div class="controls">
-        <button id="rewind-btn" class="control-btn" type="button" aria-label="Previous line" title="Previous line"></button>
-        <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">▶</button>
-        <button id="forward-btn" class="control-btn" type="button" aria-label="Next line" title="Next line"></button>
-    </div>
-
-    <div class="mode-switcher">
-        <button class="mode-btn" data-mode="comfort">Comfort</button>
-        <button class="mode-btn active" data-mode="focus">Focus</button>
-        <button class="mode-btn" data-mode="presentation">Presentation</button>
+    <div class="controls-row">
+        <button class="toggle-chip hud-settings-btn" id="hud-settings-btn" type="button" aria-expanded="false" aria-controls="hud-sheet">Settings</button>
+        <div class="controls">
+            <button id="rewind-btn" class="control-btn" type="button" aria-label="Back three lines" title="Back three lines"></button>
+            <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">▶</button>
+            <button id="forward-btn" class="control-btn" type="button" aria-label="Forward three lines" title="Forward three lines"></button>
+        </div>
     </div>
 
     <div class="bookmarks hidden" id="bookmarks-bar" aria-label="Jump to section"></div>
@@ -85,7 +97,7 @@
     </div>
 
     <div id="comfort-tip" class="comfort-tip hidden">
-        <span>Comfort mode uses your device's motion sensors — move gently and the text breathes and drifts with you, anchored in space. No mic, no camera: Spector never listens, and your script never leaves this device.</span>
+        <span>Comfort mode reads your device's motion sensors — move gently and the text breathes and drifts with you. On a desktop with no sensors it simply holds still.</span>
         <button id="dismiss-comfort-tip" type="button">Got it</button>
     </div>
 
@@ -106,12 +118,12 @@
 
     <div id="end-screen" class="end-screen hidden">
         <h2 id="end-screen-heading" tabindex="-1">Well done.</h2>
-        <p class="subtitle">Rehearsal complete. Review your pacing, then run it again until delivery feels natural.</p>
+        <p class="subtitle">Check your pacing below, then run it again.</p>
 
         <div class="stats">
             <div>
                 <span class="value" id="end-chunks">—</span>
-                <span>chunks</span>
+                <span>lines</span>
             </div>
             <div>
                 <span class="value" id="end-time">—</span>
@@ -130,18 +142,18 @@
         <div class="analytics-panel" id="analytics-panel">
             <p class="analytics-line" id="analytics-hesitations">—</p>
             <p class="analytics-line" id="analytics-slowest">—</p>
-            <p class="analytics-line analytics-tip">Tip: a pacing score above 85% means you're ready to perform eyes-up.</p>
+            <p class="analytics-line analytics-tip">Pacing is how even your timing stayed across this run — higher means steadier.</p>
         </div>
 
         <div class="section-analytics hidden" id="section-analytics"></div>
 
         <div class="end-actions">
-            <button id="restart-btn" class="btn-primary">Read Again</button>
-            <button id="edit-script-btn" class="btn-secondary">Edit Script</button>
-            <button id="save-end-btn" class="btn-secondary">Save to Library</button>
-            <button id="export-btn" class="btn-secondary">Copy Script + Stats</button>
-            <p id="export-pro-hint" class="export-pro-hint hidden">Export is a Pro perk — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy here</button>.</p>
-            <button id="new-script-btn" class="btn-secondary">New Script</button>
+            <button id="restart-btn" class="btn-primary">Read again</button>
+            <button id="edit-script-btn" class="btn-secondary">Edit script</button>
+            <button id="save-end-btn" class="btn-secondary">Save to library</button>
+            <button id="export-btn" class="btn-secondary">Copy script + stats</button>
+            <p id="export-pro-hint" class="export-pro-hint hidden">Copying needs Pro — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy it here</button>.</p>
+            <button id="new-script-btn" class="btn-secondary">New script</button>
             <button id="exit-end-btn" class="btn-secondary">Exit</button>
         </div>
     </div>
@@ -507,7 +519,7 @@
 
     // First run should never be an empty prompter — land on a real sample so the
     // pacing "aha" happens in one tap. (Bring your own script from the landing page.)
-    const SAMPLE_SCRIPT = "Welcome to **Spector**. [pause] This is the actual engine, pacing itself to punctuation. Short lines move quickly. Longer sentences, like this one, get the room they need to breathe. **Emphasis** earns a hold. [pause:2s] Commas add a beat, sentence ends linger, and you never touch a scroll wheel. Eyes up. No script-face. [pause] Now try it with your own words — hit Edit Script when you finish.";
+    const SAMPLE_SCRIPT = "Welcome to **Spector**. [pause] This is the actual engine, pacing itself to punctuation. Short lines move quickly. Longer sentences, like this one, get the room they need to breathe. **Emphasis** earns a hold. [pause:2s] Commas add a beat, sentence ends linger, and you never touch a scroll wheel. Eyes up. No script-face. [pause] Now try it with your own words — hit Edit script when you finish.";
 
     function getScriptFromURL() {
         const params = new URLSearchParams(window.location.search);
@@ -665,6 +677,7 @@
         playButton.setAttribute('aria-label', 'Pause teleprompter');
         playButton.title = 'Pause';
         Haptics.play();
+        closeHudSheet();
 
         const tick = () => {
             if (!isPlaying) return;
@@ -854,6 +867,15 @@
         document.body.classList.add(`${mode}-mode`);
         document.querySelectorAll('.mode-btn').forEach(btn =>
             btn.classList.toggle('active', btn.dataset.mode === mode));
+        const legend = document.getElementById('mode-legend');
+        if (legend) {
+            const copy = {
+                comfort: 'Comfort — text follows gentle head motion',
+                focus: 'Focus — steady center read',
+                presentation: 'Presentation — slower, heavier type'
+            };
+            legend.textContent = copy[mode] || copy.focus;
+        }
         savePrefs({ mode });
         Haptics.modeChange();
 
@@ -927,7 +949,7 @@
         btn.classList.remove('hidden');
         btn.addEventListener('click', async () => {
             const granted = await ensureMotionForPlayback();
-            btn.textContent = granted ? 'Head tracking enabled ✓' : 'Motion denied';
+            btn.textContent = granted ? 'Head tracking on ✓' : 'Motion access denied';
         });
     }
 
@@ -956,22 +978,65 @@
         });
         document.addEventListener('click', (e) => {
             if (!e.target.closest('button') && !e.target.closest('.mode-switcher') &&
-                !e.target.closest('.speed-presets') && !e.target.closest('.customize-panel'))
+                !e.target.closest('.speed-presets') && !e.target.closest('.customize-panel') &&
+                !e.target.closest('.hud-sheet') && !e.target.closest('.hud-settings-btn') &&
+                !e.target.closest('.controls-row'))
                 handlePlayGesture();
+        });
+    }
+
+    function closeHudSheet() {
+        const sheet = document.getElementById('hud-sheet');
+        const btn = document.getElementById('hud-settings-btn');
+        if (sheet) sheet.classList.remove('is-open');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function openHudSheet() {
+        const sheet = document.getElementById('hud-sheet');
+        const btn = document.getElementById('hud-settings-btn');
+        if (sheet) sheet.classList.add('is-open');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+    }
+
+    function setHudCompact(compact) {
+        document.body.classList.toggle('hud-compact', compact);
+        const toggle = document.getElementById('compact-toggle');
+        if (toggle) {
+            toggle.classList.toggle('active', compact);
+            toggle.textContent = compact ? 'Show all controls' : 'Compact stage';
+        }
+        if (!compact) closeHudSheet();
+        savePrefs({ compact: !!compact });
+    }
+
+    function setupHudSheet() {
+        const settingsBtn = document.getElementById('hud-settings-btn');
+        const closeBtn = document.getElementById('hud-sheet-close');
+        const sheet = document.getElementById('hud-sheet');
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => {
+                if (sheet?.classList.contains('is-open')) closeHudSheet();
+                else openHudSheet();
+            });
+        }
+        if (closeBtn) closeBtn.addEventListener('click', closeHudSheet);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeHudSheet();
         });
     }
 
     function setupControlsFade() {
         const els = [
-            document.querySelector('.customize-panel'),
-            document.querySelector('.speed-presets'),
+            document.querySelector('.hud-sheet'),
+            document.querySelector('.hud-settings-btn'),
             document.querySelector('.controls'),
-            document.querySelector('.mode-switcher')
+            document.querySelector('.progress-container')
         ].filter(Boolean);
         let hideTimer = null;
 
         function showControls() {
-            els.forEach(el => el.style.opacity = '1');
+            els.forEach(el => { el.style.opacity = '1'; });
             clearTimeout(hideTimer);
             if (isPlaying) {
                 hideTimer = setTimeout(hideControls, 4000);
@@ -980,15 +1045,18 @@
 
         function hideControls() {
             if (!isPlaying) return;
-            els.forEach(el => el.style.opacity = '0.1');
+            closeHudSheet();
+            // Keep progress faintly readable; tuck settings + transport
+            els.forEach(el => {
+                if (el.classList.contains('progress-container')) el.style.opacity = '0.35';
+                else el.style.opacity = '0.12';
+            });
         }
 
-        // interactions show controls
         ['mousemove', 'touchstart', 'keydown'].forEach(evt =>
             document.addEventListener(evt, showControls, { passive: true })
         );
 
-        // initial show
         setTimeout(showControls, 1000);
     }
 
@@ -1104,7 +1172,6 @@
             const s = document.getElementById('line-spacing'); if (s) s.value = p.leading;
             const v = document.getElementById('line-spacing-val'); if (v) v.textContent = p.leading;
         }
-        if (p.compact) document.getElementById('compact-toggle')?.classList.add('active');
         if (p.mirror) {
             mirrorEnabled = true;
             document.getElementById('mirror-toggle')?.classList.add('active');
@@ -1114,6 +1181,12 @@
             currentSpeed = p.speed;
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.speed === p.speed));
         }
+        // Compact = stage chrome collapsed into Settings sheet.
+        // Prefer saved pref; otherwise default compact on short/narrow viewports.
+        let compact;
+        if (typeof p.compact === 'boolean') compact = p.compact;
+        else compact = window.matchMedia('(max-width: 640px), (max-height: 720px)').matches;
+        setHudCompact(compact);
         return p.mode || 'focus';
     }
 
@@ -1126,8 +1199,7 @@
         textSize.addEventListener('input', () => {
             root.style.setProperty('--chunk-size', textSize.value + 'px');
             document.getElementById('text-size-val').textContent = textSize.value + 'px';
-            compactToggle.classList.remove('active');
-            savePrefs({ textSize: textSize.value, compact: false });
+            savePrefs({ textSize: textSize.value });
         });
         lineSpacing.addEventListener('input', () => {
             root.style.setProperty('--chunk-leading', lineSpacing.value);
@@ -1135,15 +1207,8 @@
             savePrefs({ leading: lineSpacing.value });
         });
         compactToggle.addEventListener('click', () => {
-            compactToggle.classList.toggle('active');
-            if (compactToggle.classList.contains('active')) {
-                root.style.setProperty('--chunk-size', '26px');
-                textSize.value = 26;
-                document.getElementById('text-size-val').textContent = '26px';
-                savePrefs({ textSize: '26', compact: true });
-            } else {
-                savePrefs({ compact: false });
-            }
+            setHudCompact(!document.body.classList.contains('hud-compact'));
+            Haptics.preset();
         });
         const mirrorToggle = document.getElementById('mirror-toggle');
         mirrorToggle.addEventListener('click', () => {
@@ -1246,12 +1311,12 @@
         }
         document.getElementById('analytics-hesitations').textContent =
             analytics.hesitations
-                ? `${analytics.hesitations} hesitation${analytics.hesitations === 1 ? '' : 's'} — natural pauses are fine; aim to reduce forced stops.`
-                : 'Smooth run — no mid-chunk hesitations detected.';
+                ? `${analytics.hesitations} hesitation${analytics.hesitations === 1 ? '' : 's'} — you paused before the line finished.`
+                : 'Smooth run — you never paused mid-line.';
         document.getElementById('analytics-slowest').textContent =
             analytics.slowestRatio > 1.35
                 ? `Slowest moment: ${analytics.slowestLabel} (${Math.round(analytics.slowestRatio * 100)}% of target pace)`
-                : 'Pacing stayed even across all chunks.';
+                : 'Pacing stayed even from start to finish.';
         renderSectionAnalytics();
         endScreen.classList.remove('hidden');
         endScreen.classList.add('visible');
@@ -1284,13 +1349,13 @@
         };
         document.getElementById('save-end-btn').onclick = () => {
             saveToLibrary();
-            document.getElementById('save-end-btn').textContent = 'Saved ✓';
+            document.getElementById('save-end-btn').textContent = 'Saved to library ✓';
         };
         const exportBtn = document.getElementById('export-btn');
         const exportHint = document.getElementById('export-pro-hint');
         const exportBuy = document.getElementById('export-buy-btn');
         if (exportHint) exportHint.classList.toggle('hidden', isPro());
-        if (exportBtn && !isPro()) exportBtn.textContent = 'Export (Pro)';
+        if (exportBtn && !isPro()) exportBtn.textContent = 'Copy script + stats (Pro)';
         if (exportBuy) {
             exportBuy.onclick = () => {
                 if (window.SpectorPro && window.SpectorPro.openCheckout()) return;
@@ -1304,11 +1369,11 @@
                 window.location.href = '/pricing';
                 return;
             }
-            const summary = `Script:\n${rawScript}\n\nChunks: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
-            const orig = 'Copy Script + Stats';
+            const summary = `Script:\n${rawScript}\n\nLines: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
+            const orig = 'Copy script + stats';
             const flash = (label) => { exportBtn.textContent = label; setTimeout(() => { exportBtn.textContent = orig; }, 1500); };
-            if (!navigator.clipboard) { flash('Copy not supported here'); return; }
-            navigator.clipboard.writeText(summary).then(() => flash('Copied!')).catch(() => flash('Copy failed'));
+            if (!navigator.clipboard) { flash('This browser can’t copy'); return; }
+            navigator.clipboard.writeText(summary).then(() => flash('Copied ✓')).catch(() => flash('Copy failed'));
         };
         document.getElementById('new-script-btn').onclick = () => window.location.href = 'index.html';
         document.getElementById('exit-end-btn').onclick = () => window.location.href = 'index.html';
@@ -1342,12 +1407,13 @@
         setupSpeedPresets();
         setupMotionPermissionUI();
         setupCustomization();
+        setupHudSheet();
         setupControlsFade();
         setupGlassesButtonSim();
         setupDesktopTiltSim();
         wireGlassButtons();
 
-        // First-run in-product coach: highlight Comfort + hardware button story on very first visit
+        // First-run in-product coach — one line, never over the mode row
         let firstRun = false;
         try {
             firstRun = !localStorage.getItem('spector_player_first_run');
@@ -1364,7 +1430,10 @@
             setTimeout(() => {
                 const toast = document.createElement('div');
                 toast.className = 'first-run-toast';
-                toast.innerHTML = `A sample script is loaded — just hit <strong>Play</strong>.<br>Then try <strong>Comfort</strong> mode for spatial head-tracking.`;
+                const fromLanding = !!new URLSearchParams(window.location.search).get('script');
+                toast.innerHTML = fromLanding
+                    ? `Your script is loaded — hit <strong>Play</strong>.`
+                    : `Hit <strong>Play</strong> — a sample is ready.`;
                 document.body.appendChild(toast);
 
                 toast.classList.add('visible');
@@ -1379,7 +1448,7 @@
                 };
                 toast.addEventListener('click', dismiss, { once: true });
 
-                setTimeout(dismiss, 8500);
+                setTimeout(dismiss, 4500);
             }, 1400);
         }
 

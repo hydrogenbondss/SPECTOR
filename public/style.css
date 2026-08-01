@@ -2348,11 +2348,9 @@ body.glasses:not(.say-page) {
     overflow: hidden;
 }
 
-body.player-loading .customize-panel,
+body.player-loading .hud-sheet,
 body.player-loading .progress-container,
-body.player-loading .speed-presets,
-body.player-loading .controls,
-body.player-loading .mode-switcher,
+body.player-loading .controls-row,
 body.player-loading .bookmarks {
     visibility: hidden;
 }
@@ -2508,11 +2506,137 @@ body.mirror-mode .customize-panel,
 body.mirror-mode .progress-container,
 body.mirror-mode .speed-presets,
 body.mirror-mode .controls,
+body.mirror-mode .controls-row,
 body.mirror-mode .mode-switcher,
+body.mirror-mode .hud-sheet,
+body.mirror-mode .hud-settings-btn,
 body.mirror-mode .exit-btn,
 body.mirror-mode .glasses-hw-legend,
 body.mirror-mode .bookmarks {
     transform: scaleX(1);
+}
+
+/* Stage settings: inline when expanded; bottom sheet when compact */
+.hud-sheet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto 8px;
+}
+
+.hud-sheet-header {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 4px;
+    font-size: 13px;
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+}
+
+.hud-sheet-close {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px 8px;
+}
+
+.mode-legend {
+    margin: 0;
+    max-width: 420px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--text-dim);
+}
+
+.controls-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.hud-settings-btn {
+    display: none;
+}
+
+.hud-layout-toggle {
+    margin-top: 2px;
+}
+
+/* Compact stage: Settings sheet + Play/progress only */
+body.hud-compact .hud-settings-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+body.hud-compact .hud-sheet-header {
+    display: flex;
+}
+
+body.hud-compact .hud-sheet {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    max-width: none;
+    margin: 0;
+    padding: 14px 14px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--hair2);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-panel);
+    transform: translateY(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.28s var(--ease-standard), opacity 0.28s var(--ease-standard);
+    max-height: min(68vh, 520px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.hud-compact .hud-sheet.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.hud-compact .controls-row {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+body.hud-compact .controls {
+    flex: 1;
+    max-width: 360px;
+}
+
+body.hud-compact .customize-panel {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+body.hud-compact .mode-switcher {
+    margin: 0;
+}
+
+body.hud-compact .speed-presets {
+    margin-bottom: 0;
 }
 
 /* Customization panel */
@@ -3116,20 +3240,20 @@ body.say-page {
 }
 
 /* Controls fade on idle */
-.customize-panel, .speed-presets, .controls, .mode-switcher {
+.hud-sheet, .hud-settings-btn, .controls, .progress-container, .controls-row {
     transition: opacity var(--duration-base) var(--ease-standard);
 }
 
-/* First-run coach toast */
+/* First-run coach toast — sits above transport, never over mode switcher */
 .first-run-toast {
     position: fixed;
-    bottom: 20px;
+    bottom: calc(148px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
-    max-width: 90%;
+    max-width: min(320px, 88vw);
     background: var(--accent);
     color: var(--text-on-accent);
-    padding: 12px 20px;
+    padding: 10px 16px;
     border-radius: var(--radius-pill);
     font-size: 13px;
     font-weight: var(--weight-medium);
@@ -3140,11 +3264,27 @@ body.say-page {
     pointer-events: auto;
     cursor: pointer;
     text-align: center;
+    line-height: 1.35;
 }
 
 .first-run-toast.visible {
     opacity: 1;
-    transform: translateX(-50%) translateY(-5px);
+    transform: translateX(-50%) translateY(-4px);
+}
+
+body.hud-compact .first-run-toast {
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 640px) {
+    .first-run-toast {
+        bottom: calc(168px + env(safe-area-inset-bottom, 0px));
+        font-size: 12.5px;
+        padding: 9px 14px;
+    }
+    body.hud-compact .first-run-toast {
+        bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    }
 }
 
 .first-run-toast strong {
@@ -4922,6 +5062,8 @@ form[aria-busy="true"] button[type="submit"]::after {
 .progress-container,
 .speed-presets,
 .controls,
+.controls-row,
+.hud-sheet,
 .mode-switcher,
 .bookmarks,
 .say-message,

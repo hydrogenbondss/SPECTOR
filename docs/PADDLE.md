@@ -19,12 +19,11 @@ Static site, no backend, no server. Checkout is Paddle's own **overlay**
   (`Paddle.Environment.set('sandbox')` only fires for `test_` tokens) — a
   sandbox token can never accidentally behave as if it were live.
 - No backend to validate a purchase, so `checkout.completed` just sets
-  `localStorage.spector_pro` directly (mirrors the existing manual
-  license-key box). This means Pro status is **locally spoofable** via
-  devtools — known, accepted, documented in the code. Doesn't expose
-  anyone's data or cost money; just an honesty-based local flag. Real
-  enforcement would mean adding a backend to validate license keys
-  against Paddle's Transactions API — not planned, not needed yet.
+  `localStorage.spector_pro` directly. The “unlock on another device” box
+  accepts a Paddle transaction id (`txn_…`) or any saved token ≥ 8 chars —
+  honor-system, same as the checkout flag. Spoofable via DevTools — known,
+  accepted. Real enforcement would mean a backend against Paddle’s
+  Transactions API — not planned, not needed yet.
 
 ## The one bug worth remembering
 

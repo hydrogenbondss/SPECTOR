@@ -66,9 +66,13 @@
 
     function activateLicenseKey(key) {
         var trimmed = (key || '').trim();
-        if (trimmed.length < 8) return { ok: false, message: 'That key doesn\'t look right — check the email from your purchase.' };
+        // Honor-system restore: accept Paddle transaction ids (txn_…) or any
+        // saved token ≥ 8 chars. No server validation on this static site.
+        if (trimmed.length < 8) {
+            return { ok: false, message: 'Paste the transaction id from your Paddle receipt (starts with txn_).' };
+        }
         setPro(trimmed);
-        return { ok: true, message: 'Pro activated ✓' };
+        return { ok: true, message: 'Pro unlocked on this device ✓' };
     }
 
     global.SpectorPro = {

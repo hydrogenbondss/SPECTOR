@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v9'; // Pro gating, paddle-pro.js, landing receipts/tips
+const CACHE = 'spector-v10'; // ink favicon + app icons (no purple)
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {

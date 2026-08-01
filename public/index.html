@@ -26,11 +26,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="style.min.css?v=9">
-    <link rel="stylesheet" href="landing-v2.min.css?v=13">
+    <link rel="stylesheet" href="landing-v2.min.css?v=16">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="favicon.ico" sizes="48x48">
-    <link rel="icon" type="image/png" href="images/logo-mark.png" sizes="256x256">
-    <link rel="apple-touch-icon" href="images/app-icon.png">
+    <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="images/favicon-32.png?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="images/logo-mark.png?v=2" sizes="256x256">
+    <link rel="apple-touch-icon" href="images/app-icon.png?v=2">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -61,7 +62,7 @@
             <a href="#features">Product</a>
             <a href="/pricing">Pricing</a>
             <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge hidden" id="gh-stars"></span></a>
-            <a href="#try" class="nav-cta">Try Spector free</a>
+            <a href="app.html" class="nav-cta" data-quick-start>Try Spector free</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
@@ -75,26 +76,25 @@
                 <div class="hero-copy">
                     <p class="hero-brand">SPECTOR</p>
                     <h1 class="hero-headline">The teleprompter that reads your punctuation.</h1>
-                    <p class="hero-subhead">Commas breathe. Periods hold. Eyes up on smart glasses.</p>
+                    <p class="hero-subhead">Commas breathe. Periods hold. Rehearse on phone — eyes-up on XREAL or Viture.</p>
                     <div class="hero-cta-group">
-                        <a href="#try" class="btn-hero">Try Spector free</a>
+                        <a href="app.html" class="btn-hero" data-quick-start>Try Spector free</a>
                     </div>
                     <p class="hero-trust-row">Free core forever · <b>$34 Pro, once</b></p>
                 </div>
 
                 <div class="hero-visual">
-                    <a class="hero-demo" id="hero-demo" href="app.html">
-                        <span class="sr-only">Live demo of Spector's punctuation pacing — open the full player.</span>
+                    <a class="hero-demo" id="hero-demo" href="app.html" data-quick-start>
+                        <span class="sr-only">Try Spector with a sample script</span>
                         <div class="hero-demo-shell">
                             <div class="hero-demo-chrome" aria-hidden="true">
                                 <span class="hero-demo-dots"><span></span><span></span><span></span></span>
-                                <span class="hero-demo-window">Live stage</span>
-                                <span class="hero-demo-mode">Punctuation-paced</span>
+                                <span class="hero-demo-window">Spector</span>
                             </div>
                             <div class="hero-demo-screen">
                                 <div class="hero-demo-bar-row">
                                     <span class="hero-demo-live"><span class="pip" aria-hidden="true"></span>Live pacing</span>
-                                    <span class="hero-demo-hint"><kbd>Space</kbd> pauses · open player</span>
+                                    <span class="hero-demo-hint"><kbd>Space</kbd> pauses · tap to try</span>
                                 </div>
                                 <div class="hero-demo-lines">
                                     <div class="hero-demo-line prev" id="hd-prev" aria-hidden="true">Good evening, everyone.</div>
@@ -110,7 +110,7 @@
                         <div class="hero-demo-tags" aria-hidden="true">
                             <span class="hero-demo-tag">No mic</span>
                             <span class="hero-demo-tag">No cloud</span>
-                            <span class="hero-demo-tag">Eyes-up ready</span>
+                            <span class="hero-demo-tag">No account</span>
                         </div>
                     </a>
                     <p class="hero-compat">Phone · XREAL &amp; Viture eyes-up · Ray-Ban Meta rehearsal</p>
@@ -122,14 +122,14 @@
 
     <main class="container">
 
-        <!-- PROOF — one section, three beats + one visual -->
+        <!-- PROOF — three beats + one visual -->
         <section class="proof-section reveal" id="features">
             <div class="proof-copy">
                 <h2 class="proof-headline">Eyes up. No script-face.</h2>
                 <ul class="proof-list">
-                    <li><strong>Pacing</strong> — Your punctuation sets the tempo. No mic.</li>
-                    <li><strong>Eyes up</strong> — Rehearse on phone. Perform on XREAL or Viture today.</li>
-                    <li><strong>Yours</strong> — No account. Nothing uploaded. Works offline.</li>
+                    <li><strong>Punctuation sets the pace</strong> — Commas breathe. Periods hold. No mic.</li>
+                    <li><strong>Rehearse on phone, perform eyes-up</strong> — Mirror to XREAL or Viture today. Ray-Ban Meta: phone rehearsal.</li>
+                    <li><strong>Stays on this device</strong> — No account. Nothing uploaded. Works offline.</li>
                 </ul>
             </div>
             <div class="product-media pace-visual proof-visual" aria-hidden="true">
@@ -139,21 +139,11 @@
             </div>
         </section>
 
-        <!-- RECEIPTS — first-party only (no invented quotes) -->
-        <section class="receipts-section reveal" id="receipts" aria-label="What you can verify">
-            <p class="kicker">Receipts</p>
-            <ul class="receipts-list">
-                <li><strong>No mic. No cloud.</strong> Scripts stay in your browser — nothing uploaded.</li>
-                <li><strong>Free core, forever.</strong> Pro is $34 once via Paddle — never a subscription.</li>
-                <li><strong>Built by Jeffrey</strong> in Hong Kong · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></li>
-                <li><strong>Open source</strong> on <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">GitHub</a> — read the code, run it offline.</li>
-            </ul>
-        </section>
-
         <!-- TRY — minimal -->
         <section class="try-section" id="try">
             <p class="kicker">Try it</p>
-            <h2>Paste a script. Hit play.</h2>
+            <h2>Paste a script. Hit Launch.</h2>
+            <p class="try-lead">A sample is already loaded — run it as-is, or paste your own over it.</p>
 
             <div class="try-shell">
                 <label class="sr-only" for="script-input">Your script</label>
@@ -178,7 +168,7 @@
                     <button id="launch-btn" class="btn-primary" style="flex:1;">Launch teleprompter</button>
                     <button id="save-btn" class="btn-secondary">Save</button>
                 </div>
-                <p class="install-hint"><button id="install-btn" type="button" class="link-btn">Install as an app</button> — offline and full-screen.</p>
+                <p class="install-hint"><button id="install-btn" type="button" class="link-btn">Install as an app</button> — offline, full screen.</p>
 
                 <details class="try-more">
                     <summary>Title, formatting &amp; file upload</summary>
@@ -226,48 +216,49 @@
             <div class="device-matrix">
                 <div class="matrix-row">
                     <span class="matrix-device">Phone or computer</span>
+                    <span class="matrix-how">Full teleprompter in the browser.</span>
                     <span class="matrix-status works">Works</span>
-                    <span class="matrix-how">Rehearse and perform in the browser.</span>
                 </div>
                 <div class="matrix-row">
                     <span class="matrix-device">XREAL / Viture</span>
+                    <span class="matrix-how">Mirror the phone — Spector on the glasses display.</span>
                     <span class="matrix-status works">Eyes-up</span>
-                    <span class="matrix-how">Mirror your phone — Spector on the glasses display.</span>
                 </div>
                 <div class="matrix-row">
                     <span class="matrix-device">Ray-Ban Meta Gen 1 / 2</span>
+                    <span class="matrix-how">No display — rehearse on your phone.</span>
                     <span class="matrix-status partial">Rehearsal</span>
-                    <span class="matrix-how">No display yet — rehearse on your phone.</span>
                 </div>
                 <div class="matrix-row">
                     <span class="matrix-device">Ray-Ban Meta Display</span>
+                    <span class="matrix-how">Not on the lens yet. Phone rehearsal works today.</span>
                     <span class="matrix-status waiting">Waiting</span>
-                    <span class="matrix-how">On-lens when Meta opens developer access.</span>
                 </div>
             </div>
-            <p class="matrix-note">Not listed? <a href="#beta">Tell us</a> — we'd rather under-promise.</p>
+            <p class="matrix-note">Not listed? <a href="#beta">Tell us what you have</a> — we test before we claim it.</p>
         </section>
 
         <!-- PRICING TEASER -->
         <section class="support-section" id="support">
             <p class="kicker">Pricing</p>
             <h2>Free core. Pro is $34 — once.</h2>
-            <p>After the take, Pro keeps longer rehearsal history on this device and lets you export script + stats — <strong>one payment, never a subscription</strong>. Checkout runs through Paddle. <a href="/pricing">Full pricing</a>.</p>
+            <p>Pro keeps 50 rehearsals on this device instead of 5, and copies your script with the stats after a run — <strong>one payment, never a subscription</strong>. Checkout via Paddle. <a href="/pricing">Full pricing</a>.</p>
             <div class="support-cta">
                 <button type="button" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</button>
             </div>
             <div class="license-box">
-                <span class="license-label">Already purchased?</span>
-                <input type="text" id="license-key" placeholder="Paste your license key" autocomplete="off" spellcheck="false">
-                <button type="button" id="activate-pro" class="btn-secondary">Activate Pro</button>
+                <span class="license-label">Paid on another device?</span>
+                <input type="text" id="license-key" placeholder="Paste transaction id from your receipt" autocomplete="off" spellcheck="false" aria-describedby="license-hint">
+                <button type="button" id="activate-pro" class="btn-secondary">Unlock here</button>
             </div>
+            <p id="license-hint" class="license-hint">Pro unlocks on the browser where you check out. Paste your Paddle transaction id (starts with <code>txn_</code>) to unlock on this one.</p>
             <p id="pro-status" class="pro-status" role="status"></p>
         </section>
 
         <!-- FAQ — three only -->
         <section class="faq-section band reveal" id="faq">
             <p class="kicker">FAQ</p>
-            <h2>Common questions.</h2>
+            <h2>Straight answers.</h2>
             <div class="faq-list">
                 <details class="faq-item">
                     <summary>How is this different from voice-following teleprompters?</summary>
@@ -284,7 +275,7 @@
                 <details class="faq-item">
                     <summary>What does it cost?</summary>
                     <div class="faq-answer">
-                        <p>Core is free forever. Spector Pro is <strong>$34 once</strong> via Paddle — longer on-device history and export. Never a subscription. Details on <a href="/pricing">Pricing</a>.</p>
+                        <p>Core is free forever. Spector Pro is <strong>$34 once</strong> via Paddle — 50 rehearsals kept on this device instead of 5, plus copying your script with its stats. Never a subscription. Details on <a href="/pricing">Pricing</a>.</p>
                     </div>
                 </details>
             </div>
@@ -294,7 +285,7 @@
         <section class="beta-section" id="beta">
             <p class="kicker">Founding beta</p>
             <h2>Bring your glasses.</h2>
-            <p>Own smart glasses? About 30 minutes of feedback → <strong>Pro free for life</strong>.</p>
+            <p>Spend about 30 minutes testing Spector on your own glasses and tell us what broke. <strong>Pro is yours free for life.</strong></p>
             <form id="beta-form" action="https://formspree.io/f/mzdlddkp" method="POST">
                 <input type="hidden" name="form" value="founding-beta">
                 <input type="email" name="email" placeholder="your@email.com" required>
@@ -305,11 +296,11 @@
             <div id="beta-success" style="display:none;color:var(--accent);font-weight:600;margin-top:16px;">Thanks — we'll write from hello@spectorlabs.io.</div>
         </section>
 
-        <!-- TIPS — non-beta owned email (give before ask) -->
+        <!-- TIPS — optional email -->
         <section class="tips-section reveal" id="tips">
-            <p class="kicker">One tip</p>
-            <h2>Not ready for beta?</h2>
-            <p>Get occasional rehearsal tips — no spam, unsubscribe anytime. Scripts still never leave your device.</p>
+            <p class="kicker">Tips</p>
+            <h2>Occasional rehearsal notes.</h2>
+            <p>Pacing and eyes-up tips by email. Unsubscribe anytime.</p>
             <form id="tips-form" action="https://formspree.io/f/mzdlddkp" method="POST">
                 <input type="hidden" name="form" value="tips">
                 <input type="email" name="email" placeholder="your@email.com" required>
@@ -320,8 +311,8 @@
 
         <!-- CLOSE -->
         <section class="echo-cta reveal">
-            <h2>Eyes up. Start with Spector.</h2>
-            <a href="#try" class="btn-primary btn-hero">Try Spector free</a>
+            <h2>Ready when you are.</h2>
+            <a href="app.html" class="btn-primary btn-hero" data-quick-start>Try Spector free</a>
         </section>
 
         <section class="founder-section reveal" id="founder">
@@ -459,6 +450,28 @@
             window.location.href = `app.html?script=${encoded}`;
         }
 
+        function quickStartUrl() {
+            const sample = SAMPLE_SCRIPTS.demo;
+            return `app.html?script=${btoa(encodeURIComponent(sample.text))}`;
+        }
+
+        function initQuickStartCTAs() {
+            const url = quickStartUrl();
+            document.querySelectorAll('[data-quick-start]').forEach((el) => {
+                el.setAttribute('href', url);
+            });
+        }
+
+        function preloadTrySample() {
+            const textarea = document.getElementById('script-input');
+            const titleEl = document.getElementById('script-title');
+            if (!textarea || textarea.value.trim()) return;
+            const sample = SAMPLE_SCRIPTS.demo;
+            textarea.value = sample.text;
+            if (titleEl && !titleEl.value.trim()) titleEl.value = sample.title;
+            updateScriptMeta();
+        }
+
         function renderLibrary() {
             const list = document.getElementById('library-list');
             const empty = document.getElementById('library-empty');
@@ -506,7 +519,7 @@
             if (trend) trend.innerHTML = buildPacingTrendSvg(runs);
             container.innerHTML = runs.map(r => {
                 const d = new Date(r.ts).toLocaleDateString();
-                return `<div class="history-item">${d} · ${r.chunks} chunks · ${r.time} min · ${r.wpm} wpm · ${r.pacing} pacing<br><span style="font-size:10px;opacity:0.7;">${escapeHtml(r.scriptPreview)}</span></div>`;
+                return `<div class="history-item">${d} · ${r.chunks} lines · ${r.time} min · ${r.wpm} wpm · ${r.pacing} pacing<br><span style="font-size:10px;opacity:0.7;">${escapeHtml(r.scriptPreview)}</span></div>`;
             }).join('');
         }
 
@@ -1187,6 +1200,8 @@
             initButtons();
             initSampleButtons();
             initCueToolbar();
+            initQuickStartCTAs();
+            preloadTrySample();
             renderLibrary();
             renderHistory();
             initHeroDemo();

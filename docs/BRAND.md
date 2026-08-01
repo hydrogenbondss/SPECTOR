@@ -28,9 +28,8 @@ across the landing + player — keep this doc and the CSS in lock-step.
     **"Free core, forever. No account, no cloud, nothing uploaded — ever."**
 - Always write **Spector**, never "the Spector app" or "Spector Labs product."
   Footer entity line: `© Spector Labs`.
-- **Primary try CTA:** label **"Try Spector free"** → `/#try` (minimal paste +
-  launch; formatting/title/upload behind a disclosure). Demo stage may
-  deep-link to `app.html`.
+- **Primary try CTA:** label **"Try Spector free"** → opens the player with a
+  sample (`app.html?script=…`). `#try` remains for paste / Launch / Save.
 - **Homepage IA (structural):** first viewport = one full-bleed dark plane —
   brand + H1 + one line + one CTA + framed live pacing stage (claim lives
   *with* the product surface, not stacked as a white brochure above it).
@@ -38,9 +37,8 @@ across the landing + player — keep this doc and the CSS in lock-step.
   section (three beats + one visual) → minimal Try (paste, 3 samples,
   Launch/Save; title/cues/upload behind a disclosure) → compact devices →
   pricing teaser → 3 FAQs → compact beta → optional tips email → close.
-  First-party receipts strip after proof (no invented quotes). No feature-row
-  essays,
-  no changelog wall, no investor block on the home page.
+  No invented testimonials. No feature-row essays, no changelog wall, no
+  investor block on the home page.
 - **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
   Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history
   (50 vs 5) and export — not sync until it ships. Same light canvas / ink CTAs

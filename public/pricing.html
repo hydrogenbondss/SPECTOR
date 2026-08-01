@@ -23,9 +23,10 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="/style.min.css?v=9">
     <link rel="stylesheet" href="/landing-v2.min.css?v=13">
-    <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <link rel="icon" type="image/png" href="/images/logo-mark.png" sizes="256x256">
-    <link rel="apple-touch-icon" href="/images/app-icon.png">
+    <link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-32.png?v=2" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/logo-mark.png?v=2" sizes="256x256">
+    <link rel="apple-touch-icon" href="/images/app-icon.png?v=2">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -63,33 +64,34 @@
 
         <section class="comparison-section pricing-ledger" aria-label="Spector plans">
             <article class="pricing-plan pricing-plan-current">
-                <div class="pricing-plan-name"><span>Now</span><h2>Free core</h2></div>
+                <div class="pricing-plan-name"><span>Always</span><h2>Free core</h2></div>
                 <p class="pricing-value">$0</p>
                 <p class="pricing-plan-summary">Full teleprompter in your browser. No account, no watermark, no trial clock.</p>
                 <ul>
                     <li>Paste a script — it stays on this device</li>
                     <li>Commas breathe, periods hold — no mic listening</li>
                     <li>Comfort, Focus, and Presentation modes</li>
-                    <li>Last 5 rehearsals remembered here</li>
+                    <li>Your last 5 rehearsals, kept on this device</li>
                 </ul>
                 <a href="/#try" class="btn-primary">Try Spector free</a>
             </article>
             <article class="pricing-plan pricing-plan-future">
-                <div class="pricing-plan-name"><span>Now</span><h2>Spector Pro</h2></div>
+                <div class="pricing-plan-name"><span>Optional</span><h2>Spector Pro</h2></div>
                 <p class="pricing-value pricing-value-planned">$34 <span class="pricing-once">once</span></p>
-                <p class="pricing-plan-summary">One payment. Lifetime access on this device. Never billed again.</p>
+                <p class="pricing-plan-summary">One payment. Pro stays unlocked in this browser. Never billed again.</p>
                 <ul>
-                    <li>After the take — export script + stats in one copy</li>
-                    <li>Keep up to 50 rehearsals on this device (free keeps 5)</li>
+                    <li>Copy your script and its stats after a run</li>
+                    <li>Keep 50 rehearsals on this device instead of 5</li>
                     <li>Funds the person building Spector</li>
-                    <li>Cloud sync is not included yet — we won’t sell vapor</li>
+                    <li>Cloud sync isn’t included — it hasn’t shipped</li>
                 </ul>
                 <button type="button" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</button>
                 <div class="license-box pricing-license">
-                    <span class="license-label">Already purchased?</span>
-                    <input type="text" id="license-key" placeholder="Paste your license key" autocomplete="off" spellcheck="false">
-                    <button type="button" id="activate-pro" class="btn-secondary">Activate Pro</button>
+                    <span class="license-label">Paid on another device?</span>
+                    <input type="text" id="license-key" placeholder="Paste transaction id from your receipt" autocomplete="off" spellcheck="false" aria-describedby="license-hint">
+                    <button type="button" id="activate-pro" class="btn-secondary">Unlock here</button>
                 </div>
+                <p id="license-hint" class="license-hint">Pro unlocks on the browser where you check out. Paste your Paddle transaction id (starts with <code>txn_</code>) to unlock on this one.</p>
                 <p id="pro-status" class="pro-status" role="status"></p>
                 <p class="support-note">Founding hardware testers get Pro free for life. Checkout via Paddle.</p>
             </article>
@@ -105,7 +107,7 @@
                 </details>
                 <details class="faq-item">
                     <summary>What does Pro unlock today?</summary>
-                    <div class="faq-answer"><p>Longer rehearsal history on this device (50 runs vs 5) and export of script + stats from the end screen. Sync across devices is not shipping yet — when it does, it will stay optional and off by default.</p></div>
+                    <div class="faq-answer"><p>Longer rehearsal history on this device (50 runs vs 5), and copying your script with its stats from the end screen. Sync across devices is not shipping yet — when it does, it will stay optional and off by default.</p></div>
                 </details>
                 <details class="faq-item">
                     <summary>Is Pro a subscription?</summary>

@@ -7,7 +7,7 @@ Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.
 [![License: MIT](https://img.shields.io/badge/License-MIT-000?style=flat-square)](LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-Installable-000?style=flat-square)](https://spectorlabs.io)
 
-[![The Spector player mid-rehearsal: dimmed context lines, one active line, purple emphasis earning a longer hold](docs/images/readme-player.png)](https://spectorlabs.io/app.html)
+[![The Spector player mid-rehearsal: dimmed context lines, one active line, emphasis earning a longer hold](docs/images/readme-player.png)](https://spectorlabs.io/app.html)
 
 *The actual player, mid-rehearsal — dimmed context, one active line, `**emphasis**` earning a longer hold. [Try it live](https://spectorlabs.io), no sign-up.*
 
@@ -24,7 +24,7 @@ by design, not locked to any manufacturer.
 
 1. Open **https://spectorlabs.io**
 2. Paste text, drop a `.txt`, or load a sample script
-3. Hit **Launch Teleprompter**
+3. Hit **Launch teleprompter**
 4. Pick a mode (try **Comfort**), speed, and text size
 5. Tap Play (or press Space) — the engine paces itself to your punctuation
 6. When done, review your pacing, hesitations, and slowest chunk on the end screen
@@ -78,8 +78,8 @@ new and hasn't been tested with real AAC users yet — [feedback welcome](https:
 Honest answer, kept current on the site's [device matrix](https://spectorlabs.io/#devices):
 any phone or computer gets the full experience right now; **XREAL and Viture work
 today** as mirrored displays; camera-only Ray-Ban Meta (Gen 1/2) is
-rehearsal-on-phone until Meta opens its platform; Ray-Ban Display support is
-built and waiting on Meta's app store. If your device isn't honestly covered,
+rehearsal-on-phone until Meta opens its platform; Ray-Ban Display can't show
+Spector on the lens yet, so phone rehearsal is the answer there too. If your device isn't honestly covered,
 [tell us](https://spectorlabs.io/#beta) and we'll test it.
 
 ### vs. Meta's built-in teleprompter

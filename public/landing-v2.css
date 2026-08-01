@@ -560,6 +560,13 @@ body.landing .pace-visual .pv-hold {
 body.landing .try-section {
     padding: 96px 0 0; max-width: 720px; margin: 0 auto;
 }
+body.landing .try-lead {
+    margin: 8px 0 0;
+    max-width: 36em;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--t3);
+}
 body.landing .try-shell {
     margin-top: 28px;
     padding: 0;
@@ -625,53 +632,62 @@ body.landing .history-heading {
    DEVICES
    -------------------------------------------------------------------------- */
 body.landing .devices-section {
-    padding: 88px 0 0; max-width: 860px; margin: 0 auto;
+    padding: 88px 0 0;
+    max-width: 860px;
+    margin: 0 auto;
+    border-top: 1px solid var(--hair2);
 }
 body.landing .device-matrix {
     margin-top: 28px;
-    border-top: 1px solid var(--hair2);
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
 }
 body.landing .matrix-row {
-    display: grid; grid-template-columns: 200px 100px 1fr; gap: 16px;
-    padding: 14px 0; border-bottom: 1px solid var(--hair1);
-    align-items: baseline; background: none; border-left: none; border-right: none;
+    display: grid;
+    grid-template-columns: minmax(140px, 220px) minmax(0, 1fr) auto;
+    grid-template-areas: none;
+    gap: 12px 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--hair1);
+    align-items: baseline;
+    background: none;
+    border-left: none;
+    border-right: none;
 }
-body.landing .matrix-device { color: var(--t2); font-weight: 510; font-size: 14.5px; }
+body.landing .matrix-device {
+    color: var(--t2);
+    font-weight: 510;
+    font-size: 14.5px;
+    min-width: 0;
+}
+body.landing .matrix-how {
+    color: var(--t4);
+    font-size: 13.5px;
+    line-height: 1.45;
+    min-width: 0;
+}
 body.landing .matrix-status {
-    font-size: 12px; font-weight: 550; border: none; background: none; padding: 0;
-    text-transform: none; letter-spacing: .02em;
+    font-size: 12px;
+    font-weight: 550;
+    border: none;
+    background: none;
+    padding: 0;
+    text-transform: none;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    justify-self: end;
+    text-align: right;
 }
 body.landing .matrix-status.works { color: var(--accent); }
 body.landing .matrix-status.partial { color: var(--t3); }
 body.landing .matrix-status.waiting { color: var(--t4); }
-body.landing .matrix-how { color: var(--t4); font-size: 13.5px; line-height: 1.45; }
 body.landing .matrix-note { margin-top: 14px; font-size: 13px; color: var(--t4); }
 
 /* --------------------------------------------------------------------------
-   RECEIPTS / TIPS
+   TIPS
    -------------------------------------------------------------------------- */
-body.landing .receipts-section {
-    max-width: 640px;
-    margin: 56px auto 0;
-    padding: 0;
-}
-body.landing .receipts-list {
-    list-style: none;
-    margin: 16px 0 0;
-    padding: 0;
-    display: grid;
-    gap: 12px;
-}
-body.landing .receipts-list li {
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--t2);
-    padding: 0 0 12px;
-    border-bottom: 1px solid var(--hair1);
-}
-body.landing .receipts-list li:last-child { border-bottom: none; padding-bottom: 0; }
-body.landing .receipts-list strong { color: var(--t1); font-weight: 550; }
-
 body.landing .tips-section {
     max-width: 640px;
     margin: 72px auto 0;
@@ -722,6 +738,17 @@ body.landing .license-box input {
     border-radius: 8px; padding: 10px 12px;
 }
 body.landing .license-label { color: var(--t4); font-size: 12.5px; width: 100%; }
+body.landing .license-hint {
+    margin: 8px 0 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--t4);
+    max-width: 36em;
+}
+body.landing .license-hint code {
+    font-size: 11.5px;
+    color: var(--t3);
+}
 body.landing .pro-status.active { color: var(--accent); }
 
 body.landing .faq-section,
@@ -901,7 +928,16 @@ body.landing.pricing-page .seo-crosslinks a { color: var(--t3); }
         transform: none;
     }
     body.landing .proof-section { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
-    body.landing .matrix-row { grid-template-columns: 1fr; gap: 4px; }
+    body.landing .matrix-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "device status"
+            "how how";
+        gap: 4px 12px;
+    }
+    body.landing .matrix-device { grid-area: device; }
+    body.landing .matrix-status { grid-area: status; }
+    body.landing .matrix-how { grid-area: how; }
     body.landing .try-section,
     body.landing .devices-section,
     body.landing .support-section,

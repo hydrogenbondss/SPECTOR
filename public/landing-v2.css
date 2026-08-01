@@ -241,31 +241,38 @@ body.landing .hero-plane .hero-demo {
     color: #D0D6E0;
     text-align: left;
     text-decoration: none;
-    perspective: 1200px;
 }
 body.landing .hero-demo::before, body.landing .hero-demo::after { content: none; }
 body.landing .hero-demo:hover { opacity: 1; transform: none; box-shadow: none; }
-body.landing .hero-demo-shell {
+
+/* Real player still — no fake window chrome, no glow */
+body.landing .hero-demo-shell--still {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 18px;
-    padding: 1px;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .04) 40%, rgba(14, 124, 116, .22) 100%);
-    box-shadow:
-        0 28px 70px rgba(0, 0, 0, .42),
-        inset 0 1px rgba(255, 255, 255, .08);
-    transform: rotateX(4deg) rotateY(-7deg);
-    transform-origin: 70% 50%;
-    transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+    background: #0A0A0C;
+    border: 1px solid rgba(255, 255, 255, .1);
+    box-shadow: 0 24px 56px rgba(0, 0, 0, .4);
+    transform: none;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
 }
-body.landing .hero-demo:hover .hero-demo-shell,
-body.landing .hero-demo:focus-visible .hero-demo-shell {
-    transform: rotateX(2deg) rotateY(-4deg) translateY(-2px);
-    box-shadow:
-        0 34px 84px rgba(0, 0, 0, .5),
-        inset 0 1px rgba(255, 255, 255, .12);
+body.landing .hero-demo:hover .hero-demo-shell--still,
+body.landing .hero-demo:focus-visible .hero-demo-shell--still {
+    border-color: rgba(255, 255, 255, .16);
+    box-shadow: 0 28px 64px rgba(0, 0, 0, .48);
+    transform: none;
+}
+body.landing .hero-demo-still {
+    display: block;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center 35%;
 }
 body.landing .hero-demo-chrome {
     display: grid;

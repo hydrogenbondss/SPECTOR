@@ -31,13 +31,12 @@ across the landing + player — keep this doc and the CSS in lock-step.
 - **Primary try CTA:** label **"Try Spector free"** → opens the player with a
   sample (`app.html?script=…`). `#try` remains for paste / Launch / Save.
 - **Homepage IA (structural):** first viewport = one full-bleed dark plane —
-  brand + H1 + one line + one CTA + framed live pacing stage (claim lives
-  *with* the product surface, not stacked as a white brochure above it).
-  Price whisper under CTA. Light canvas begins below. Then: one proof
-  section (three beats + one visual) → minimal Try (paste, 3 samples,
-  Launch/Save; title/cues/upload behind a disclosure) → compact devices →
-  pricing teaser → 3 FAQs → compact beta → optional tips email → close.
-  No invented testimonials. No feature-row essays, no changelog wall, no
+  brand + H1 + one line + one CTA + real player still (same UI as `app.html`;
+  click opens the player with a sample). Price whisper under CTA. Light canvas
+  begins below. Then: one proof section (three beats + one visual) → minimal Try
+  (paste, 3 samples, Launch/Save; title/cues/upload behind a disclosure) →
+  compact devices → pricing teaser → 3 FAQs → compact beta → optional tips email
+  → close. No invented testimonials. No feature-row essays, no changelog wall, no
   investor block on the home page.
 - **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
   Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history

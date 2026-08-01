@@ -11,7 +11,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.min.css?v=9">
+    <link rel="stylesheet" href="style.min.css?v=10">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=2" sizes="32x32">
@@ -149,12 +149,18 @@
 
         <div class="end-actions">
             <button id="restart-btn" class="btn-primary">Read again</button>
-            <button id="edit-script-btn" class="btn-secondary">Edit script</button>
-            <button id="save-end-btn" class="btn-secondary">Save to library</button>
-            <button id="export-btn" class="btn-secondary">Copy script + stats</button>
-            <p id="export-pro-hint" class="export-pro-hint hidden">Copying needs Pro — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy it here</button>.</p>
-            <button id="new-script-btn" class="btn-secondary">New script</button>
-            <button id="exit-end-btn" class="btn-secondary">Exit</button>
+            <div class="end-actions-row">
+                <button id="edit-script-btn" class="btn-secondary">Edit script</button>
+                <button id="save-end-btn" class="btn-secondary">Save to library</button>
+            </div>
+            <div class="end-export-block">
+                <button id="export-btn" class="btn-secondary">Copy script + stats</button>
+                <p id="export-pro-hint" class="export-pro-hint hidden">Copying needs Pro — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy it here</button>.</p>
+            </div>
+            <div class="end-actions-quiet">
+                <button type="button" id="new-script-btn" class="link-btn">New script</button>
+                <button type="button" id="exit-end-btn" class="link-btn">Exit</button>
+            </div>
         </div>
     </div>
 
@@ -1354,7 +1360,8 @@
         const exportBtn = document.getElementById('export-btn');
         const exportHint = document.getElementById('export-pro-hint');
         const exportBuy = document.getElementById('export-buy-btn');
-        if (exportHint) exportHint.classList.toggle('hidden', isPro());
+        // Hint stays hidden until Export is tapped — checkout only from "buy it here" / pricing.
+        if (exportHint) exportHint.classList.add('hidden');
         if (exportBtn && !isPro()) exportBtn.textContent = 'Copy script + stats (Pro)';
         if (exportBuy) {
             exportBuy.onclick = () => {
@@ -1365,8 +1372,6 @@
         exportBtn.onclick = () => {
             if (!isPro()) {
                 if (exportHint) exportHint.classList.remove('hidden');
-                if (window.SpectorPro && window.SpectorPro.openCheckout()) return;
-                window.location.href = '/pricing';
                 return;
             }
             const summary = `Script:\n${rawScript}\n\nLines: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;

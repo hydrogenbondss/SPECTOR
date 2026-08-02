@@ -1,7 +1,7 @@
 {
   "name": "Spector — Teleprompter for Smart Glasses",
   "short_name": "Spector",
-  "description": "The teleprompter that reads your punctuation. No mic. No cloud. Rehearse on phone, perform eyes-up on smart glasses.",
+  "description": "Your punctuation sets the pace — not your voice. No mic. No cloud. Rehearse on phone, perform eyes-up on smart glasses.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#F7F7F8",

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>document.documentElement.classList.add('js');</script>
-    <meta name="description" content="Spector: the teleprompter that reads your punctuation. No mic. No listening. Rehearse on phone, perform eyes-up on smart glasses. Free core, forever — no account, no cloud.">
+    <meta name="description" content="Spector: your punctuation sets the pace — not your voice. No mic. No listening. Rehearse on phone, perform eyes-up on smart glasses. Free core, forever — no account, no cloud.">
     <meta name="theme-color" content="#F7F7F8">
     <meta property="og:title" content="Spector — Punctuation-paced. No mic. No cloud.">
-    <meta property="og:description" content="The teleprompter that reads your punctuation. Commas breathe, periods hold — nothing listens. Free core forever.">
+    <meta property="og:description" content="Your punctuation sets the pace — not your voice. Commas breathe, periods hold — nothing listens. Free core forever.">
     <meta property="og:image" content="https://www.spectorlabs.io/images/og-card.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -15,9 +15,9 @@
     <meta property="og:url" content="https://www.spectorlabs.io">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Spector — Punctuation-paced. No mic. No cloud.">
-    <meta name="twitter:description" content="The teleprompter that reads your punctuation. No mic. No listening. Free core forever.">
+    <meta name="twitter:description" content="Your punctuation sets the pace — not your voice. No mic. No listening. Free core forever.">
     <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png">
-    <title>Spector — The teleprompter that reads your punctuation</title>
+    <title>Spector — Your punctuation sets the pace</title>
     <link rel="canonical" href="https://www.spectorlabs.io/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="style.min.css?v=9">
-    <link rel="stylesheet" href="landing-v2.min.css?v=17">
+    <link rel="stylesheet" href="landing-v2.min.css?v=19">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=2" sizes="32x32">
@@ -75,7 +75,7 @@
             <div class="hero-layout">
                 <div class="hero-copy">
                     <p class="hero-brand">SPECTOR</p>
-                    <h1 class="hero-headline">The teleprompter that reads your punctuation.</h1>
+                    <h1 class="hero-headline">Your punctuation sets the pace — not your voice.</h1>
                     <p class="hero-subhead">Commas breathe. Periods hold. Rehearse on phone — eyes-up on XREAL or Viture.</p>
                     <div class="hero-cta-group">
                         <a href="app.html" class="btn-hero" data-quick-start>Try Spector free</a>
@@ -87,15 +87,19 @@
                     <a class="hero-demo hero-demo--still" id="hero-demo" href="app.html" data-quick-start>
                         <span class="sr-only">Try Spector with a sample script — opens the player</span>
                         <div class="hero-demo-shell hero-demo-shell--still">
-                            <img
-                                class="hero-demo-still"
-                                src="images/hero-player-still.png?v=1"
-                                width="1600"
-                                height="1000"
-                                alt="Spector player: active line Good evening, everyone. with punctuation pacing marks"
-                                decoding="async"
-                                fetchpriority="high"
-                            >
+                            <video
+                                class="hero-demo-video"
+                                src="images/launch.mp4?v=6"
+                                poster="images/hero-player-still.png?v=1"
+                                width="1280"
+                                height="720"
+                                autoplay
+                                muted
+                                loop
+                                playsinline
+                                preload="metadata"
+                                aria-label="Spector launch: punctuation-paced teleprompter demo"
+                            ></video>
                         </div>
                         <div class="hero-demo-tags" aria-hidden="true">
                             <span class="hero-demo-tag">No mic</span>
@@ -1111,8 +1115,8 @@
             else setTimeout(go, 3500);
         }
 
-        // Hero uses a real player still (images/hero-player-still.png) — no animated mock.
-        function initHeroDemo() { /* still image; click → sample player */ }
+        // Hero uses muted looping launch.mp4 (motion-graphics product film) — click → sample.
+        function initHeroDemo() { /* video + poster; click → sample player */ }
 
         function init() {
             initFileUpload();

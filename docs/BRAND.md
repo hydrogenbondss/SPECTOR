@@ -16,10 +16,11 @@ across the landing + player — keep this doc and the CSS in lock-step.
   voice doesn't want. ALL-CAPS `SPECTOR` is reserved for graphic lockups: the
   letterspaced nav wordmark and the homepage hero kicker (not prose spelling).
   The repo name `SPECTOR` stays as-is and reads as that same lockup.
-- **Headline hierarchy:** lead with the falsifiable claim — **"The teleprompter
-  that reads your punctuation."** is the hero H1. **"Eyes Forward"** is earned
-  equity only (badge / secondary), never the primary share title.
-- **One-liner:** *The teleprompter that reads your punctuation. No mic. No
+- **Headline hierarchy:** lead with the falsifiable claim — **"Your punctuation
+  sets the pace — not your voice."** is the hero H1. **"Eyes Forward"** is earned
+  equity only (badge / secondary), never the primary share title. Retired primary:
+  "The teleprompter that reads your punctuation."
+- **One-liner:** *Your punctuation sets the pace — not your voice. No mic. No
   listening. Rehearse on phone, perform eyes-up on smart glasses.*
 - **Two distinct lines — do not paraphrase either:**
   - **Pairing / footer tagline** (contrarian association): **"Punctuation-paced.
@@ -31,13 +32,13 @@ across the landing + player — keep this doc and the CSS in lock-step.
 - **Primary try CTA:** label **"Try Spector free"** → opens the player with a
   sample (`app.html?script=…`). `#try` remains for paste / Launch / Save.
 - **Homepage IA (structural):** first viewport = one full-bleed dark plane —
-  brand + H1 + one line + one CTA + real player still (same UI as `app.html`;
-  click opens the player with a sample). Price whisper under CTA. Light canvas
-  begins below. Then: one proof section (three beats + one visual) → minimal Try
-  (paste, 3 samples, Launch/Save; title/cues/upload behind a disclosure) →
-  compact devices → pricing teaser → 3 FAQs → compact beta → optional tips email
-  → close. No invented testimonials. No feature-row essays, no changelog wall, no
-  investor block on the home page.
+  brand + H1 + one line + one CTA + muted looping launch video (real `app.html`
+  UI capture; poster = player still; click opens the player with a sample).
+  Price whisper under CTA. Light canvas begins below. Then: one proof section
+  (three beats + one visual) → minimal Try (paste, 3 samples, Launch/Save;
+  title/cues/upload behind a disclosure) → compact devices → pricing teaser →
+  3 FAQs → compact beta → optional tips email → close. No invented testimonials.
+  No feature-row essays, no changelog wall, no investor block on the home page.
 - **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
   Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history
   (50 vs 5) and export — not sync until it ships. Same light canvas / ink CTAs

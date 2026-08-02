@@ -207,7 +207,7 @@ body.landing .hero-plane .hero-headline {
     letter-spacing: -0.042em;
     line-height: 0.98;
     margin: 0;
-    max-width: 14ch;
+    max-width: 16ch;
     text-wrap: balance;
 }
 body.landing .hero-plane .hero-subhead {
@@ -265,14 +265,19 @@ body.landing .hero-demo:focus-visible .hero-demo-shell--still {
     box-shadow: 0 28px 64px rgba(0, 0, 0, .48);
     transform: none;
 }
-body.landing .hero-demo-still {
+body.landing .hero-demo-still,
+body.landing .hero-demo-video {
     display: block;
     width: 100%;
     height: auto;
     vertical-align: middle;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    object-position: center 35%;
+    object-position: center center;
+    background: #0A0A0C;
+}
+body.landing .hero-demo-video {
+    pointer-events: none;
 }
 body.landing .hero-demo-chrome {
     display: grid;
@@ -917,6 +922,14 @@ body.landing.pricing-page .seo-crosslinks a { color: var(--t3); }
     body.landing .hero-demo-live .pip { animation: none; }
     body.landing .hero-demo-screen::after,
     body.landing .hero-demo.is-stepping .hero-demo-line.active { animation: none; }
+    body.landing .hero-demo-video { display: none; }
+    body.landing .hero-demo-shell--still::after {
+        content: "";
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #0A0A0C url("images/hero-player-still.png") center / cover no-repeat;
+    }
 }
 
 /* --------------------------------------------------------------------------

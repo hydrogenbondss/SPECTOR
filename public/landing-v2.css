@@ -114,8 +114,8 @@ body.landing .nav-brand {
 body.landing .nav-logo-mark {
     width: 22px; height: 22px; flex-shrink: 0;
     background-color: currentColor;
-    -webkit-mask: url("images/logo-mark-64.png") center / contain no-repeat;
-    mask: url("images/logo-mark-64.png") center / contain no-repeat;
+    -webkit-mask: url("images/logo-mark-64.png?v=3") center / contain no-repeat;
+    mask: url("images/logo-mark-64.png?v=3") center / contain no-repeat;
     -webkit-mask-source-type: alpha;
     mask-mode: alpha;
 }

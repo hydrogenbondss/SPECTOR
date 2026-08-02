@@ -33,12 +33,15 @@ across the landing + player — keep this doc and the CSS in lock-step.
   sample (`app.html?script=…`). `#try` remains for paste / Launch / Save.
 - **Homepage IA (structural):** first viewport = one full-bleed dark plane —
   brand + H1 + one line + one CTA + muted looping launch video (real `app.html`
-  UI capture; poster = player still; click opens the player with a sample).
-  Price whisper under CTA. Light canvas begins below. Then: one proof section
-  (three beats + one visual) → minimal Try (paste, 3 samples, Launch/Save;
-  title/cues/upload behind a disclosure) → compact devices → pricing teaser →
-  3 FAQs → compact beta → optional tips email → close. No invented testimonials.
-  No feature-row essays, no changelog wall, no investor block on the home page.
+  UI capture; poster = player still; click opens the player with a sample;
+  pause control for WCAG 2.2.2). Trust row: free / no mic / no cloud / Pro once.
+  Light canvas begins below. Then: one proof section (three beats + mirrored
+  FOV composite `proof-glasses.webp` captioned as XREAL/Viture mirror — not
+  Meta Display) → collapsed Try (one Launch CTA; paste/save behind disclosure)
+  → compact devices → pricing teaser → 3 FAQs → tips email → hardware beta
+  (invite-capped; does not replace Buy Pro) → close CTA. No invented
+  testimonials. No feature-row essays, no changelog wall, no investor block on
+  the home page.
 - **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
   Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history
   (50 vs 5) and export — not sync until it ships. Same light canvas / ink CTAs
@@ -145,6 +148,9 @@ legibility, but shares the same accent family, type, and CTA grammar.
 
 - **Logo mark:** `public/images/logo-mark.png` (nav) · app icon
   `public/images/app-icon.png` · favicon `public/favicon.ico`.
+- **Homepage visuals:** hero = `public/images/launch.mp4` (motion-graphics
+  loop); proof = `public/images/proof-glasses.webp` (mirrored phone FOV for
+  XREAL / Viture — not Ray-Ban Meta Display).
 - **PWA icons:** defined in `public/manifest.json`.
 - **Social/OG card:** `public/images/og-card.png` (1200×630).
 - **Theme color:** `#F7F7F8` marketing / `#0A0A0C` player

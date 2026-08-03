@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v11'; // pure B/W favicon (no cool-ink purple)
+const CACHE = 'spector-v12'; // ink-neutral favicons + app icons
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {

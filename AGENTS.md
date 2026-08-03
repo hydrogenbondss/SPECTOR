@@ -8,6 +8,22 @@ entire app lives in `public/`; all app logic is inline in `public/index.html`,
 `window`). Node is only used for the CSS build and the link-check lint; Python
 runs the dev server and the verifier; Chrome is used by the headless test paths.
 
+### Accessibility (frontend)
+
+When changing HTML/CSS/JS UI in `public/`, follow strictly the accessibility
+rules in [A11Y.md](https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md)
+(WCAG 2.2-aligned agent contract; lazy-load only the reference guides needed).
+
+- **Compliance profile:** Launchpad (A floor for structure/semantics; do not
+  regress keyboard, labels, focus, or live regions). Prefer Standard (AA) when
+  the change is small and cheap.
+- **Stack constraint:** vanilla HTML — use native controls (`button`, `a`,
+  `label`/`for`, `dialog` patterns) before ARIA. No clickable `div`s for
+  primary actions.
+- **Brand override:** Spector ink/teal tokens and dark player stage win over
+  generic “tint gray / avoid pure black” design-linter advice when they
+  conflict. Contrast still must meet the profile.
+
 ### Services
 
 There is a single service: the static site served from `public/`.

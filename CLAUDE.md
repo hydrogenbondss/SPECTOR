@@ -12,6 +12,13 @@ confirmations, one-step-at-a-time UI walkthroughs, simple acknowledgments.
 Those stay short and untagged — applying full ceremony there slows down
 exactly the moments where a short, plain answer is what's actually needed.
 
+## Accessibility (UI work)
+
+When editing frontend UI, follow
+[A11Y.md](https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md).
+Default profile: **Launchpad**; prefer **Standard (AA)** for small cheap
+fixes. Native HTML first. Full agent notes live in `AGENTS.md`.
+
 ---
 
 # STANDING INSTRUCTIONS

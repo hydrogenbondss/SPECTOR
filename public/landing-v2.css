@@ -932,6 +932,58 @@ body.landing.pricing-page .seo-crosslinks {
 body.landing.pricing-page .seo-crosslinks a { color: var(--t3); }
 
 /* --------------------------------------------------------------------------
+   LEGAL + DEVICE PAGES — same nav/type language as pricing (page-scoped)
+   -------------------------------------------------------------------------- */
+body.landing.legal-shell .seo-nav,
+body.landing.device-detail-page .seo-nav {
+    max-width: 1080px; margin: 0 auto; padding: 16px 28px;
+    background: var(--bg); border-bottom: 1px solid var(--hair2);
+}
+body.landing.legal-shell .nav-wordmark,
+body.landing.device-detail-page .nav-wordmark {
+    color: var(--t1); font-size: 12px; font-weight: 650; letter-spacing: .14em;
+}
+body.landing.legal-shell .nav-logo,
+body.landing.device-detail-page .nav-logo {
+    width: 22px; height: 22px; border-radius: 0;
+}
+body.landing.legal-shell .legal-hero {
+    padding-top: 112px; padding-bottom: 32px; max-width: 640px;
+}
+body.landing.legal-shell .legal-hero .hero-headline {
+    font-size: clamp(2.2rem, 4.2vw, 3rem);
+}
+body.landing.legal-shell .legal-hero .hero-subhead {
+    max-width: none; color: var(--t4); font-size: 14px;
+}
+body.landing.legal-shell .legal-body {
+    color: var(--t3); max-width: 640px;
+}
+body.landing.legal-shell .legal-body h2 { color: var(--t1); }
+body.landing.legal-shell .legal-body a { color: var(--accent); }
+body.landing.legal-shell .seo-crosslinks,
+body.landing.device-detail-page .seo-crosslinks {
+    padding: 40px 0 0; text-align: left; color: var(--t4); font-size: 13px;
+}
+body.landing.legal-shell .seo-crosslinks a,
+body.landing.device-detail-page .seo-crosslinks a { color: var(--t3); }
+body.landing.device-detail-page .device-hero {
+    padding-top: 112px; padding-bottom: 56px; max-width: 720px;
+}
+body.landing.device-detail-page .device-hero .hero-brand {
+    margin: 0 0 20px;
+    font-size: 11px; font-weight: 650; letter-spacing: .18em;
+    color: var(--t1); text-transform: none;
+}
+body.landing.device-detail-page .device-hero .hero-headline {
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+}
+body.landing.device-detail-page .section-eyebrow {
+    color: var(--t4); letter-spacing: .08em; font-weight: 550;
+}
+body.landing.device-detail-page .section-header h2 { color: var(--t1); }
+
+/* --------------------------------------------------------------------------
    MOTION / REVEAL
    -------------------------------------------------------------------------- */
 .js body.landing .reveal {

@@ -11,6 +11,8 @@ import json
 import os
 import re
 import shutil
+import signal
+import socket
 import subprocess
 import sys
 import tempfile
@@ -38,6 +40,70 @@ EDGE_PROFILE = SCRATCH / "edge-profile"
 
 ARTIFACTS: dict[str, str] = {}
 FAILURES: list[str] = []
+
+
+def _port_listening(port: int = PORT, host: str = "127.0.0.1") -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(0.2)
+        return sock.connect_ex((host, port)) == 0
+
+
+def _terminate_process(proc: subprocess.Popen | None, timeout: float = 3.0) -> None:
+    """Terminate a Popen process (and its group when started with start_new_session)."""
+    if not proc or proc.poll() is not None:
+        return
+    try:
+        if proc.pid:
+            os.killpg(proc.pid, signal.SIGTERM)
+        else:
+            proc.terminate()
+    except (ProcessLookupError, PermissionError, OSError):
+        try:
+            proc.terminate()
+        except OSError:
+            pass
+    try:
+        proc.wait(timeout=timeout)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        if proc.pid:
+            os.killpg(proc.pid, signal.SIGKILL)
+        else:
+            proc.kill()
+    except (ProcessLookupError, PermissionError, OSError):
+        try:
+            proc.kill()
+        except OSError:
+            pass
+    try:
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        pass
+
+
+def _clear_stale_chrome_singleton(profile: Path) -> None:
+    """Remove orphaned Chrome profile locks left after an unclean prior exit."""
+    if not profile.is_dir():
+        return
+    marker = str(profile)
+    try:
+        listed = subprocess.run(
+            ["pgrep", "-lf", "user-data-dir"],
+            capture_output=True, text=True, timeout=5,
+        ).stdout or ""
+    except (OSError, subprocess.TimeoutExpired):
+        listed = ""
+    if marker in listed:
+        return
+    for name in ("SingletonLock", "SingletonCookie", "SingletonSocket"):
+        path = profile / name
+        try:
+            if path.exists() or path.is_symlink():
+                path.unlink()
+        except OSError:
+            pass
 
 
 def meta(step: int) -> str:
@@ -81,26 +147,56 @@ class HttpServer:
         self.lines: list[str] = []
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
+        self.ready = False
 
     def _read_log_lines(self) -> list[str]:
         return list(self.lines)
+
+    def _fail_start(self, label: str):
+        fail(label)
+        self.ready = False
+        self._stop.set()
+        _terminate_process(self.proc)
+        self.proc = None
+        if self._thread:
+            self._thread.join(timeout=2)
+            self._thread = None
 
     def start(self):
         SCRATCH.mkdir(parents=True, exist_ok=True)
         self.log_path.write_text("", encoding="utf-8")
         self.lines = []
+        self.ready = False
+        deadline = time.time() + 5.0
+        while _port_listening() and time.time() < deadline:
+            time.sleep(0.1)
+        if _port_listening():
+            self._fail_start(f"port {PORT} still in use before http.server start")
+            return
         cmd = [
             sys.executable, "-u", "-m", "http.server", str(PORT),
             "--bind", "127.0.0.1", "--directory", str(PUBLIC),
         ]
         self.proc = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1,
+            start_new_session=True,
         )
         self._stop.clear()
         self._thread = threading.Thread(target=self._reader, daemon=True)
         self._thread.start()
-        time.sleep(1.2)
-        ok(f"server started :{PORT}")
+        ready_deadline = time.time() + 5.0
+        while time.time() < ready_deadline:
+            if self.proc.poll() is not None:
+                tail = "\n".join(self.lines[-30:]) or "(no server output)"
+                self._fail_start(f"http.server exited before ready on :{PORT}: {tail}")
+                return
+            if any("Serving HTTP" in ln for ln in self.lines):
+                self.ready = True
+                ok(f"server started :{PORT}")
+                return
+            time.sleep(0.05)
+        tail = "\n".join(self.lines[-30:]) or "(no server output)"
+        self._fail_start(f"http.server did not become ready on :{PORT}: {tail}")
 
     def _reader(self):
         assert self.proc and self.proc.stdout
@@ -153,15 +249,18 @@ class HttpServer:
         return idle_note + "\n" + "\n".join(server_lines)
 
     def stop(self):
+        self.ready = False
         self._stop.set()
-        if self.proc:
-            self.proc.terminate()
-            try:
-                self.proc.wait(timeout=3)
-            except subprocess.TimeoutExpired:
-                self.proc.kill()
+        _terminate_process(self.proc)
         if self._thread:
             self._thread.join(timeout=2)
+            self._thread = None
+        deadline = time.time() + 5.0
+        while _port_listening() and time.time() < deadline:
+            time.sleep(0.1)
+        if _port_listening():
+            fail(f"port {PORT} still in use after http.server stop")
+        self.proc = None
 
 
 def external_curl_get(path: str) -> tuple[int, str]:
@@ -235,8 +334,11 @@ def edge_visit(url: str, profile: Path, seconds: float = 6.0):
     browser = find_browser()
     if not browser:
         return
+    _clear_stale_chrome_singleton(profile)
     cmd = [str(browser), "--disable-gpu", "--no-sandbox", "--no-first-run",
            "--disable-background-timer-throttling",
+           "--disable-background-networking",
+           "--disable-component-update",
            f"--user-data-dir={str(profile).replace(chr(92), '/')}"]
     if _has_display():
         # Real windowed visit, parked off-screen — closest to normal browser behavior.
@@ -247,34 +349,95 @@ def edge_visit(url: str, profile: Path, seconds: float = 6.0):
         # in the same --user-data-dir, so priming still works, just invisibly.
         cmd += ["--headless=new", "--window-size=500,400"]
     cmd.append(url)
-    proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.Popen(
+        cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
     time.sleep(seconds)
-    proc.terminate()
-    try:
-        proc.wait(timeout=3)
-    except subprocess.TimeoutExpired:
-        proc.kill()
+    _terminate_process(proc)
+    _clear_stale_chrome_singleton(profile)
 
 
 def edge_dump(url: str, dump_path: Path, profile: Path | None = None, budget: int = 10000) -> str:
     browser = find_browser()
     if not browser:
         return ""
+    if profile:
+        _clear_stale_chrome_singleton(profile)
     dump_arg = str(dump_path).replace("\\", "/")
     cmd = [
         str(browser), "--headless=new", "--disable-gpu", "--no-sandbox",
+        "--no-first-run", "--disable-background-networking",
+        "--disable-component-update", "--disable-sync",
         f"--dump-dom={dump_arg}", f"--virtual-time-budget={budget}",
         "--run-all-compositor-stages-before-draw", url,
     ]
     if profile:
         cmd.insert(1, f"--user-data-dir={str(profile).replace(chr(92), '/')}")
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-    stdout = proc.stdout or ""
+
+    proc = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        start_new_session=True,
+    )
+    stdout_chunks: list[str] = []
+    stderr_chunks: list[str] = []
+
+    def _drain_stdout() -> None:
+        assert proc.stdout is not None
+        while True:
+            chunk = proc.stdout.read(8192)
+            if not chunk:
+                break
+            stdout_chunks.append(chunk)
+
+    def _drain_stderr() -> None:
+        assert proc.stderr is not None
+        while True:
+            chunk = proc.stderr.read(8192)
+            if not chunk:
+                break
+            stderr_chunks.append(chunk)
+
+    stdout_thread = threading.Thread(target=_drain_stdout, daemon=True)
+    stderr_thread = threading.Thread(target=_drain_stderr, daemon=True)
+    stdout_thread.start()
+    stderr_thread.start()
+
+    deadline = time.time() + 60.0
+    dom_complete = False
+    exited_cleanly = False
+    while time.time() < deadline:
+        if "</html>" in "".join(stdout_chunks).lower():
+            dom_complete = True
+            break
+        if proc.poll() is not None and not stdout_thread.is_alive():
+            exited_cleanly = True
+            break
+        time.sleep(0.05)
+
+    if proc.poll() is None:
+        _terminate_process(proc)
+
+    stdout_thread.join(timeout=2)
+    stderr_thread.join(timeout=2)
+    stdout = "".join(stdout_chunks)
+    stderr = "".join(stderr_chunks)
+    if "</html>" in stdout.lower():
+        dom_complete = True
+
+    if profile:
+        _clear_stale_chrome_singleton(profile)
+
+    if not dom_complete and not exited_cleanly:
+        fail(f"edge_dump timed out after 60s: {url}")
+        if not stdout and not stderr:
+            return f"<!-- edge_dump timeout: {url} -->"
+
     if "<html" in stdout.lower():
         return stdout
     if dump_path.is_file() and dump_path.stat().st_size > 0:
         return dump_path.read_text(encoding="utf-8", errors="replace")
-    return stdout + (proc.stderr or "")
+    return stdout + stderr
 
 
 def append_full_file(lines: list[str], label: str, path: Path):
@@ -467,6 +630,7 @@ def step3_pwa_tests(server: HttpServer):
 
         prime = {}
         prime_dump = ""
+        prime_poll_only = {}
         for budget in (35000, 50000, 60000):
             prime_dump = edge_dump(
                 f"{BASE_URL}/sw-prime.html", SCRATCH / "sw-prime.html",
@@ -477,18 +641,34 @@ def step3_pwa_tests(server: HttpServer):
                 raw = html.unescape(m.group(1).strip())
                 if raw.startswith("{") and not raw.startswith("pending"):
                     try:
-                        prime = json.loads(raw)
-                        if prime.get("pass"):
-                            break
+                        parsed = json.loads(raw)
                     except json.JSONDecodeError:
-                        pass
+                        parsed = {}
+                    if parsed.get("pass"):
+                        prime = parsed
+                        break
+                    probed = any(
+                        isinstance(s, dict) and s.get("step") in ("cache-shell", "fetch-shell")
+                        for s in parsed.get("steps", [])
+                    )
+                    if probed:
+                        # Reached the real cache/fetch checks and failed — keep as product signal.
+                        prime = parsed
+                    else:
+                        # Poll timed out before probe (common under --virtual-time-budget,
+                        # which advances Date.now() used by sw-prime.html). Not a product fail.
+                        prime_poll_only = parsed
         if prime:
             lines.append("ONLINE sw-prime:")
             lines.append(json.dumps(prime, indent=2))
             if not prime.get("pass"):
                 fail("sw-prime did not pass online cache registration")
         else:
-            lines.append(f"sw-prime dump snippet: {prime_dump[:500]}")
+            if prime_poll_only:
+                lines.append("ONLINE sw-prime (poll-only headless artifact):")
+                lines.append(json.dumps(prime_poll_only, indent=2))
+            else:
+                lines.append(f"sw-prime dump snippet: {prime_dump[:500]}")
             lines.append("NOTE: sw-prime headless parse pending; relying on player warm + offline shell")
 
         online_dump = edge_dump(
@@ -538,12 +718,18 @@ def step4_launch():
     """Independent launch servers — full 10s stdout transcripts with external curl."""
     srv1 = HttpServer()
     srv1.start()
-    run1 = srv1.capture_full_transcript(10)
+    if srv1.ready:
+        run1 = srv1.capture_full_transcript(10)
+    else:
+        run1 = "\n".join(srv1.lines) or "(launch-1 server failed to start)"
     srv1.stop()
     time.sleep(0.5)
     srv2 = HttpServer()
     srv2.start()
-    run2 = srv2.capture_full_transcript(10)
+    if srv2.ready:
+        run2 = srv2.capture_full_transcript(10)
+    else:
+        run2 = "\n".join(srv2.lines) or "(launch-2 server failed to start)"
     srv2.stop()
     combined = run1 + "\n" + run2
     ARTIFACTS["launch-1.log"] = run1

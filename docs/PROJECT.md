@@ -1,6 +1,6 @@
 # SPECTOR — Project Status & Roadmap 
 
-**Last updated:** June 24, 2026 (thorough pre-domain pass: punchier Glasses & Future, actionable beta form with mailto + model field, added TEDx preset, history note, consistent domain language across docs)
+**Last updated:** August 9, 2026 (reconciled with current homepage / brand story: punctuation-paced positioning, honest device matrix, shipped vs roadmap cleanup)
 **Repository:** [github.com/hydrogenbondss/SPECTOR](https://github.com/hydrogenbondss/SPECTOR)  
 **Live URL:** https://spectorlabs.io
 **Latest commit:** current (see git log)
@@ -9,9 +9,11 @@
 
 ## Executive summary
 
-SPECTOR is a premium digital teleprompter positioned to outperform Meta’s built-in Ray-Ban glasses teleprompter — the same way Google Maps wins against Apple Maps: deeper workflow, not default placement.
+SPECTOR is a free, open-source **punctuation-paced teleprompter** PWA for serious rehearsal and the smart-glasses era. Pace comes from the script — commas breathe, periods hold — not from a microphone. Core use is local: **no account, no cloud, nothing uploaded**.
 
-As smart glasses become more common, more people will need rehearsal tools *before* built-in HUD teleprompters mature. SPECTOR is a **teleprompter app** (not a glasses retailer) — phone/PWA rehearsal today, portable `SpectorCore` engine ready for Meta’s rumored glasses app store (late 2026–early 2027). Not affiliated with Meta or Ray-Ban.
+**Today:** rehearse on phone or computer; go eyes-up by mirroring to **XREAL or Viture**. Ray-Ban Meta Gen 1/2 and Ray-Ban Meta Display are **phone-rehearsal** paths — SPECTOR does **not** currently run on the Meta Display lens. Meta remains competitive context and a possible future platform option, not the primary product story.
+
+SPECTOR sells teleprompter software only — not smart glasses. Not affiliated with Meta, Ray-Ban, XREAL, Viture, or any glasses manufacturer. Free core forever; Spector Pro is **$34 once** (longer on-device history + copy script with stats). Cloud sync is **not shipped**.
 
 ---
 
@@ -27,20 +29,21 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 | **Player modes** | Done | Comfort / Focus / Presentation + Slow/Normal/Fast |
 | **Customization** | Done | Text size, leading, Compact HUD toggle |
 | **Mirror mode** | Done | Toggle for camera/mirror-facing setups |
-| **Cue markers** | Done | `**emphasis**`, `[pause]`, `[pause:3s]` inline syntax |
+| **Cue markers** | Done | `**emphasis**`, `[pause]`, `[pause:3s]`, `## Section` inline syntax; landing insert toolbar |
 | **Rehearsal analytics** | Done | End-screen pacing %, hesitations, slowest chunk |
-| **PWA / offline** | Done | `manifest.json`, `sw.js` v8, offline shell verified |
-| **iOS motion fix** | Done | `ensureMotionForPlayback()` skips motion setup when already bound |
-| **Meta positioning** | Done | Landing “Glasses & Future” section; compatibility notes, not hardware sales |
-| **Modular core** | Done | `window.SpectorCore` — chunk registry, hooks, `createMotion()` |
-| **First-run coach + hardware legend** | Done | One-time toast auto-highlights Comfort + button note; persistent .glasses-hw-legend under modes with right-temple mappings |
-| **Beta assets** | Done | Landing beta signup form + README Beta Program section focused on hardware testing |
-| **End-screen reinforcement** | Done | Subtitle and analytics note tie rehearsal stats to real glasses button use |
-| **Punchier positioning** | Done | Condensed “Glasses & Future” to benefit-led paragraphs |
-| **Actionable beta + presets** | Done | Real mailto beta form with glasses model field; added Wedding Toast + Earnings Call presets |
-| **History clarity** | Done | Local history with explicit note on future cloud sync |
+| **Rehearsal analytics v2** | Done | Pacing trend chart across recent runs on the landing history list |
 | **Section bookmarks** | Done | `## Section` lines become chapter-marker chunks + a jump bar in the player |
-| **Rehearsal analytics v2** | Done | Pacing trend chart across last 5 runs, on the landing page's history list |
+| **PWA / offline** | Done | `manifest.json`, `sw.js` (see current cache version in file); offline shell implemented — re-run verifier to confirm |
+| **iOS motion fix** | Done | `ensureMotionForPlayback()` skips motion setup when already bound |
+| **Current positioning** | Done | Homepage lead: “Your punctuation sets the pace — not your voice”; no mic / no cloud; honest device matrix |
+| **Modular core** | Done | `window.SpectorCore` — chunk registry, hooks, `createMotion()` |
+| **First-run coach + hardware legend** | Done | One-time toast; `.glasses-hw-legend` under modes (tester/debug context) |
+| **Beta assets** | Done | Landing beta signup + README Beta Program focused on hardware testing |
+| **End-screen reinforcement** | Done | Subtitle and analytics note after a run |
+| **Actionable beta + presets** | Done | Mailto beta form with glasses model field; sample scripts / presets |
+| **History clarity** | Done | Local history; cloud sync called out as not shipped |
+| **Monetization (current)** | Done | Free core; Pro $34 once via Paddle — 50 rehearsals on-device (vs 5) + copy script with stats; no subscription |
+| **Export (Pro)** | Done | End-screen “Copy script + stats” gated behind Pro |
 | **Say (AAC composer)** | Done (v1) | New page at `/say` — row-column switch-scan speller, single input (tap/Space/B), no camera/translation/backend. See "Accessibility & communication direction" below |
 
 ### Infrastructure & quality
@@ -49,73 +52,75 @@ As smart glasses become more common, more people will need rehearsal tools *befo
 |------|--------|---------|
 | **Static hosting** | Done | `vercel.json` → `public/` output directory |
 | **Canonical assets** | Done | Single `public/style.css` (no `styles.css` split) |
-| **Verification** | Done | `tests/run_verification.py` — single entry point, 15 artifacts |
-| **GitHub** | Done | `main` pushed with full revamp + merge of prior remote history |
+| **Verification** | Harness present — requires re-run | `tests/run_verification.py` is the single entry point; do not treat older “all pass” notes as current evidence |
+| **GitHub** | Done | Public repo; Vercel deploy from `main` |
 | **Git identity** | Done | Commit attribution configured |
 
-### Competitive positioning (vs Meta teleprompter)
+### Competitive context (vs Meta teleprompter)
 
-- **Meta today:** Paste in Meta AI app → basic scroll/cards → manual Neural Band advance  
-- **SPECTOR:** Script library → adaptive auto-pace → comfort spatial effects → cue markers → rehearsal analytics → PWA install for daily use  
+Meta’s built-in path (where available) is paste + manual advance. SPECTOR differentiates with local script library, punctuation-aware auto-pace, Comfort spatial, cue markers, rehearsal analytics, and installable PWA — without a Meta account.
 
-**Device coverage:** 
-- Ray-Ban Meta Display / HUD (primary: run on-glasses lens HUD; right temple button + touch + future Neural Band for control).
-- Gen 1/2 and non-Display (phone companion rehearsal with haptics).
-- Other brands (XREAL, Viture, Brilliant Labs, Even Realities, etc.): PWA on phone or browser. Varying input methods.
-Not Ray-Ban exclusive. Web + PWA approach maximizes compatibility today.
+This is **competitive context**, not a claim that SPECTOR currently runs on Ray-Ban Meta Display.
+
+**Device coverage (current reality — matches homepage / README):**
+
+| Device | Status today |
+|--------|----------------|
+| Phone or computer | Full teleprompter in the browser |
+| XREAL / Viture | Eyes-up via mirrored phone/computer display |
+| Ray-Ban Meta Gen 1 / 2 | No display — phone rehearsal |
+| Ray-Ban Meta Display | **Not** an on-lens SPECTOR runtime yet — phone rehearsal works today |
+
+Not Ray-Ban exclusive. Web + PWA maximizes honest compatibility. Claim only what has been tested.
 
 ---
 
-## Deployment status (verified June 24, 2026)
+## Deployment status
 
-| Check | Result |
-|-------|--------|
-| URL responds | **Yes** — https://spectorlabs.io returns HTTP 200 |
-| Hosted on Vercel | **Yes** — `X-Vercel-Id` header present |
-| Serving latest code | **Yes** — verified live (full pass updates) |
+**Last checked (historical):** June 24, 2026 — site responded HTTP 200 on Vercel; GitHub → Vercel auto-deploy was connected. This section is **not** a fresh verification pass.
 
-**Verified on production:**
+**Live:** https://spectorlabs.io / https://www.spectorlabs.io
 
-- `href="style.css"` (canonical asset path)
-- Saved Scripts library, hero badge, teleprompter disclaimer
-- GitHub → Vercel auto-deploy connected and working
-
-**Live:** https://spectorlabs.io
+Re-run `python3 tests/run_verification.py` (and spot-check production) before treating deploy/offline health as current.
 
 ---
 
 ## Plan moving forward
 
-### Phase 1 — Ship & validate (now → 2 weeks)
+### Phase 1 — Validate on real hardware (ongoing)
 
-- [x] **Redeploy Vercel** to latest `main` and verify live matches GitHub
-- [x] **Thorough pre-domain pass** (punchier copy, actionable beta, presets, history notes, button sim, consistent language)
-- [ ] **Set `git config --global user.name`** for commit attribution (email already set)
-- [ ] **Beta test on real glasses** via Developer Mode ([TESTING.md](./TESTING.md))
-- [ ] **Gather feedback** on button mapping, Comfort on HUD, comparison to native teleprompter
-- [x] **Acquire spectorlabs.io** and run migration script + flip (in progress)
+- [x] **Redeploy Vercel** to latest `main` (historical)
+- [x] **Domain live** — spectorlabs.io acquired and serving the product site
+- [x] **Positioning / homepage honesty pass** — punctuation-paced lead, device matrix, free core / Pro once (see `docs/BRAND.md`)
+- [ ] **Beta test on real glasses** via Developer Mode ([TESTING.md](./TESTING.md)) — especially XREAL / Viture mirror workflows
+- [ ] **Gather feedback** on Comfort, pacing feel, and comparison to other teleprompters (including Meta’s where users have it)
+- [ ] **Re-run full local verification** and record the result here when green
 
-### Phase 2 — Creator essentials (2–6 weeks)
+### Phase 2 — Creator essentials (remaining)
 
-- [ ] **Mirror mode polish** — optional horizontal flip only for text, preserve controls UI
-- [ ] **Cue marker editor** — visual toolbar to insert `**emphasis**` / `[pause]` without typing syntax
-- [ ] **Rehearsal analytics v2** — per-run history in `localStorage`, trend chart (pacing over sessions)
-- [ ] **Section bookmarks** — `## Section` headers → jump list in player
-- [ ] **Export/share** — copy script + stats summary for collaborators
+Shipped since earlier drafts (do not re-list as open): mirror mode (base), section bookmarks, rehearsal analytics v2 / trend chart, Pro export of script + stats, basic cue insert toolbar on landing.
 
-### Phase 3 — Broader smart-glasses adoption (Q3–Q4 2026)
+Still open:
 
-- [ ] **Onboarding flow** — first-run tour for new glasses owners (“rehearse on phone → perform on glasses”)
-- [ ] **Preset scripts** — demo keynotes/interviews for instant wow
-- [ ] **Hardware controls & gesture map** — right temple button/touch on Display models today (where events forward); Neural Band subtle gestures (pinch/advance/pause/rewind) when Meta exposes APIs. Support other brands' controllers/touch too.
-- [ ] **Landing refresh** — social proof, short demo video, comparison table vs Meta teleprompter
+- [ ] **Cue authoring UX polish** — deeper editor ergonomics beyond the basic insert toolbar (README still calls this out)
+- [ ] **Analytics depth** — richer rehearsal insight beyond end-screen + trend chart, as evidence warrants
+- [ ] **Mirror mode polish** — optional refinements (e.g. flip text only / preserve controls) if testers need them
 
-### Phase 4 — App store founding developer (late 2026–2027)
+### Phase 3 — Broader smart-glasses adoption
 
-- [ ] **Port `SpectorCore`** to Meta glasses SDK / native wrapper when store opens
-- [ ] **One-tap “Send to glasses”** from script library
-- [ ] **Optional cloud sync** — scripts across phone ↔ glasses (accounts + thin API)
-- [ ] **Plugin marketplace** — third-party chunk strategies, ASR hooks, language packs
+- [ ] **Onboarding flow** — first-run tour (“rehearse on phone → mirror for eyes-up”)
+- [ ] **Preset scripts** — expand demo scripts for instant wow
+- [ ] **Hardware controls map** — only where events actually forward; never claim unsupported Meta Display / Neural Band APIs
+- [ ] **Landing / demo material** — keep proof honest (real player, real device claims)
+
+### Phase 4 — Future platforms (research / optional)
+
+Not current product positioning:
+
+- [ ] **Port `SpectorCore`** to a glasses SDK / native wrapper **if/when** a real platform path opens (Meta or otherwise)
+- [ ] **One-tap “Send to glasses”** from script library (requires real platform primitives)
+- [ ] **Optional cloud sync** — **not shipped**; only if architecture and privacy story deliberately change
+- [ ] **Plugin marketplace** — third-party chunk strategies, etc. (speculative)
 
 ### Accessibility & communication direction
 
@@ -144,16 +149,17 @@ Two distinct efforts, deliberately not conflated:
 ### Explicit non-goals (for now)
 
 - Native App Store / Play Store binaries  
-- Server backend or user accounts (until app store requires it, or until the
+- Server backend or user accounts (until a deliberate plan requires it, or until the
   live-translation direction above gets a real plan)
-- Direct Bluetooth / Neural Band proprietary protocols (unavailable today)  
+- Direct Bluetooth / Neural Band proprietary protocols (unavailable / unsupported today)
+- Claiming Ray-Ban Meta Display as an on-lens SPECTOR runtime
 - Video recording / multi-device director mode  
 
-### Strategic / Meta angle (4)
+### Strategic / Meta angle (future context only)
 
-- **Real glasses testing:** Use TESTING.md to recruit Display + non-Display + other brand users. Focus feedback on button usability, HUD readability, Comfort spatial on glasses vs phone, comparison to Meta's built-in teleprompter (now available on Display models).
-- **Meta decision:** This validates demand for pro rehearsal tooling. Options: 1) Rapidly enhance native Meta AI / glasses teleprompter with library, auto-pace, cues, analytics, button mapping, Comfort-like presence. 2) Open primitives (button events, HUD rendering, Neural Band) earlier to enable third-party like SPECTOR as complements. 3) Feature high-quality apps in the ecosystem.
-- **Adoption:** Track via future anonymous events or manual (samples used, Comfort tried, end reached, beta signups). Use to decide native vs platform investment. SPECTOR can serve as reference implementation or acquisition target if traction on real hardware.
+- **Real glasses testing:** Recruit XREAL / Viture / phone users first; Meta Display owners for **phone rehearsal** feedback and competitive comparison — not as proof of on-lens SPECTOR support.
+- **Meta as platform option:** If Meta opens primitives (HUD rendering, button events, app distribution), re-evaluate a native/port path. Until then, Meta is competitor + research horizon, not the homepage story.
+- **Adoption:** Track via future anonymous events or manual signals (samples used, Comfort tried, end reached, beta signups). Prefer evidence over speculation.
 
 ---
 
@@ -167,7 +173,7 @@ SPECTOR/
 │   ├── say.html        # Switch-scan AAC composer + ?test harness
 │   ├── style.css       # Canonical styles (landing + glasses mode)
 │   ├── manifest.json   # PWA manifest
-│   ├── sw.js           # Service worker v8
+│   ├── sw.js           # Service worker (cache version: see file; currently spector-v12)
 │   └── sw-prime.html   # SW registration helper
 ├── tests/
 │   └── run_verification.py
@@ -180,15 +186,17 @@ SPECTOR/
 **Run verification locally:**
 
 ```bash
-python tests/run_verification.py
+python3 tests/run_verification.py
 ```
+
+Expect `ALL VERIFICATION STEPS PASS` only after a fresh green run — do not assume from older notes.
 
 **Run unit tests in browser:**
 
 ```
 https://spectorlabs.io/app.html?test
 ```
-(After redeploy — should show `SpectorTest: ALL PASS` with 27+ assertions)
+(Should show `SpectorTest: ALL PASS` when the harness and deploy are healthy.)
 
 ---
 
@@ -199,6 +207,7 @@ https://spectorlabs.io/app.html?test
 | `**word or phrase**` | Visual emphasis + slightly longer hold |
 | `[pause]` | Inserts a ~2.8s pause chunk |
 | `[pause:3s]` | Inserts a 3-second pause chunk |
+| `## Section Name` | Section header — jump button in the player |
 
 ---
 
@@ -206,9 +215,9 @@ https://spectorlabs.io/app.html?test
 
 - **GitHub:** https://github.com/hydrogenbondss/SPECTOR (public)
 - **Live:** https://www.spectorlabs.io
-- **Competition:** Meta Ray-Ban teleprompter (in-app, paste + manual advance)  
+- **Competition (context):** Meta Ray-Ban teleprompter (in-app, paste + manual advance) — not a claim of SPECTOR on-lens Meta Display support
 - **Note:** SPECTOR sells teleprompter software only — not smart glasses or Meta hardware
-- **Domain status:** spectorlabs.io purchased (Namecheap) and live at https://www.spectorlabs.io/. Repo public at `github.com/hydrogenbondss/SPECTOR`.
+- **Domain status:** spectorlabs.io purchased and live at https://www.spectorlabs.io/. Repo public at `github.com/hydrogenbondss/SPECTOR`.
 
 ---
 

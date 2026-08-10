@@ -135,9 +135,13 @@ Claim tags used below:
 
 ### 4.7 Offline / PWA
 
-**VERIFIED:** `manifest.json` installable; `sw.js` cache `spector-v12` precaches index/app/say/`style.css`/manifest/verify helpers. Network-first for HTML + css/js/json with cache fallback.
+**VERIFIED (code):** `manifest.json` installable; `sw.js` cache `spector-v12` precaches index/app/say/`style.css`/manifest/verify helpers. Network-first for HTML + css/js/json with cache fallback.
 
-**INFERRED risk:** production pages load `style.min.css` / `landing-v2.min.css`, but SW precache lists `style.css` only — offline styling for marketing may be incomplete until those assets were previously network-cached. Core player shells still intended to work offline after a warm visit.
+**VERIFIED (browser, Aug 2026):** Service Worker validation complete in Chrome DevTools — `sw.js` registers and activates; expected cache entries populate; `app.html` successfully reloads with DevTools **Offline** enabled. **Do not modify the Service Worker** on the basis of this pass (it is working).
+
+**VERIFIED (process):** Headless Chrome verifier / dump paths that hang or time out are **unreliable** and must **not** be treated as evidence of a PWA/offline failure. Prefer real-browser DevTools Offline checks for offline health.
+
+**INFERRED (remaining, marketing only):** production marketing pages also load `style.min.css` / `landing-v2.min.css`, while SW precache lists `style.css` — offline *marketing* styling may still depend on prior network cache. Core player offline reload is already browser-verified above.
 
 ### 4.8 Analytics (product + site)
 
@@ -321,15 +325,15 @@ Pro is spoofable via DevTools; accepted for now. No backend Transactions API val
 | Punctuation pacing + cues | Production-ready | **VERIFIED** |
 | Rehearsal analytics v1/v2 | Functional / useful; not deep coaching | **VERIFIED** shipped; **INFERRED** “rough” depth |
 | Comfort spatial | Functional; desktop needs sim/sensors; real-glasses feel unvalidated at scale | **VERIFIED** code; **UNKNOWN** field quality |
-| PWA offline | Implemented + verifier path exists | **VERIFIED** code; health is **re-run dependent** (PROJECT) |
+| PWA offline | Working for player shell | **VERIFIED** browser: SW active, cache populated, `app.html` reloads Offline |
 | Pro checkout | Live Paddle product/price IDs in client | **VERIFIED** in paddle-pro.js / PADDLE.md |
 | Say | Functional v1; early | **VERIFIED** |
 | Device SEO pages | Shipped; honest Meta copy | **VERIFIED** |
 | Hardware integration depth | Thin (mirror + debug keys) | **VERIFIED** |
 | Docs drift | TESTING/CONTRIBUTING partially stale | **VERIFIED** contradictions |
-| Broken | No confirmed product-breaking defect at baseline from static read | **UNKNOWN** without fresh verifier/prod probe this session |
+| Broken | No confirmed product-breaking offline/PWA defect after browser SW pass | **VERIFIED** for offline player path; other areas still need separate evidence |
 
-**Technically risky (**INFERRED**):** honor-system Pro; Formspree as sole lead capture; SW/min.css offline skew; Comfort + iOS permission UX; any future mic/translation direction breaking “nothing uploaded.”
+**Technically risky (**INFERRED**):** honor-system Pro; Formspree as sole lead capture; possible marketing `*.min.css` offline skew (player path verified); Comfort + iOS permission UX; any future mic/translation direction breaking “nothing uploaded.”
 
 **Marketing claims needing ongoing verification:** “XREAL/Viture eyes-up works today” (mirror workflow — true as browser mirror, not as native app); beta Pro-for-life fulfillment process (**UNKNOWN** ops detail).
 
@@ -369,7 +373,8 @@ Pro is spoofable via DevTools; accepted for now. No backend Transactions API val
 | Overclaiming Meta Display / temple controls | Trust collapse; Paddle/brand damage | **VERIFIED** stale TESTING text exists |
 | Pro spoof / support burden | Low financial risk; support confusion | **VERIFIED** known |
 | Privacy promise broken by future features (translation, accounts) | Strategic identity risk | **VERIFIED** called out in PROJECT |
-| Offline/PWA cache skew (`*.min.css` vs precache) | “Broken offline” reports | **INFERRED** |
+| Marketing offline style skew (`*.min.css` vs precache) | Cosmetic offline marketing FOUC — **not** a player-offline failure | **INFERRED**; player offline **VERIFIED** browser |
+| Treating headless Chrome hangs as PWA failure | False “offline broken” diagnoses; unnecessary SW churn | **VERIFIED** process risk — headless unreliable |
 | Adoption stall without hardware proof videos/testimonials | Growth | **INFERRED**; no fake testimonials policy **VERIFIED** |
 | Split mission (teleprompter vs AAC vs translation) | Dilution | **INFERRED**; PROJECT deliberately separates them **VERIFIED** |
 | Design-branch resurrection (`unify-and-deslop`) | Reintroduces rejected purple/Inter player | **VERIFIED** process risk |
@@ -378,14 +383,15 @@ Pro is spoofable via DevTools; accepted for now. No backend Transactions API val
 
 ## 14. Open Questions
 
-1. **UNKNOWN:** Fresh `python3 tests/run_verification.py` result on this machine/session (PROJECT says re-run; do not assume green from old notes).
-2. **UNKNOWN:** Real-world Comfort quality on XREAL/Viture/Meta Display WebViews.
-3. **UNKNOWN:** Conversion rates Try→Play→End→Pro; Formspree beta volume.
-4. **UNKNOWN:** Whether Meta Web App / Developer Mode path still matches TESTING.md steps in 2026.
-5. **UNKNOWN:** How many users hit the 5-run cap (is Pro priced to a real pain?).
-6. **UNKNOWN:** AAC user feedback on Say (scan speed defaults, phrase rows, SPEAK via `speechSynthesis`).
-7. **UNKNOWN:** Trademark / brand conflict risk for “Spector” (DOMAIN.md mentions check; outcome not recorded as final).
-8. **UNKNOWN:** Whether minified CSS offline gap is user-visible in practice.
+1. **UNKNOWN:** Real-world Comfort quality on XREAL/Viture/Meta Display WebViews.
+2. **UNKNOWN:** Conversion rates Try→Play→End→Pro; Formspree beta volume.
+3. **UNKNOWN:** Whether Meta Web App / Developer Mode path still matches TESTING.md steps in 2026.
+4. **UNKNOWN:** How many users hit the 5-run cap (is Pro priced to a real pain?).
+5. **UNKNOWN:** AAC user feedback on Say (scan speed defaults, phrase rows, SPEAK via `speechSynthesis`).
+6. **UNKNOWN:** Trademark / brand conflict risk for “Spector” (DOMAIN.md mentions check; outcome not recorded as final).
+7. **UNKNOWN:** Whether marketing-page offline styling (`style.min.css` / `landing-v2.min.css` vs SW precache of `style.css`) is user-visible — **player** offline is no longer unknown.
+8. **RESOLVED (browser VERIFIED):** PWA/SW offline for `app.html` — registers, activates, caches, reloads Offline. Headless hangs ≠ PWA failure.
+9. **PARTIAL:** Headless `tests/run_verification.py` / Chrome dump reliability — treat hangs as harness noise, not product proof; do not let them drive SW changes.
 
 ---
 
@@ -404,6 +410,8 @@ Treat these as locked unless explicitly revisited:
 9. **Honor-system Pro is accepted** for now. **VERIFIED** PADDLE
 10. **`origin/design/unify-and-deslop` is non-authoritative.** **VERIFIED** (process instruction / Meta Brain baseline)
 11. **Baseline product truth = `main` @ `c68909a`.** **VERIFIED**
+12. **Do not modify `sw.js` to “fix” offline** after the Aug 2026 browser validation pass — player offline is working. **VERIFIED** process decision.
+13. **Headless Chrome hangs are not PWA failure evidence.** Use DevTools Offline / real-browser checks for offline health. **VERIFIED** process decision.
 
 ---
 
@@ -414,11 +422,12 @@ Treat these as locked unless explicitly revisited:
 3. **Free core surface** — modes, pacing, Comfort, offline-capable rehearsal without paywall.
 4. **Pro honesty** — don’t sell sync or features that aren’t live.
 5. **Device honesty** — especially Meta Display status.
-6. **`SpectorCore` test harness** (`app.html?test`) and verifier entrypoint.
+6. **`SpectorCore` test harness** (`app.html?test`) and verifier entrypoint — without treating headless hangs as offline truth.
 7. **Paddle load pattern** (`async`, not `defer`) — documented footgun.
 8. **CSP / Permissions-Policy** allowing Paddle payment frames.
 9. **Brand tokens** — accent not CTA; Instrument Sans; light marketing canvas.
 10. **Local storage data model** for scripts/runs/pro without forcing accounts.
+11. **Working Service Worker offline path** for `app.html` (register → activate → cache → Offline reload) — do not churn `sw.js` without a real-browser regression.
 
 ---
 
@@ -449,6 +458,8 @@ From PROJECT explicit non-goals + Meta Brain judgment:
 - Redesigning the player or reopening purple/dark Inter branch aesthetics
 - Merging `origin/design/unify-and-deslop`
 - Broad CSS/HTML refactors “for cleanliness” without a product hypothesis
+- Modifying `sw.js` / Service Worker behavior without a real-browser Offline regression
+- Treating headless Chrome hangs as grounds to change the PWA
 
 ---
 
@@ -461,7 +472,7 @@ Small, evidence-seeking moves (do **not** implement in Meta Brain phase):
 3. **History-cap experiment messaging:** show free users “4/5 rehearsals kept” earlier — test if Pro intent rises. **INFERRED**
 4. **Say user test (n=3–5 AAC/switch users):** scan speed, BACK affordance, SPEAK usefulness — ship feedback before features. **VERIFIED** next step per PROJECT.
 5. **TESTING.md honesty patch** (docs-only): remove on-lens overclaims so beta testers aren’t misled. **VERIFIED** contradiction to fix.
-6. **Offline warm-path check:** cold install → offline open app — confirm min CSS behavior. **INFERRED** tech experiment.
+6. **Offline warm-path (player) — DONE (browser VERIFIED):** SW register/activate/cache + `app.html` Offline reload. Optional leftover: marketing `*.min.css` offline cosmetics only — do not touch SW for that without evidence.
 
 ---
 

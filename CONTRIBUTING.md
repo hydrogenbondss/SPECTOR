@@ -13,33 +13,39 @@ Be respectful, inclusive, and focused on building a great tool for people who re
 3. **Make your changes**:
    - Follow the existing code style (vanilla JS, minimal dependencies, clean HTML/CSS).
    - For UI changes, test on both desktop and mobile.
-   - For player features (especially anything related to hardware controls like the right-temple button), test the simulation and document the expected real-hardware behavior.
+   - For player features that *might* relate to hardware controls (e.g. right-temple advance): exercise the **in-app simulator** (`app.html?debug`, `b` key) and document **expected** real-hardware behavior. Simulator success does **not** mean hardware behavior is verified — real glasses behavior is still unproven in-repo (see TESTING.md).
 4. **Test**:
    - Run `cd public; python -m http.server 8000` (or `--directory public 8080`)
    - In your browser, open http://localhost:8000 (or http://127.0.0.1:8000 if IPv6 localhost doesn't resolve). The terminal only shows the server banner — the site appears in the browser.
-   - Test the landing, player launch (click samples then Launch), Comfort mode (tilt device or use DevTools > Sensors > Orientation on desktop), button simulator ('b' key or on-screen button), PWA install, and offline mode.
-   - Run `?test` in the player to verify core logic still passes.
+   - Smoke-test the landing, player launch (samples then Launch), Comfort mode on phone or via DevTools → Sensors → Orientation on desktop, and the button simulator (`b` / on-screen control).
+   - **PWA / offline (authoritative):** in a **real browser**, warm the app so the Service Worker can install, then enable Chrome DevTools **Offline** and confirm `app.html` still reloads. This is the offline regression check we trust.
+   - **Do not** treat headless Chrome Service Worker diagnostics as an acceptance test — they may hang with the page left pending and are **not** evidence that the PWA is broken or healthy.
+   - Run `app.html?test` in the player to verify core logic still passes (`SpectorTest`).
+   - Optional: `python3 tests/run_verification.py` for broader harness checks — useful signal, but headless SW hangs must not drive Service Worker changes by themselves. Prefer [TESTING.md](TESTING.md) for the offline/PWA truth table.
 5. **Commit** with clear messages.
 6. **Open a Pull Request** against the `main` branch of `hydrogenbondss/SPECTOR`.
 
 ## Reporting Issues
 
 - Use the GitHub Issues tab.
-- For hardware-specific issues (right-temple button on Ray-Ban Meta, HUD readability, etc.), please include:
+- For hardware-specific issues (right-temple button on Ray-Ban Meta, HUD readability, Meta Web App open, etc.), please include:
   - Your exact glasses model
   - What you were testing (e.g., "button advance during Comfort mode")
+  - Whether you used the **simulator** or **physical hardware**
   - Steps to reproduce
   - Screenshots or screen recordings if possible
+- Do not assume temple-button, HUD, or on-lens Display behavior is already verified — report what you observed.
 - For security vulnerabilities, don't open a public issue — see [SECURITY.md](SECURITY.md).
 
 ## Development Notes
 
 - The site is a static PWA (served from `public/`).
-- All logic is in `public/index.html` and `public/app.html`.
+- All logic is in `public/index.html` and `public/app.html` (plus `say.html` for the AAC composer).
 - Core engine (`SpectorCore`) is exposed on `window` for portability.
-- We prioritize a premium feel (glassmorphism, haptics, sounds) while keeping the code simple.
-- New features should consider both phone rehearsal and future glasses HUD use.
+- Prefer calm, precise UI craft (see `docs/BRAND.md`) — avoid glassmorphism / purple-glow / Inter defaults.
+- New features should consider phone rehearsal today and **possible** future glasses HUD use — without claiming unverified hardware support.
 - Before a release, consider a local security self-audit — see [SECURITY.md](SECURITY.md).
+- Hardware / glasses validation status lives in [TESTING.md](TESTING.md). Do not modify `public/sw.js` based solely on headless hangs.
 
 ## Open source approach
 

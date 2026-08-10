@@ -11,7 +11,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.min.css?v=10">
+    <link rel="stylesheet" href="style.min.css?v=15">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=5" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=5" sizes="32x32">
@@ -22,7 +22,7 @@
 </head>
 <body class="glasses player-loading">
 
-    <button class="exit-btn" id="exit-btn" type="button" aria-label="Exit the teleprompter">← Exit</button>
+    <button class="exit-btn" id="exit-btn" type="button" aria-label="Exit the teleprompter">Exit</button>
 
     <main id="script-container">
         <div id="script-text-wrapper">
@@ -63,7 +63,7 @@
             <button class="mode-btn active" data-mode="focus">Focus</button>
             <button class="mode-btn" data-mode="presentation">Presentation</button>
         </div>
-        <p class="mode-legend" id="mode-legend">Focus — steady center read</p>
+        <p class="mode-legend" id="mode-legend" hidden>Focus — steady center read</p>
 
         <button class="toggle-chip hud-layout-toggle" id="compact-toggle" type="button">Compact stage</button>
     </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="timer">
             <span id="time-elapsed">0:00</span>
-            <span id="pacing-indicator" class="pacing-indicator" aria-hidden="true">commas breathe · periods hold</span>
+            <span id="pacing-indicator" class="pacing-indicator" aria-hidden="true"></span>
             <span id="time-remaining">— remaining</span>
         </div>
     </div>
@@ -83,7 +83,7 @@
         <button class="toggle-chip hud-settings-btn" id="hud-settings-btn" type="button" aria-expanded="false" aria-controls="hud-sheet">Settings</button>
         <div class="controls">
             <button id="rewind-btn" class="control-btn" type="button" aria-label="Back three lines" title="Back three lines"></button>
-            <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">▶</button>
+            <button id="play-btn" class="control-btn" type="button" aria-label="Play teleprompter" title="Play">Play</button>
             <button id="forward-btn" class="control-btn" type="button" aria-label="Forward three lines" title="Forward three lines"></button>
         </div>
     </div>
@@ -329,17 +329,27 @@
     }
 
     function computeMs(mode, speed, chunkText) {
-        const pauseExtra = cuePauseMs(chunkText);
-        if (/^\[pause\]$/i.test((chunkText || '').trim())) return Math.max(1200, pauseExtra);
-        let base = 2400;
-        if (mode === 'comfort') base = 2800;
-        if (mode === 'presentation') base = 3200;
-        if (speed === 'slow') base *= 1.25;
-        if (speed === 'fast') base *= 0.75;
-        if (/[.!?]$/.test(chunkText)) base *= 1.35;
-        if (/,/.test(chunkText)) base *= 1.15;
-        if (/\*\*[^*]+\*\*/.test(chunkText || '')) base *= 1.12;
-        return Math.max(1200, base + pauseExtra);
+        const text = chunkText || '';
+        const taggedOnly = text.trim().match(/^\[pause:(\d+)s\]$/i);
+        if (taggedOnly) return Math.max(1000, parseInt(taggedOnly[1], 10) * 1000);
+        if (/^\[pause\]$/i.test(text.trim())) return 2800;
+
+        let msPerWord = 380;
+        if (mode === 'comfort') msPerWord = 400;
+        if (mode === 'presentation') msPerWord = 460;
+
+        const words = Math.max(1, countSpokenWords(text));
+        let duration = words * msPerWord;
+        if (speed === 'slow') duration *= 1.25;
+        if (speed === 'fast') duration *= 0.75;
+
+        // Additive holds — avoid stacking multiplicative punctuation into long delays.
+        if (/[.!?]$/.test(text)) duration += 350;
+        if (/,/.test(text)) duration += 150;
+        if (/\*\*[^*]+\*\*/.test(text)) duration += 120;
+
+        duration += cuePauseMs(text);
+        return Math.max(800, Math.round(duration));
     }
 
     function buildRehearsalAnalytics(timings) {
@@ -496,6 +506,7 @@
     let currentIndex = 0;
     let isPlaying = false;
     let interval = null;
+    let elapsedDisplayTimer = null; // UI-only; does not drive chunk pacing
     let currentMode = 'focus';
     let currentSpeed = 'normal';
     let startTime = 0;
@@ -560,6 +571,34 @@
             container.appendChild(div);
         });
         renderBookmarks();
+        syncScriptStagePadding();
+    }
+
+    // Top/bottom spacers so scrollTop can park early/late chunks on the
+    // reading-area center. Without this, flex-start leaves chunk 0 at the top
+    // and scroll cannot move it into the stage center (scrollTop can't go < 0).
+    function syncScriptStagePadding() {
+        const stage = document.getElementById('script-container');
+        const wrap = document.getElementById('script-text-wrapper');
+        if (!stage || !wrap) return;
+        const pad = Math.max(0, Math.round(stage.clientHeight / 2));
+        const px = pad + 'px';
+        if (wrap.style.paddingTop !== px) wrap.style.paddingTop = px;
+        if (wrap.style.paddingBottom !== px) wrap.style.paddingBottom = px;
+    }
+
+    // Snap the active chunk to the stage reading center immediately.
+    // Instant scrollTop (not smooth): smooth animation was leaving early
+    // chunks off-position until scroll "caught up" many seconds later.
+    function scrollActiveIntoReadingPosition(active) {
+        const stage = document.getElementById('script-container');
+        if (!stage || !active) return;
+        syncScriptStagePadding();
+        const containerRect = stage.getBoundingClientRect();
+        const activeRect = active.getBoundingClientRect();
+        const delta = (activeRect.top + activeRect.height / 2)
+            - (containerRect.top + containerRect.height / 2);
+        stage.scrollTop = Math.max(0, stage.scrollTop + delta);
     }
 
     function renderBookmarks() {
@@ -617,6 +656,40 @@
         return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
     }
 
+    // Elapsed HUD only — wall-clock from startTime. Independent of chunk setTimeout pacing.
+    function refreshElapsedDisplay() {
+        if (!startTime) return;
+        const now = Date.now();
+        const elapsedMs = now - startTime;
+        const elapsed = Math.floor(elapsedMs / 1000);
+        const el = document.getElementById('time-elapsed');
+
+        console.log('[SPECTOR ELAPSED]', {
+            now,
+            startTime,
+            elapsedMs,
+            elapsed,
+            display: formatTime(elapsed),
+            isPlaying,
+            currentIndex
+        });
+
+        if (el) el.textContent = formatTime(elapsed);
+    }
+
+    function stopElapsedDisplayTimer() {
+        if (elapsedDisplayTimer != null) {
+            clearInterval(elapsedDisplayTimer);
+            elapsedDisplayTimer = null;
+        }
+    }
+
+    function startElapsedDisplayTimer() {
+        stopElapsedDisplayTimer();
+        refreshElapsedDisplay();
+        elapsedDisplayTimer = setInterval(refreshElapsedDisplay, 250);
+    }
+
     function estimateRemainingSeconds() {
         let total = 0;
         for (let i = currentIndex; i < chunks.length; i++)
@@ -640,13 +713,7 @@
         updateBookmarkHighlight();
         if (active) {
             active.classList.add('active');
-            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const scriptContainer = document.getElementById('script-container');
-            const targetTop = active.offsetTop - (scriptContainer.clientHeight - active.offsetHeight) / 2;
-            scriptContainer.scrollTo({
-                top: Math.max(0, targetTop),
-                behavior: reduced ? 'auto' : 'smooth',
-            });
+            scrollActiveIntoReadingPosition(active);
             settleActiveChunk();
             const announcer = document.getElementById('active-line-announcer');
             if (announcer) announcer.textContent = chunkToAnnounceText(chunks[currentIndex] || '');
@@ -685,21 +752,31 @@
         Haptics.play();
         closeHudSheet();
 
+        // Re-center the current chunk immediately on Play (before the first tick).
+        updateDisplay();
+
         const tick = () => {
             if (!isPlaying) return;
             if (currentIndex < chunks.length - 1) {
                 recordChunkTiming(currentIndex);
                 currentIndex++;
                 lastChunkAdvanceAt = Date.now();
+
+                // Schedule pacing immediately, before UI work.
+                // getMs() uses the NEW currentIndex (same as before when it ran after updateDisplay).
+                const delay = getMs();
+                interval = setTimeout(tick, delay);
+
+                // UI work happens after scheduling.
                 updateDisplay();
                 Haptics.tick();
-                interval = setTimeout(tick, getMs());
             } else {
                 recordChunkTiming(currentIndex);
                 showEndScreen();
             }
         };
         interval = setTimeout(tick, getMs());
+        startElapsedDisplayTimer();
         if (window.__refreshTiltPanel) window.__refreshTiltPanel();
     }
 
@@ -712,8 +789,10 @@
         }
         isPlaying = false;
         clearTimeout(interval);
+        stopElapsedDisplayTimer();
+        refreshElapsedDisplay();
         const playButton = document.getElementById('play-btn');
-        playButton.textContent = '▶';
+        playButton.textContent = 'Play';
         playButton.setAttribute('aria-label', 'Play teleprompter');
         playButton.title = 'Play';
         if (window.__refreshTiltPanel) window.__refreshTiltPanel();
@@ -745,6 +824,28 @@
         resetSpatialState();
     }
 
+    // Comfort-only: keep spatial transforms inside the reading stage.
+    // Focus/Presentation apply raw deltas unchanged.
+    function clampComfortMotion(dx, dy, rot, scale) {
+        const maxT = 36;
+        const maxR = 3;
+        return {
+            dx: Math.max(-maxT, Math.min(maxT, Number(dx) || 0)),
+            dy: Math.max(-maxT, Math.min(maxT, Number(dy) || 0)),
+            rot: Math.max(-maxR, Math.min(maxR, Number(rot) || 0)),
+            scale: Math.max(0.97, Math.min(1.04, scale == null ? 1 : Number(scale))),
+        };
+    }
+
+    function setActiveChunkTransform(chunk, dx, dy, rot, scale) {
+        if (!chunk) return;
+        let x = dx, y = dy, r = rot, s = scale == null ? 1 : scale;
+        if (currentMode === 'comfort') {
+            ({ dx: x, dy: y, rot: r, scale: s } = clampComfortMotion(x, y, r, s));
+        }
+        chunk.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg) scale(${s})`;
+    }
+
     function setupSpatialAnchoring() {
         playerMotion.bind((event) => {
             if (!isPlaying) return;
@@ -764,8 +865,7 @@
                 activeChunk.style.transition = currentMode === 'comfort'
                     ? 'transform 0.82s cubic-bezier(0.17, 1, 0.36, 1)'
                     : 'transform 0.22s ease-out';
-                activeChunk.style.transform =
-                    `translate(${d.deltaX}px, ${d.deltaY}px) rotate(${d.deltaRotate}deg) scale(${d.deltaScale})`;
+                setActiveChunkTransform(activeChunk, d.deltaX, d.deltaY, d.deltaRotate, d.deltaScale);
             }
             lastBeta = filteredBeta;
             lastGamma = filteredGamma;
@@ -802,7 +902,7 @@
             const fastScale = 1 + Math.sin(fast * Math.PI * 2) * 0.0006;
 
             chunk.style.transition = 'none';
-            chunk.style.transform = `translate(0px, ${slowY + fastY}px) rotate(0deg) scale(${slowScale + fastScale})`;
+            setActiveChunkTransform(chunk, 0, slowY + fastY, 0, slowScale + fastScale);
             chunk.style.opacity = (0.980 + Math.sin(slow * Math.PI * 2) * 0.011).toFixed(3);
             breathingFrame = requestAnimationFrame(breathe);
         };
@@ -813,7 +913,7 @@
                 cancelAnimationFrame(breathingFrame);
                 isBreathing = false;
                 chunk.style.transition = 'transform 2.4s cubic-bezier(0.33, 1, 0.68, 1), opacity 2.4s ease-out';
-                chunk.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+                setActiveChunkTransform(chunk, 0, 0, 0, 1);
                 chunk.style.opacity = '1';
                 setTimeout(() => {
                     if (isPlaying && currentMode === 'comfort' && chunk.classList.contains('active'))
@@ -837,7 +937,7 @@
             const driftY = Math.sin(driftTime * 0.42) * 0.95;
             const driftRotate = Math.sin(driftTime * 0.38) * 0.035;
             chunk.style.transition = 'transform 1.75s cubic-bezier(0.33, 1, 0.68, 1)';
-            chunk.style.transform = `translate(${driftX}px, ${driftY}px) rotate(${driftRotate}deg) scale(1.0004)`;
+            setActiveChunkTransform(chunk, driftX, driftY, driftRotate, 1.0004);
             driftFrame = setTimeout(() => {
                 if (isPlaying && currentMode === 'comfort' && chunk.classList.contains('active') && !isBreathing) drift();
                 else isDrifting = false;
@@ -1014,6 +1114,8 @@
         }
         if (!compact) closeHudSheet();
         savePrefs({ compact: !!compact });
+        syncScriptStagePadding();
+        updateDisplay();
     }
 
     function setupHudSheet() {
@@ -1127,7 +1229,7 @@
             const dr = g * rotAmt;
             const ds = 1 + (g * scaleAmt);
             activeChunk.style.transition = 'transform 0.1s linear';
-            activeChunk.style.transform = `translate(${dx}px, ${dy}px) rotate(${dr}deg) scale(${ds})`;
+            setActiveChunkTransform(activeChunk, dx, dy, dr, ds);
         }
 
         function refreshTiltPanel() {
@@ -1188,10 +1290,10 @@
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.speed === p.speed));
         }
         // Compact = stage chrome collapsed into Settings sheet.
-        // Prefer saved pref; otherwise default compact on short/narrow viewports.
+        // Default compact so the reading surface stays empty; Settings opens the sheet.
         let compact;
         if (typeof p.compact === 'boolean') compact = p.compact;
-        else compact = window.matchMedia('(max-width: 640px), (max-height: 720px)').matches;
+        else compact = true;
         setHudCompact(compact);
         return p.mode || 'focus';
     }
@@ -1388,7 +1490,9 @@
         // Tester scaffolding (button sim, tilt sim, hardware legend) is opt-in via ?debug —
         // real users get a clean player. TESTING.md documents the flag for beta testers.
         const DEBUG = new URLSearchParams(window.location.search).has('debug');
-        if (!DEBUG) {
+        if (DEBUG) {
+            document.body.classList.add('debug-player');
+        } else {
             document.querySelectorAll('.glasses-button-test, #desktop-tilt-sim, .glasses-hw-legend')
                 .forEach(el => el.remove());
         }
@@ -1426,9 +1530,16 @@
         } catch (e) {}
 
         applyMode(restorePlayerPrefs());
+        syncScriptStagePadding();
         updateDisplay();
+        window.addEventListener('resize', () => {
+            syncScriptStagePadding();
+            updateDisplay();
+        });
         requestAnimationFrame(() => requestAnimationFrame(() => {
             document.body.classList.remove('player-loading');
+            syncScriptStagePadding();
+            updateDisplay();
         }));
 
         if (firstRun) {
@@ -1540,13 +1651,22 @@
         const sentenceChunks = SpectorCore.chunk(sample, 'sentence');
         assert('sentence strategy count >= 2', sentenceChunks.length >= 2);
 
-        const msFocus = SpectorCore.getMs('focus', 'normal', 'test, phrase.');
-        const msComfortSlow = SpectorCore.getMs('comfort', 'slow', 'End.');
-        const msPresFast = SpectorCore.getMs('presentation', 'fast', 'word');
-        assert('getMs focus normal in range', msFocus >= 1200 && msFocus <= 5000);
-        assert('getMs comfort slow > focus normal', msComfortSlow > msFocus);
-        assert('getMs presentation fast < comfort slow', msPresFast < msComfortSlow);
-        assert('getMs punctuation increases timing', SpectorCore.getMs('focus', 'normal', 'End.') > SpectorCore.getMs('focus', 'normal', 'word'));
+        const msFocus = SpectorCore.getMs('focus', 'normal', 'Hello there friends.');
+        const msComfortSlow = SpectorCore.getMs('comfort', 'slow', 'Hello there friends.');
+        const msPresFast = SpectorCore.getMs('presentation', 'fast', 'Hello there friends.');
+        assert('getMs focus normal in sensible range', msFocus >= 800 && msFocus <= 6000);
+        assert('getMs comfort slow > focus normal (same text)', msComfortSlow > msFocus);
+        assert('getMs presentation fast < comfort slow (same text)', msPresFast < msComfortSlow);
+        assert('getMs punctuation increases timing', SpectorCore.getMs('focus', 'normal', 'Hello world.') > SpectorCore.getMs('focus', 'normal', 'Hello world'));
+
+        const msShort = SpectorCore.getMs('focus', 'normal', 'Hi');
+        const msMedium = SpectorCore.getMs('focus', 'normal', 'Hello there friends today');
+        const msLong = SpectorCore.getMs('focus', 'normal', 'Hello there friends today and also tomorrow night');
+        assert('getMs short chunk at least floor', msShort >= 800);
+        assert('getMs medium > short (word-proportional)', msMedium > msShort);
+        assert('getMs long > medium (word-proportional)', msLong > msMedium);
+        assert('getMs bare [pause] is intentional 2800', SpectorCore.getMs('focus', 'normal', '[pause]') === 2800);
+        assert('getMs [pause:2s] is exactly 2000', SpectorCore.getMs('focus', 'normal', '[pause:2s]') === 2000);
 
         const kf = new SpectorCore.KalmanFilter();
         const readings = [10, 12, 11, 10.5, 11, 10.8];
@@ -1570,7 +1690,7 @@
         const taggedCueChunks = SpectorCore.hybridChunkWithCues('Line one. [pause:7s] Line two.');
         assert('hybridChunkWithCues preserves tagged pause duration', taggedCueChunks.includes('[pause:7s]'));
         assert('computeMs honors tagged pause duration',
-            SpectorCore.getMs('focus', 'normal', '[pause:7s]') >= 7000);
+            SpectorCore.getMs('focus', 'normal', '[pause:7s]') === 7000);
         const sectionChunks = SpectorCore.hybridChunkWithCues('Intro line.\n## Q&A\nWhat happens next?');
         assert('hybridChunkWithCues extracts a section header as its own chunk',
             sectionChunks.includes('[section:Q&A]'));

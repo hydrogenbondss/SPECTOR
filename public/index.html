@@ -7,8 +7,8 @@
     <meta name="description" content="Spector: your punctuation sets the pace — not your voice. No mic. No listening. Rehearse on phone, perform eyes-up on smart glasses. Free core, forever — no account, no cloud.">
     <meta name="theme-color" content="#F7F7F8">
     <meta property="og:title" content="Spector — Punctuation-paced. No mic. No cloud.">
-    <meta property="og:description" content="Your punctuation sets the pace — not your voice. Commas breathe, periods hold — nothing listens. Free core forever.">
-    <meta property="og:image" content="https://www.spectorlabs.io/images/og-card.png">
+    <meta property="og:description" content="Your punctuation sets the pace — not your voice. No mic. No listening. Free core forever.">
+    <meta property="og:image" content="https://www.spectorlabs.io/images/og-card.png?v=2">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
@@ -16,7 +16,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Spector — Punctuation-paced. No mic. No cloud.">
     <meta name="twitter:description" content="Your punctuation sets the pace — not your voice. No mic. No listening. Free core forever.">
-    <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png">
+    <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png?v=2">
     <title>Spector — Your punctuation sets the pace</title>
     <link rel="canonical" href="https://www.spectorlabs.io/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="style.min.css?v=9">
-    <link rel="stylesheet" href="landing-v2.min.css?v=23">
+    <link rel="stylesheet" href="landing-v2.min.css?v=25">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=5" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=5" sizes="32x32">
@@ -78,39 +78,34 @@
                 <div class="hero-copy">
                     <p class="hero-brand">SPECTOR</p>
                     <h1 class="hero-headline">Your punctuation sets the pace — not your voice.</h1>
-                    <p class="hero-subhead">Commas breathe. Periods hold. Rehearse on phone — eyes-up on XREAL or Viture.</p>
+                    <p class="hero-subhead">A teleprompter that follows the rhythm of your script, so you can focus on delivering it — not chasing the words.</p>
                     <div class="hero-cta-group">
                         <a href="app.html" class="btn-hero" data-quick-start>Try Spector free</a>
                     </div>
-                    <p class="hero-trust-row">Free core forever · No mic · No cloud · <b>$34 Pro, once</b></p>
                 </div>
 
                 <div class="hero-visual">
                     <div class="hero-demo-wrap">
-                        <a class="hero-demo hero-demo--still" id="hero-demo" href="app.html" data-quick-start>
-                            <span class="sr-only">Try Spector with a sample script — opens the player</span>
-                            <div class="hero-demo-shell hero-demo-shell--still">
-                                <video
-                                    id="hero-demo-video"
-                                    class="hero-demo-video"
-                                    src="images/launch.mp4?v=6"
-                                    poster="images/hero-player-still.png?v=1"
-                                    width="1280"
-                                    height="720"
-                                    autoplay
-                                    muted
-                                    loop
-                                    playsinline
-                                    preload="metadata"
-                                    aria-label="Spector launch: punctuation-paced teleprompter demo"
-                                ></video>
+                        <a class="hero-demo" id="hero-demo" href="app.html" data-quick-start aria-label="Spector product demo — click to try with a sample script">
+                            <div class="hero-demo-shell">
+                                <div class="hero-demo-screen">
+                                    <div class="hero-demo-lines" aria-hidden="true">
+                                        <div class="hero-demo-line prev" id="hd-prev"></div>
+                                        <div class="hero-demo-line active" id="hd-active">Good evening, everyone.</div>
+                                        <div class="hero-demo-line next" id="hd-next">Tonight I want to show you something.</div>
+                                    </div>
+                                    <div class="hero-demo-footer">
+                                        <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill" style="width:20%"></div></div>
+                                        <span class="hero-demo-pacing" id="hd-pacing">punctuation-paced</span>
+                                    </div>
+                                </div>
                             </div>
                         </a>
-                        <button type="button" class="hero-video-toggle" id="hero-video-toggle" aria-controls="hero-demo-video" aria-pressed="false">
+                        <button type="button" class="hero-demo-toggle" id="hero-demo-toggle" aria-controls="hero-demo" aria-pressed="false">
                             Pause demo
                         </button>
                     </div>
-                    <p class="hero-compat">Phone · XREAL &amp; Viture eyes-up · Ray-Ban Meta rehearsal</p>
+                    <p class="hero-compat">Works on phone · Eyes-up on display glasses when you’re ready</p>
                 </div>
             </div>
         </div>
@@ -119,38 +114,26 @@
 
     <main class="container">
 
-        <!-- PROOF — three beats + one visual -->
-        <section class="proof-section reveal" id="features">
+        <!-- PROOF — three beats -->
+        <section class="proof-section proof-section--copy reveal" id="features">
             <div class="proof-copy">
-                <h2 class="proof-headline">Eyes up. No script-face.</h2>
+                <h2 class="proof-headline">Read naturally. Keep your place.</h2>
+                <p class="proof-lead">SPECTOR keeps your place without asking you to chase the script.</p>
                 <ul class="proof-list">
-                    <li><strong>Punctuation sets the pace</strong> — Commas breathe. Periods hold. No mic.</li>
-                    <li><strong>Rehearse on phone, perform eyes-up</strong> — Mirror to XREAL or Viture today. Ray-Ban Meta: phone rehearsal.</li>
-                    <li><strong>Stays on this device</strong> — No account. Nothing uploaded. Works offline.</li>
+                    <li><strong>Punctuation-paced</strong> Your writing controls the rhythm.</li>
+                    <li><strong>No microphone</strong> SPECTOR doesn’t listen to you.</li>
+                    <li><strong>On your screen first</strong> Rehearse here. Use display glasses later if you want.</li>
                 </ul>
             </div>
-            <figure class="product-media proof-visual">
-                <img
-                    src="images/proof-glasses.webp?v=2"
-                    width="1600"
-                    height="900"
-                    alt="Spector teleprompter mirrored from a phone onto display glasses (XREAL or Viture) — not Ray-Ban Meta Display"
-                    loading="lazy"
-                    decoding="async"
-                >
-                <figcaption class="proof-caption">Mirrored from phone — XREAL / Viture. Not Ray-Ban Meta Display.</figcaption>
-            </figure>
         </section>
 
-        <!-- TRY — one Launch; paste path behind disclosure -->
+        <!-- TRY — primary CTA; paste path behind disclosure -->
         <section class="try-section" id="try">
             <p class="kicker">Try it</p>
-            <h2>Launch with a sample.</h2>
-            <p class="try-lead">Opens the player with a paced script — same path as the hero.</p>
+            <h2>See it in action.</h2>
+            <p class="try-lead">Opens Spector with a paced sample script — same path as the hero.</p>
 
             <div class="try-shell try-shell--simple">
-                <a href="app.html" class="btn-primary try-launch-link" data-quick-start>Launch teleprompter</a>
-
                 <details class="try-more">
                     <summary>Paste your own script</summary>
                     <div class="try-more-body">
@@ -173,7 +156,7 @@
                         </div>
 
                         <div class="btn-row">
-                            <button id="launch-btn" class="btn-primary" style="flex:1;">Launch with this script</button>
+                            <button id="launch-btn" class="btn-primary" style="flex:1;">Try with this script</button>
                             <button id="save-btn" class="btn-secondary">Save</button>
                         </div>
                         <p class="install-hint"><button id="install-btn" type="button" class="link-btn">Install as an app</button> — offline, full screen.</p>
@@ -221,7 +204,7 @@
             <div class="device-matrix">
                 <div class="matrix-row">
                     <span class="matrix-device">Phone or computer</span>
-                    <span class="matrix-how">Full teleprompter in the browser.</span>
+                    <span class="matrix-how">Full Spector in the browser.</span>
                     <span class="matrix-status works">Works</span>
                 </div>
                 <div class="matrix-row">
@@ -286,24 +269,11 @@
             </div>
         </section>
 
-        <!-- TIPS — optional email -->
-        <section class="tips-section reveal" id="tips">
-            <p class="kicker">Tips</p>
-            <h2>Occasional rehearsal notes.</h2>
-            <p>Pacing and eyes-up tips by email. Unsubscribe anytime.</p>
-            <form id="tips-form" action="https://formspree.io/f/mzdlddkp" method="POST">
-                <input type="hidden" name="form" value="tips">
-                <input type="email" name="email" placeholder="your@email.com" required>
-                <button type="submit">Send me tips</button>
-            </form>
-            <div id="tips-success" style="display:none;color:var(--accent);font-weight:600;margin-top:16px;">You’re on the list — tips from hello@spectorlabs.io.</div>
-        </section>
-
         <!-- BETA — hardware testers only; below Buy Pro so it does not compete -->
         <section class="beta-section" id="beta">
             <p class="kicker">Hardware beta</p>
-            <h2>Own XREAL, Viture, or Ray-Ban Meta?</h2>
-            <p>Invite-capped testing on your glasses (~30 min feedback). <strong>Hardware testers get Pro free for life</strong> — everyone else: Pro is <a href="/pricing">$34 once</a>.</p>
+            <h2>Have XREAL, Viture, or Ray-Ban Meta?</h2>
+            <p>We’re testing SPECTOR on real hardware. Join the beta.</p>
             <form id="beta-form" action="https://formspree.io/f/mzdlddkp" method="POST">
                 <input type="hidden" name="form" value="hardware-beta">
                 <input type="email" name="email" placeholder="your@email.com" required>
@@ -314,13 +284,8 @@
             <div id="beta-success" style="display:none;color:var(--accent);font-weight:600;margin-top:16px;">Thanks — we'll write from hello@spectorlabs.io.</div>
         </section>
 
-        <!-- CLOSE -->
-        <section class="echo-cta reveal">
-            <a href="app.html" class="btn-primary btn-hero" data-quick-start>Try Spector free</a>
-        </section>
-
         <section class="founder-section reveal" id="founder">
-            <p>Built by <strong>Jeffrey</strong> in Hong Kong · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></p>
+            <p>Made in Hong Kong. · <a href="mailto:hello@spectorlabs.io">hello@spectorlabs.io</a></p>
         </section>
 
         <footer class="site-footer">
@@ -593,11 +558,11 @@
         const SAMPLE_SCRIPTS = {
             keynote: {
                 title: "Keynote Opener",
-                text: "Good morning. **Thank you** for being here.\n\nToday we're talking about showing up without the script-face.\n\n[pause:2s]\n\nMost teleprompters still make you look like you're reading. **Spector paces from your punctuation instead.**"
+                text: "Good morning. **Thank you** for being here.\n\nToday we're talking about delivering without chasing the words.\n\n[pause:2s]\n\nMost tools still make you look like you're reading. **Spector paces from your punctuation instead.**"
             },
             pitch: {
                 title: "Pitch",
-                text: "We're building a teleprompter for people who perform on camera — and on glasses. [pause]\n\nRehearse on your phone today. [pause:3s] Go eyes-up on XREAL or Viture when you're ready.\n\n**No mic.** No listening. Same script, same pace every time. [pause]"
+                text: "We're building Spector for people who perform on camera — and on glasses. [pause]\n\nRehearse on your phone today. [pause:3s] Go eyes-up on display glasses when you're ready.\n\n**No mic.** No listening. Same script, same pace every time. [pause]"
             },
             demo: {
                 title: "Product Demo",
@@ -870,27 +835,6 @@
             });
         }
 
-        function initHeroVideoToggle() {
-            const video = document.getElementById('hero-demo-video');
-            const btn = document.getElementById('hero-video-toggle');
-            if (!video || !btn) return;
-            const sync = () => {
-                const paused = video.paused;
-                btn.textContent = paused ? 'Play demo' : 'Pause demo';
-                btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-            };
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (video.paused) video.play().catch(() => {});
-                else video.pause();
-                sync();
-            });
-            video.addEventListener('play', sync);
-            video.addEventListener('pause', sync);
-            sync();
-        }
-
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -1147,8 +1091,95 @@
             else setTimeout(go, 3500);
         }
 
-        // Hero uses muted looping launch.mp4 (motion-graphics product film) — click → sample.
-        function initHeroDemo() { /* video + poster; click → sample player */ }
+        // Live hero stage — Focus-mode pacing (380 ms/word + punctuation holds).
+        // Click still opens the real player via data-quick-start.
+        function initHeroDemo() {
+            const prev = document.getElementById('hd-prev');
+            const active = document.getElementById('hd-active');
+            const next = document.getElementById('hd-next');
+            const fill = document.getElementById('hd-fill');
+            const pacing = document.getElementById('hd-pacing');
+            const btn = document.getElementById('hero-demo-toggle');
+            if (!prev || !active || !next) return;
+
+            const LINES = [
+                'Good evening, everyone.',
+                'Tonight I want to show you something.',
+                'Your writing sets the pace.'
+            ];
+
+            const markPunct = (text) =>
+                text.replace(/([,;:—]|[.!?])(?=\s|$)/g, '<span class="hd-mark">$1</span>');
+
+            const demoMs = (text) => {
+                const plain = String(text || '').replace(/<[^>]+>/g, '');
+                const words = Math.max(1, plain.trim().split(/\s+/).filter(Boolean).length);
+                let duration = words * 380;
+                if (/[.!?]$/.test(plain)) duration += 350;
+                if (/,/.test(plain)) duration += 150;
+                return Math.max(800, duration);
+            };
+
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce) {
+                if (btn) btn.hidden = true;
+                active.innerHTML = markPunct(LINES[0]);
+                next.textContent = LINES[1];
+                if (fill) fill.style.width = (1 / LINES.length) * 100 + '%';
+                return;
+            }
+
+            let i = 0;
+            let timer = 0;
+            let paused = false;
+
+            const paint = () => {
+                const cur = i % LINES.length;
+                prev.textContent = cur === 0 ? '' : LINES[cur - 1];
+                active.innerHTML = markPunct(LINES[cur]);
+                next.textContent = LINES[(cur + 1) % LINES.length];
+                if (fill) fill.style.width = ((cur + 1) / LINES.length) * 100 + '%';
+                if (pacing) {
+                    pacing.classList.remove('tick');
+                    void pacing.offsetWidth;
+                    pacing.classList.add('tick');
+                }
+            };
+
+            const schedule = () => {
+                if (paused) return;
+                const delay = demoMs(LINES[i % LINES.length]);
+                timer = window.setTimeout(() => {
+                    i += 1;
+                    paint();
+                    schedule();
+                }, delay);
+            };
+
+            const syncBtn = () => {
+                if (!btn) return;
+                btn.textContent = paused ? 'Play demo' : 'Pause demo';
+                btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+            };
+
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    paused = !paused;
+                    if (paused) {
+                        window.clearTimeout(timer);
+                    } else {
+                        schedule();
+                    }
+                    syncBtn();
+                });
+            }
+
+            paint();
+            schedule();
+            syncBtn();
+        }
 
         function init() {
             initFileUpload();
@@ -1160,7 +1191,6 @@
             renderLibrary();
             renderHistory();
             initHeroDemo();
-            initHeroVideoToggle();
             initProofOfLife();
             registerServiceWorker();
             initInstallPrompt();

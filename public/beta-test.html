@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPECTOR Private Beta</title>
+    <meta name="description" content="SPECTOR private hardware beta — testing steps and feedback.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="theme-color" content="#F7F7F8">
+    <link rel="canonical" href="https://www.spectorlabs.io/beta/test">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
+    <link rel="stylesheet" href="/style.min.css?v=9">
+    <link rel="stylesheet" href="/landing-v2.min.css?v=28">
+    <link rel="icon" href="/favicon.ico?v=5" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-32.png?v=5" sizes="32x32">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="landing beta-test-page">
+    <header class="seo-nav">
+        <a href="/" class="nav-brand">
+            <img class="nav-logo" src="/images/logo-mark-64.png" alt="" width="30" height="30">
+            <span class="nav-wordmark">SPECTOR</span>
+        </a>
+        <a href="/app.html" class="btn-primary seo-nav-cta">Open Spector</a>
+    </header>
+
+    <main class="container beta-test-main">
+        <section class="beta-test-hero" id="beta-gate">
+            <p class="hero-brand">SPECTOR Private Beta</p>
+            <h1 class="hero-headline">Private hardware beta</h1>
+            <p class="hero-subhead" id="gate-copy">You're participating in the SPECTOR private beta. Follow the testing steps below and submit your feedback when you're finished.</p>
+            <p class="beta-test-hint" id="gate-hint" hidden>Open the personal link you received (it includes your tester ID), or enter your tester ID below.</p>
+            <form id="tester-id-form" class="beta-id-form" hidden>
+                <label for="tester-id-input">Tester ID</label>
+                <div class="beta-id-row">
+                    <input id="tester-id-input" name="tester" type="text" autocomplete="off" spellcheck="false" placeholder="SB-YYYYMMDD-NNN" required>
+                    <button type="submit" class="btn-primary">Continue</button>
+                </div>
+            </form>
+            <p class="beta-test-error" id="gate-error" role="alert" hidden></p>
+        </section>
+
+        <div id="beta-workspace" hidden>
+            <section class="beta-meta" aria-label="Tester session">
+                <dl class="beta-meta-grid">
+                    <div>
+                        <dt>Tester ID</dt>
+                        <dd id="meta-tester-id"></dd>
+                    </div>
+                    <div>
+                        <dt>Device</dt>
+                        <dd id="meta-device"></dd>
+                    </div>
+                    <div>
+                        <dt>Status</dt>
+                        <dd id="meta-status"></dd>
+                    </div>
+                    <div>
+                        <dt>Protocol</dt>
+                        <dd id="meta-protocol"></dd>
+                    </div>
+                </dl>
+                <p class="beta-honesty" id="meta-honesty"></p>
+            </section>
+
+            <section class="beta-panel" aria-labelledby="instructions-heading">
+                <h2 id="instructions-heading">Testing steps</h2>
+                <ol class="beta-steps" id="beta-steps"></ol>
+                <p class="beta-panel-note">
+                    Open the player when ready:
+                    <a href="/app.html" target="_blank" rel="noopener">Try Spector</a>
+                </p>
+            </section>
+
+            <section class="beta-panel" aria-labelledby="checklist-heading">
+                <h2 id="checklist-heading">Checklist</h2>
+                <p class="beta-panel-lead">Mark each item. You can submit feedback even if some items could not be completed.</p>
+                <div id="checklist-root" class="beta-checklist"></div>
+            </section>
+
+            <section class="beta-panel" aria-labelledby="feedback-heading">
+                <h2 id="feedback-heading">Feedback</h2>
+                <form id="feedback-form" class="beta-feedback-form" novalidate>
+                    <div class="beta-field">
+                        <label for="fb-tester-id">Tester ID</label>
+                        <input id="fb-tester-id" name="testerId" type="text" readonly>
+                    </div>
+                    <div class="beta-field">
+                        <label for="fb-device">Device</label>
+                        <input id="fb-device" name="deviceLabel" type="text" readonly>
+                    </div>
+
+                    <fieldset class="beta-rating">
+                        <legend>Overall experience</legend>
+                        <div class="beta-rating-options" data-name="overall"></div>
+                    </fieldset>
+                    <fieldset class="beta-rating">
+                        <legend>Setup difficulty</legend>
+                        <div class="beta-rating-options" data-name="setupDifficulty"></div>
+                    </fieldset>
+                    <fieldset class="beta-rating" id="readability-field">
+                        <legend>Readability <span class="beta-optional">(where applicable)</span></legend>
+                        <div class="beta-rating-options" data-name="readability"></div>
+                    </fieldset>
+                    <fieldset class="beta-rating">
+                        <legend>Usefulness</legend>
+                        <div class="beta-rating-options" data-name="usefulness"></div>
+                    </fieldset>
+
+                    <div class="beta-field">
+                        <label for="fb-worked">What worked well?</label>
+                        <textarea id="fb-worked" name="worked" rows="3"></textarea>
+                    </div>
+                    <div class="beta-field">
+                        <label for="fb-didnt">What didn't work?</label>
+                        <textarea id="fb-didnt" name="didNotWork" rows="3"></textarea>
+                    </div>
+                    <div class="beta-field">
+                        <label for="fb-confusing">What was confusing?</label>
+                        <textarea id="fb-confusing" name="confusing" rows="3"></textarea>
+                    </div>
+                    <div class="beta-field">
+                        <label for="fb-change">What would you change?</label>
+                        <textarea id="fb-change" name="wouldChange" rows="3"></textarea>
+                    </div>
+
+                    <fieldset class="beta-choice">
+                        <legend>Would you use SPECTOR again?</legend>
+                        <label><input type="radio" name="useAgain" value="Yes"> Yes</label>
+                        <label><input type="radio" name="useAgain" value="Maybe"> Maybe</label>
+                        <label><input type="radio" name="useAgain" value="No"> No</label>
+                    </fieldset>
+
+                    <div class="beta-field">
+                        <label for="fb-comments">Additional comments</label>
+                        <textarea id="fb-comments" name="comments" rows="3"></textarea>
+                    </div>
+
+                    <p class="beta-form-note">Submitting saves a local copy on this device, downloads a JSON receipt, and opens an email draft to hello@spectorlabs.io. You still need to send the email. Official beta status is updated by SPECTOR operators — not by this form.</p>
+                    <p class="beta-test-error" id="feedback-error" role="alert" hidden></p>
+                    <button type="submit" class="btn-primary">Submit feedback</button>
+                </form>
+            </section>
+        </div>
+
+        <section class="beta-success" id="beta-success" hidden>
+            <p class="hero-brand">SPECTOR Private Beta</p>
+            <h1 class="hero-headline">Thank you for testing SPECTOR.</h1>
+            <p class="hero-subhead">Your feedback has been received.</p>
+            <p class="beta-success-id">Tester ID: <strong id="success-tester-id"></strong></p>
+            <p class="beta-panel-note">If an email draft opened, please send it so we receive your answers. Keep the downloaded JSON as your receipt.</p>
+            <a class="btn-primary" href="/">Back to Spector</a>
+        </section>
+    </main>
+
+    <script src="/js/beta-feedback-store.js"></script>
+    <script>
+(function () {
+    'use strict';
+
+    var PROTOCOLS = {
+        'phone-rehearsal': {
+            honesty: 'This protocol is phone (or computer) rehearsal while wearing Ray-Ban Meta Gen 1/2. SPECTOR does not display teleprompter text on these lenses.',
+            protocolLabel: 'Phone rehearsal only',
+            steps: [
+                'On your phone or computer, open Spector and start the player with a short script.',
+                'Put on your Ray-Ban Meta Gen 1 or Gen 2.',
+                'Rehearse while reading from the phone/computer — not from the lenses.',
+                'Optionally try temple/touch controls and note whether anything affects Spector (none is a useful result).',
+                'Complete the checklist and submit feedback below.'
+            ],
+            checklist: [
+                { id: 'A1', label: 'Spector player opens and plays on the phone/computer' },
+                { id: 'A2', label: 'You can read the active line at Normal speed' },
+                { id: 'A3', label: 'Punctuation pacing feels usable while speaking a short paragraph' },
+                { id: 'A4', label: 'You can rehearse for about 2 minutes without losing place' },
+                { id: 'B1', label: 'You can speak aloud while Spector advances on the phone' },
+                { id: 'B2', label: 'You can look up from the phone when needed without losing the thread' },
+                { id: 'C1', label: 'Optional: single temple/touch action — did anything reach Spector?' },
+                { id: 'C2', label: 'Optional: another gesture — did anything reach Spector?' },
+                { id: 'D1', label: 'Optional: Focus mode feels more stable' },
+                { id: 'D2', label: 'Optional: Comfort mode on phone — help or distract?' }
+            ]
+        },
+        'meta-display': {
+            honesty: 'On-lens Spector on Ray-Ban Meta Display is unverified. Report honestly if Spector cannot open or show on the lens. Phone rehearsal still counts.',
+            protocolLabel: 'Display path (unverified on-lens)',
+            steps: [
+                'Baseline: confirm Spector works on phone/computer.',
+                'Attempt your Display / Web App path and document exact steps.',
+                'If the lens shows Spector, assess readability, comfort, and controls.',
+                'If it does not, record that clearly — that is valuable.',
+                'Complete the checklist and submit feedback.'
+            ],
+            checklist: [
+                { id: 'A1', label: 'Spector works on phone/computer' },
+                { id: 'A2', label: 'Readable at Normal speed while speaking (phone)' },
+                { id: 'B1', label: 'Spector can open or display on the lens at all' },
+                { id: 'B2', label: 'If yes: lens text is readable' },
+                { id: 'B3', label: 'Text size / spacing usable on lens' },
+                { id: 'B4', label: 'Comfort / motion: help or distract' },
+                { id: 'B5', label: 'Stability acceptable (jitter / lag)' },
+                { id: 'B6', label: 'Real-world speaking with eyes toward audience' },
+                { id: 'C1', label: 'Temple / touch / Neural Band affects Spector' }
+            ]
+        },
+        'mirror-display': {
+            honesty: 'Intended path: mirror your phone or computer display to XREAL / Viture (or similar). Spector is not a native glasses app.',
+            protocolLabel: 'Mirrored display',
+            steps: [
+                'Open Spector on phone or computer and start the player.',
+                'Start your usual mirror / desktop stream to the glasses.',
+                'Confirm you can see Spector in the glasses FOV.',
+                'Try Comfort and Focus; speak for a couple of minutes.',
+                'Complete the checklist and submit feedback.'
+            ],
+            checklist: [
+                { id: 'A1', label: 'Spector visible in glasses via mirror' },
+                { id: 'A2', label: 'Text readable at Normal / Presentation' },
+                { id: 'A3', label: 'Lag / blur / cutoff acceptable' },
+                { id: 'B1', label: 'Comfort mode with gentle head movement' },
+                { id: 'B2', label: 'Focus mode for a stable read' },
+                { id: 'B3', label: 'Speaking while mirrored (~2 minutes)' },
+                { id: 'C1', label: 'Play/pause from phone/computer while mirrored' },
+                { id: 'C2', label: 'Any glasses hardware controls affect Spector?' },
+                { id: 'C3', label: 'Longer script (~5+ minutes) stays usable' }
+            ]
+        }
+    };
+
+    var FAMILY_TO_PROTOCOL = {
+        'rayban-meta-gen': 'phone-rehearsal',
+        'rayban-meta-display': 'meta-display',
+        'xreal': 'mirror-display',
+        'viture': 'mirror-display',
+        'other-display': 'mirror-display'
+    };
+
+    function qs(name) {
+        return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function el(id) { return document.getElementById(id); }
+
+    function fillRatings() {
+        document.querySelectorAll('.beta-rating-options').forEach(function (wrap) {
+            var name = wrap.getAttribute('data-name');
+            var html = '';
+            for (var i = 1; i <= 5; i++) {
+                html += '<label><input type="radio" name="' + name + '" value="' + i + '"> ' + i + '</label>';
+            }
+            if (name === 'readability') {
+                html += '<label><input type="radio" name="readability" value="n/a"> N/A</label>';
+            }
+            wrap.innerHTML = html;
+        });
+    }
+
+    function renderChecklist(items) {
+        var root = el('checklist-root');
+        root.innerHTML = items.map(function (item) {
+            return (
+                '<article class="beta-check-item" data-id="' + item.id + '">' +
+                    '<p class="beta-check-label"><span class="beta-check-id">' + item.id + '</span> ' + item.label + '</p>' +
+                    '<div class="beta-check-actions" role="group" aria-label="' + item.id + ' result">' +
+                        '<label><input type="radio" name="check-' + item.id + '" value="completed"> Completed</label>' +
+                        '<label><input type="radio" name="check-' + item.id + '" value="could-not-complete"> Could not complete</label>' +
+                    '</div>' +
+                    '<label class="beta-check-notes-label" for="note-' + item.id + '">Notes <span class="beta-optional">(optional)</span></label>' +
+                    '<input class="beta-check-notes" id="note-' + item.id + '" type="text" autocomplete="off">' +
+                '</article>'
+            );
+        }).join('');
+    }
+
+    function collectChecklist() {
+        return Array.prototype.map.call(document.querySelectorAll('.beta-check-item'), function (article) {
+            var id = article.getAttribute('data-id');
+            var selected = article.querySelector('input[type="radio"]:checked');
+            var note = article.querySelector('.beta-check-notes');
+            return {
+                id: id,
+                result: selected ? selected.value : '',
+                notes: note ? note.value.trim() : ''
+            };
+        });
+    }
+
+    function showError(node, message) {
+        if (!node) return;
+        if (!message) {
+            node.hidden = true;
+            node.textContent = '';
+            return;
+        }
+        node.hidden = false;
+        node.textContent = message;
+    }
+
+    function activateTester(record) {
+        var protocolKey = record.protocol || FAMILY_TO_PROTOCOL[record.deviceFamily] || 'phone-rehearsal';
+        var protocol = PROTOCOLS[protocolKey] || PROTOCOLS['phone-rehearsal'];
+
+        el('beta-workspace').hidden = false;
+        el('tester-id-form').hidden = true;
+        el('gate-hint').hidden = true;
+        showError(el('gate-error'), '');
+        el('gate-copy').textContent = "You're participating in the SPECTOR private beta. Follow the testing steps below and submit your feedback when you're finished.";
+
+        el('meta-tester-id').textContent = record.id;
+        el('meta-device').textContent = record.deviceLabel || record.deviceFamily || '—';
+        el('meta-status').textContent = record.status || '—';
+        el('meta-protocol').textContent = protocol.protocolLabel;
+        el('meta-honesty').textContent = protocol.honesty;
+
+        el('beta-steps').innerHTML = protocol.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('');
+        renderChecklist(protocol.checklist);
+
+        el('fb-tester-id').value = record.id;
+        el('fb-device').value = record.deviceLabel || '';
+
+        var readabilityField = el('readability-field');
+        if (protocolKey === 'phone-rehearsal') {
+            readabilityField.querySelector('legend').innerHTML = 'Readability on phone/computer <span class="beta-optional">(not on-lens)</span>';
+        }
+
+        // Restore local draft if present
+        if (window.SpectorBetaFeedback) {
+            var draft = SpectorBetaFeedback.loadLocal(record.id);
+            if (draft && draft.payload) {
+                // lightweight: only mark that a prior submission exists in note
+                var prior = document.createElement('p');
+                prior.className = 'beta-panel-note';
+                prior.textContent = 'A previous feedback draft/submission exists on this device (saved ' + (draft.savedAt || '') + ').';
+                el('feedback-form').insertBefore(prior, el('feedback-form').firstChild);
+            }
+        }
+
+        window.__betaTester = record;
+        window.__betaProtocol = protocolKey;
+    }
+
+    function loadRegistry() {
+        return fetch('/beta/testers-registry.json', { cache: 'no-store' })
+            .then(function (res) {
+                if (!res.ok) throw new Error('registry');
+                return res.json();
+            });
+    }
+
+    function findTester(registry, id) {
+        var list = (registry && registry.testers) || [];
+        id = String(id || '').trim();
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].id === id) return list[i];
+        }
+        return null;
+    }
+
+    fillRatings();
+
+    var requestedId = qs('tester');
+    if (!requestedId) {
+        el('gate-hint').hidden = false;
+        el('tester-id-form').hidden = false;
+    }
+
+    el('tester-id-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var id = el('tester-id-input').value.trim();
+        if (!id) return;
+        var url = new URL(window.location.href);
+        url.searchParams.set('tester', id);
+        window.location.href = url.toString();
+    });
+
+    loadRegistry().then(function (registry) {
+        if (!requestedId) return;
+        var record = findTester(registry, requestedId);
+        if (!record) {
+            el('gate-hint').hidden = false;
+            el('tester-id-form').hidden = false;
+            el('tester-id-input').value = requestedId;
+            showError(el('gate-error'), 'We could not find that tester ID in the private beta registry. Check the link from SPECTOR, or ask for a new invite.');
+            return;
+        }
+        activateTester(record);
+    }).catch(function () {
+        el('gate-hint').hidden = false;
+        el('tester-id-form').hidden = false;
+        showError(el('gate-error'), 'Could not load the beta registry. Try again in a moment.');
+    });
+
+    el('feedback-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        showError(el('feedback-error'), '');
+        var record = window.__betaTester;
+        if (!record) {
+            showError(el('feedback-error'), 'Missing tester session.');
+            return;
+        }
+
+        var fd = new FormData(e.target);
+        var payload = {
+            testerId: record.id,
+            deviceLabel: record.deviceLabel || '',
+            deviceFamily: record.deviceFamily || '',
+            protocol: window.__betaProtocol || '',
+            statusAtSubmit: record.status || '',
+            submittedAt: new Date().toISOString(),
+            overall: fd.get('overall') || '',
+            setupDifficulty: fd.get('setupDifficulty') || '',
+            readability: fd.get('readability') || '',
+            usefulness: fd.get('usefulness') || '',
+            worked: (fd.get('worked') || '').trim(),
+            didNotWork: (fd.get('didNotWork') || '').trim(),
+            confusing: (fd.get('confusing') || '').trim(),
+            wouldChange: (fd.get('wouldChange') || '').trim(),
+            useAgain: fd.get('useAgain') || '',
+            comments: (fd.get('comments') || '').trim(),
+            checklist: collectChecklist()
+        };
+
+        if (!window.SpectorBetaFeedback) {
+            showError(el('feedback-error'), 'Feedback module failed to load.');
+            return;
+        }
+
+        var btn = e.target.querySelector('button[type="submit"]');
+        if (btn) btn.disabled = true;
+
+        SpectorBetaFeedback.submit(payload).then(function (result) {
+            if (!result.ok) {
+                showError(el('feedback-error'), 'Could not save feedback on this device. Try again.');
+                if (btn) btn.disabled = false;
+                return;
+            }
+            el('beta-workspace').hidden = true;
+            el('beta-gate').hidden = true;
+            el('beta-success').hidden = false;
+            el('success-tester-id').textContent = record.id;
+            window.scrollTo(0, 0);
+        }).catch(function () {
+            showError(el('feedback-error'), 'Something went wrong while submitting. Try again.');
+            if (btn) btn.disabled = false;
+        });
+    });
+})();
+    </script>
+</body>
+</html>

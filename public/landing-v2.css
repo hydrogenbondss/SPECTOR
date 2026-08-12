@@ -1042,3 +1042,177 @@ body.landing.device-detail-page .section-header h2 { color: var(--t1); }
     body.landing .hero-plane .hero-headline { font-size: clamp(2.25rem, 10.5vw, 2.85rem); }
     body.landing .hero-section .hero-headline { font-size: clamp(2.4rem, 11vw, 3rem); }
 }
+
+/* --------------------------------------------------------------------------
+   PRIVATE BETA TEST PAGE (/beta/test)
+   -------------------------------------------------------------------------- */
+body.landing.beta-test-page .seo-nav {
+    max-width: 720px; margin: 0 auto; padding: 16px 28px;
+    background: var(--bg); border-bottom: 1px solid var(--hair2);
+}
+body.landing.beta-test-page .nav-wordmark {
+    color: var(--t1); font-size: 12px; font-weight: 650; letter-spacing: .14em;
+}
+body.landing.beta-test-page .nav-logo { width: 22px; height: 22px; }
+body.landing.beta-test-page .beta-test-main {
+    max-width: 720px; padding-bottom: 96px;
+}
+body.landing.beta-test-page .beta-test-hero {
+    padding: 72px 0 32px;
+}
+body.landing.beta-test-page .beta-test-hero .hero-headline {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    max-width: 16ch;
+}
+body.landing.beta-test-page .beta-test-hero .hero-subhead {
+    max-width: 42ch; margin-top: 14px;
+}
+body.landing.beta-test-page .beta-test-hint,
+body.landing.beta-test-page .beta-form-note,
+body.landing.beta-test-page .beta-panel-note,
+body.landing.beta-test-page .beta-panel-lead {
+    color: var(--t3); font-size: 14.5px; line-height: 1.5;
+}
+body.landing.beta-test-page .beta-test-error {
+    color: #8B1E1E; font-size: 14px; margin-top: 12px;
+}
+body.landing.beta-test-page .beta-id-form {
+    margin-top: 24px; max-width: 420px;
+}
+body.landing.beta-test-page .beta-id-form label {
+    display: block; font-size: 13px; color: var(--t3); margin-bottom: 8px;
+}
+body.landing.beta-test-page .beta-id-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+}
+body.landing.beta-test-page .beta-id-row input {
+    flex: 1; min-width: 180px;
+    border: 1px solid var(--hair3); border-radius: 8px;
+    padding: 12px 14px; font: inherit; background: #fff; color: var(--t1);
+}
+body.landing.beta-test-page .beta-meta {
+    border-top: 1px solid var(--hair2);
+    padding: 28px 0;
+}
+body.landing.beta-test-page .beta-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+    margin: 0;
+}
+body.landing.beta-test-page .beta-meta-grid dt {
+    font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--t4); margin: 0 0 4px;
+}
+body.landing.beta-test-page .beta-meta-grid dd {
+    margin: 0; color: var(--t1); font-size: 16px; font-weight: 550;
+}
+body.landing.beta-test-page .beta-honesty {
+    margin: 20px 0 0;
+    padding: 14px 16px;
+    border-left: 2px solid var(--accent);
+    background: rgba(14, 124, 116, .06);
+    color: var(--t2);
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+body.landing.beta-test-page .beta-panel {
+    border-top: 1px solid var(--hair2);
+    padding: 36px 0;
+}
+body.landing.beta-test-page .beta-panel h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: var(--t1);
+}
+body.landing.beta-test-page .beta-steps {
+    margin: 16px 0 0;
+    padding-left: 1.2em;
+    color: var(--t2);
+}
+body.landing.beta-test-page .beta-steps li { margin: 0 0 10px; }
+body.landing.beta-test-page .beta-checklist { margin-top: 20px; }
+body.landing.beta-test-page .beta-check-item {
+    border: 1px solid var(--hair2);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 0 0 12px;
+    background: #fff;
+}
+body.landing.beta-test-page .beta-check-label {
+    margin: 0 0 12px;
+    color: var(--t1);
+    font-size: 15px;
+}
+body.landing.beta-test-page .beta-check-id {
+    color: var(--t4);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: .04em;
+    margin-right: 6px;
+}
+body.landing.beta-test-page .beta-check-actions {
+    display: flex; flex-wrap: wrap; gap: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--t2);
+}
+body.landing.beta-test-page .beta-check-notes-label,
+body.landing.beta-test-page .beta-field label,
+body.landing.beta-test-page .beta-optional {
+    font-size: 13px; color: var(--t3);
+}
+body.landing.beta-test-page .beta-check-notes,
+body.landing.beta-test-page .beta-field input,
+body.landing.beta-test-page .beta-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 6px;
+    border: 1px solid var(--hair3);
+    border-radius: 8px;
+    padding: 11px 12px;
+    font: inherit;
+    color: var(--t1);
+    background: #fff;
+}
+body.landing.beta-test-page .beta-field input[readonly] {
+    background: rgba(10, 10, 12, .03);
+    color: var(--t2);
+}
+body.landing.beta-test-page .beta-field { margin: 0 0 18px; }
+body.landing.beta-test-page .beta-rating,
+body.landing.beta-test-page .beta-choice {
+    border: none;
+    margin: 0 0 22px;
+    padding: 0;
+}
+body.landing.beta-test-page .beta-rating legend,
+body.landing.beta-test-page .beta-choice legend {
+    font-size: 14px;
+    font-weight: 550;
+    color: var(--t1);
+    margin-bottom: 10px;
+}
+body.landing.beta-test-page .beta-rating-options,
+body.landing.beta-test-page .beta-choice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    font-size: 14px;
+    color: var(--t2);
+}
+body.landing.beta-test-page .beta-form-note { margin: 8px 0 18px; }
+body.landing.beta-test-page .beta-success {
+    padding: 96px 0 48px;
+}
+body.landing.beta-test-page .beta-success-id {
+    color: var(--t2);
+    margin: 18px 0 28px;
+}
+@media (max-width: 640px) {
+    body.landing.beta-test-page .seo-nav,
+    body.landing.beta-test-page .container { padding-left: 20px; padding-right: 20px; }
+    body.landing.beta-test-page .beta-meta-grid { grid-template-columns: 1fr; }
+    body.landing.beta-test-page .beta-test-hero { padding-top: 48px; }
+}

@@ -1,0 +1,14 @@
+{
+  "updated": "2026-08-12",
+  "note": "Public non-PII registry only. No names or emails. Operator syncs from private/beta-testers.csv when inviting testers.",
+  "testers": [
+    {
+      "id": "SB-20260812-001",
+      "deviceFamily": "rayban-meta-gen",
+      "deviceLabel": "Ray-Ban Meta Gen 1",
+      "status": "Accepted",
+      "protocol": "phone-rehearsal",
+      "country": "Italy"
+    }
+  ]
+}

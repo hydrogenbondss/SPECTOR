@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="style.min.css?v=9">
-    <link rel="stylesheet" href="landing-v2.min.css?v=25">
+    <link rel="stylesheet" href="landing-v2.min.css?v=27">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=5" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=5" sizes="32x32">
@@ -77,8 +77,8 @@
             <div class="hero-layout">
                 <div class="hero-copy">
                     <p class="hero-brand">SPECTOR</p>
-                    <h1 class="hero-headline">Your punctuation sets the pace — not your voice.</h1>
-                    <p class="hero-subhead">A teleprompter that follows the rhythm of your script, so you can focus on delivering it — not chasing the words.</p>
+                    <h1 class="hero-headline">Stop reading. Start delivering.</h1>
+                    <p class="hero-subhead">SPECTOR turns your script into a natural speaking pace, so you can keep your eyes up and stay present.</p>
                     <div class="hero-cta-group">
                         <a href="app.html" class="btn-hero" data-quick-start>Try Spector free</a>
                     </div>
@@ -91,12 +91,12 @@
                                 <div class="hero-demo-screen">
                                     <div class="hero-demo-lines" aria-hidden="true">
                                         <div class="hero-demo-line prev" id="hd-prev"></div>
-                                        <div class="hero-demo-line active" id="hd-active">Good evening, everyone.</div>
-                                        <div class="hero-demo-line next" id="hd-next">Tonight I want to show you something.</div>
+                                        <div class="hero-demo-line active" id="hd-active">Good morning, everyone.</div>
+                                        <div class="hero-demo-line next" id="hd-next">Thanks for being here.</div>
                                     </div>
                                     <div class="hero-demo-footer">
                                         <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill" style="width:20%"></div></div>
-                                        <span class="hero-demo-pacing" id="hd-pacing">punctuation-paced</span>
+                                        <span class="hero-demo-pacing" id="hd-pacing">Your punctuation sets the pace.</span>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,6 @@
                             Pause demo
                         </button>
                     </div>
-                    <p class="hero-compat">Works on phone · Eyes-up on display glasses when you’re ready</p>
                 </div>
             </div>
         </div>
@@ -118,11 +117,11 @@
         <section class="proof-section proof-section--copy reveal" id="features">
             <div class="proof-copy">
                 <h2 class="proof-headline">Read naturally. Keep your place.</h2>
-                <p class="proof-lead">SPECTOR keeps your place without asking you to chase the script.</p>
+                <p class="proof-lead">SPECTOR follows your script's natural rhythm, so you can focus on delivering instead of tracking every line.</p>
                 <ul class="proof-list">
-                    <li><strong>Punctuation-paced</strong> Your writing controls the rhythm.</li>
-                    <li><strong>No microphone</strong> SPECTOR doesn’t listen to you.</li>
-                    <li><strong>On your screen first</strong> Rehearse here. Use display glasses later if you want.</li>
+                    <li><strong>Punctuation-paced</strong> Your punctuation shapes the timing.</li>
+                    <li><strong>No microphone</strong> SPECTOR doesn't need to hear you to keep the script moving.</li>
+                    <li><strong>Screen first</strong> Rehearse on your phone or computer. Take the same workflow to display glasses when you're ready.</li>
                 </ul>
             </div>
         </section>
@@ -558,27 +557,27 @@
         const SAMPLE_SCRIPTS = {
             keynote: {
                 title: "Keynote Opener",
-                text: "Good morning. **Thank you** for being here.\n\nToday we're talking about delivering without chasing the words.\n\n[pause:2s]\n\nMost tools still make you look like you're reading. **Spector paces from your punctuation instead.**"
+                text: "Good morning. Thanks for being here.\n\nToday I want to talk about something we all struggle with: remembering what to say when everyone is looking at you.\n\nYou know your material. You just need to stop thinking about the next sentence — and start delivering this one."
             },
             pitch: {
                 title: "Pitch",
-                text: "We're building Spector for people who perform on camera — and on glasses. [pause]\n\nRehearse on your phone today. [pause:3s] Go eyes-up on display glasses when you're ready.\n\n**No mic.** No listening. Same script, same pace every time. [pause]"
+                text: "We're building Spector for people who have to perform without wanting to sound like they're reading.\n\nYou write your script. Spector handles the pacing.\n\nNo microphone. No voice tracking. Just your words, moving at the rhythm you wrote them."
             },
             demo: {
                 title: "Product Demo",
-                text: "This is Spector. [pause]\n\nPaste any script. Hit play. The text advances from **your** punctuation — commas breathe, periods hold.\n\nComfort mode uses gentle head motion so the stage stays with you. [pause:2s]\n\nRehearse here. Take it to stage — or to your glasses."
+                text: "Let me show you how Spector works.\n\nYou paste in your script. Hit play. And that's it.\n\nCommas give you a moment to breathe. Periods give you more time.\n\nYou don't have to chase the text. You can actually focus on what you're saying."
             },
             ted: {
                 title: "TEDx Opener",
-                text: "Good [pause] afternoon.\n\n**What if** the most important talk of your life started with you looking up?\n\n[pause:2s]\n\nToday I'm going to show you a different way to rehearse — one that keeps your eyes with the room."
+                text: "Good afternoon.\n\nWhat if the most important part of giving a talk wasn't remembering every word?\n\nWhat if you could look up, stay present, and still know exactly where you are?\n\nThat's the idea behind Spector."
             },
             wedding: {
                 title: "Wedding Toast",
-                text: "To the happy couple. [pause]\n\n**I've known** the groom for years, and if there's one thing I've learned, it's that he's found his perfect match.\n\n[pause:3s]\n\nMay your life together be as full of laughter and [pause] love as today."
+                text: "To the happy couple.\n\nI've known the groom for years, and I've never seen him quite this happy.\n\nSo here's to the two of you — to the good days, the difficult ones, and all the ridiculous moments in between.\n\nMay there be plenty more of them."
             },
             earnings: {
                 title: "Earnings Call",
-                text: "Good morning, everyone. [pause]\n\n**Q3 results** came in strong — revenue up 18% year-over-year, driven by our new product line.\n\n[pause:2s]\n\nGuidance for Q4 remains unchanged. We're executing against the plan."
+                text: "Good morning, everyone.\n\nI'll start with the headline numbers. Revenue was up 18% year-over-year, driven primarily by our new product line.\n\nWe're seeing strong demand going into the next quarter, and our guidance remains unchanged.\n\nI'll walk through the details now."
             }
         };
 
@@ -1103,9 +1102,10 @@
             if (!prev || !active || !next) return;
 
             const LINES = [
-                'Good evening, everyone.',
-                'Tonight I want to show you something.',
-                'Your writing sets the pace.'
+                'Good morning, everyone.',
+                'Thanks for being here.',
+                'Today I want to talk about something important.',
+                "Let's get started."
             ];
 
             const markPunct = (text) =>

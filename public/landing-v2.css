@@ -170,18 +170,22 @@ body.landing .hero-plane-inner {
 body.landing .hero-plane-inner::before { content: none; }
 body.landing .hero-layout {
     display: grid;
-    grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
-    gap: 52px;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: start;
+    max-width: 640px;
 }
 body.landing .hero-copy {
     position: relative;
     z-index: 1;
 }
+/* Reset style.css .hero-visual (48px top margin + entrance animation) */
 body.landing .hero-visual {
     position: relative;
     min-width: 0;
     width: 100%;
+    margin: 0;
+    animation: none;
 }
 body.landing .hero-plane .hero-brand {
     margin: 0 0 16px;
@@ -196,11 +200,11 @@ body.landing .hero-plane .hero-headline {
     letter-spacing: -0.042em;
     line-height: 0.98;
     margin: 0;
-    max-width: 16ch;
+    max-width: 14ch;
     text-wrap: balance;
 }
 body.landing .hero-plane .hero-subhead {
-    margin: 16px 0 0; max-width: 42ch;
+    margin: 16px 0 0; max-width: 38ch;
     font-size: 17px; line-height: 1.45; letter-spacing: -0.014em;
     color: #8A8F98;
 }
@@ -224,65 +228,81 @@ body.landing .hero-plane .hero-trust-row {
 }
 body.landing .hero-plane .hero-trust-row b { color: #D0D6E0; font-weight: 550; }
 
+/* Demo as stage evidence — not a second bordered card (overrides style.css .hero-demo) */
 body.landing .hero-plane .hero-demo {
     display: block;
+    max-width: none;
     margin: 0;
+    padding: 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    border-bottom: none;
+    border-radius: 0;
+    background: transparent;
     color: #D0D6E0;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
+    box-shadow: none;
+    cursor: pointer;
+    transition: border-color .2s var(--ease);
 }
 body.landing .hero-demo::before, body.landing .hero-demo::after { content: none; }
-body.landing .hero-demo:hover { opacity: 1; transform: none; box-shadow: none; }
+body.landing .hero-demo:hover,
+body.landing .hero-demo:focus-visible {
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+    border-top-color: rgba(255, 255, 255, .14);
+}
 
-/* Product stage — player language: black, hairline, no chrome */
+/* Flush with the plane — no floating shell chrome */
 body.landing .hero-demo-shell {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 0;
     overflow: hidden;
-    background: #0A0A0C;
-    border: 1px solid rgba(255, 255, 255, .1);
+    background: transparent;
+    border: none;
     box-shadow: none;
     transform: none;
-    transition: border-color .2s var(--ease);
 }
 body.landing .hero-demo:hover .hero-demo-shell,
 body.landing .hero-demo:focus-visible .hero-demo-shell {
-    border-color: rgba(255, 255, 255, .16);
+    border-color: transparent;
 }
 body.landing .hero-demo-screen {
     position: relative;
     overflow: hidden;
     min-width: 0;
-    padding: 36px 28px 22px;
-    background: #0A0A0C;
+    padding: 24px 0 8px;
+    background: transparent;
 }
 body.landing .hero-demo-screen::before,
 body.landing .hero-demo-screen::after { content: none; }
 body.landing .hero-demo-lines {
-    min-height: 8.6em;
+    min-height: 5.8em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 6px;
     position: relative;
     z-index: 1;
 }
 body.landing .hero-demo-line {
     font-family: var(--font-sans);
-    font-size: clamp(22px, 2.8vw, 32px);
-    line-height: 1.35;
-    letter-spacing: -0.028em;
+    font-size: clamp(17px, 2vw, 22px);
+    line-height: 1.4;
+    letter-spacing: -0.024em;
     font-weight: 450;
-    padding: 2px 0;
+    padding: 1px 0;
     overflow-wrap: anywhere;
     transition: color .3s var(--ease), opacity .3s var(--ease);
 }
 body.landing .hero-demo-line.prev {
     color: #50545C;
-    min-height: 1.35em;
+    min-height: 1.4em;
 }
 body.landing .hero-demo-line.active {
     color: #F7F8F8;
@@ -293,31 +313,33 @@ body.landing .hero-demo-line.next {
 body.landing .hd-mark {
     text-decoration: underline;
     text-decoration-color: rgba(247, 248, 248, .42);
-    text-underline-offset: 6px;
+    text-underline-offset: 5px;
     text-decoration-thickness: 1.5px;
 }
 body.landing .hero-demo-footer {
-    display: flex; align-items: center; gap: 14px; margin-top: 22px;
+    display: flex; align-items: center; gap: 12px; margin-top: 14px;
+    max-width: 36ch;
     position: relative;
     z-index: 1;
 }
 body.landing .hero-demo-bar {
     flex: 1;
-    height: 2px;
+    height: 1px;
     background: rgba(255, 255, 255, .1);
     overflow: hidden;
     border-radius: 0;
 }
 body.landing .hero-demo-fill {
     height: 100%;
-    background: rgba(247, 248, 248, .72);
+    background: rgba(247, 248, 248, .55);
     transition: width .4s var(--ease);
 }
 body.landing .hero-demo-pacing {
-    font-size: 11px;
+    font-size: 12px;
     color: #787D86;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    white-space: normal;
 }
 body.landing .hero-demo-wrap {
     position: relative;
@@ -325,21 +347,21 @@ body.landing .hero-demo-wrap {
 body.landing .hero-demo-toggle {
     display: inline-flex;
     align-items: center;
-    margin-top: 12px;
+    margin-top: 10px;
     padding: 0;
     border: none;
     background: none;
-    color: #A8ADB6;
+    color: #787D86;
     font: inherit;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 450;
     letter-spacing: -0.01em;
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: rgba(168, 173, 182, .45);
+    text-decoration-color: rgba(120, 125, 134, .4);
 }
-body.landing .hero-demo-toggle:hover { color: #F7F8F8; }
+body.landing .hero-demo-toggle:hover { color: #A8ADB6; }
 body.landing .hero-demo-toggle:focus-visible {
     outline: 2px solid #D0D6E0;
     outline-offset: 3px;
@@ -943,11 +965,12 @@ body.landing.device-detail-page .section-header h2 { color: var(--t1); }
 @media (max-width: 900px) {
     body.landing .hero-layout {
         grid-template-columns: 1fr;
-        gap: 28px;
+        gap: 24px;
         align-items: start;
     }
     body.landing .hero-visual {
-        max-width: 720px;
+        max-width: none;
+        margin: 0;
     }
     body.landing .hero-demo-shell {
         transform: none;
@@ -1003,17 +1026,17 @@ body.landing.device-detail-page .section-header h2 { color: var(--t1); }
         padding-right: 20px;
     }
     body.landing .hero-plane-inner { padding: 28px 20px 44px; }
-    body.landing .hero-demo-screen { padding: 28px 18px 18px; }
+    body.landing .hero-demo-screen { padding: 20px 0 6px; }
     body.landing .hero-demo-shell,
     body.landing .hero-demo-screen,
     body.landing .hero-demo-lines { max-width: 100%; }
     body.landing .hero-demo-line,
     body.landing .hero-demo-line.prev,
     body.landing .hero-demo-line.next {
-        font-size: 18px;
-        line-height: 1.32;
+        font-size: 16px;
+        line-height: 1.4;
     }
-    body.landing .hero-demo-lines { min-height: 7.2em; }
+    body.landing .hero-demo-lines { min-height: 5.2em; }
     body.landing .hero-compat { font-size: 12px; }
     body.landing .hero-compat { margin-top: 12px; font-size: 12px; }
     body.landing .hero-plane .hero-headline { font-size: clamp(2.25rem, 10.5vw, 2.85rem); }

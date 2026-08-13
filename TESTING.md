@@ -78,7 +78,7 @@ If these UI steps have moved in a newer Meta AI app, treat that as part of your 
 These steps apply to a normal browser or installed PWA on phone or computer:
 
 - Paste or upload your script on the landing page (or use **Try Spector free** / a sample).
-- Tap **Launch teleprompter** / open the player.
+- Open the player via **Try Spector free**, or **Try with this script** after pasting.
 - **Comfort mode (expected behavior on phone/desktop sensors):** subtle breathing + gentle spatial movement when device orientation is available. On desktop without sensors, use DevTools → Sensors → Orientation, or `app.html?debug` tilt controls. **Comfort on actual Meta glasses is NOT verified.**
 - **Focus mode:** static, steady center read — maximum stability.
 - **Presentation mode:** slower / heavier type for delivery.

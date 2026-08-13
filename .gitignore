@@ -12,3 +12,6 @@ NUL
 *.swp
 .idea/
 .vscode/
+
+# Private operator data (beta tester PII — never commit)
+private/

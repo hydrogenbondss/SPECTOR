@@ -1,6 +1,6 @@
 # SPECTOR — Project Status & Roadmap 
 
-**Last updated:** August 9, 2026 (reconciled with current homepage / brand story: punctuation-paced positioning, honest device matrix, shipped vs roadmap cleanup)
+**Last updated:** August 12, 2026 (homepage H1 / hero demo aligned with live `index.html`; punctuation remains supporting claim; honest device matrix unchanged)
 **Repository:** [github.com/hydrogenbondss/SPECTOR](https://github.com/hydrogenbondss/SPECTOR)  
 **Live URL:** https://spectorlabs.io
 **Latest commit:** current (see git log)
@@ -35,7 +35,7 @@ SPECTOR sells teleprompter software only — not smart glasses. Not affiliated w
 | **Section bookmarks** | Done | `## Section` lines become chapter-marker chunks + a jump bar in the player |
 | **PWA / offline** | Done | `manifest.json`, `sw.js` (see current cache version in file); offline shell implemented — re-run verifier to confirm |
 | **iOS motion fix** | Done | `ensureMotionForPlayback()` skips motion setup when already bound |
-| **Current positioning** | Done | Homepage lead: “Your punctuation sets the pace — not your voice”; no mic / no cloud; honest device matrix |
+| **Current positioning** | Done | Homepage H1: “Stop reading. Start delivering.”; punctuation-paced pacing as supporting claim / capability; no mic / no cloud; honest device matrix |
 | **Modular core** | Done | `window.SpectorCore` — chunk registry, hooks, `createMotion()` |
 | **First-run coach + hardware legend** | Done | One-time toast; `.glasses-hw-legend` under modes (tester/debug context) |
 | **Beta assets** | Done | Landing beta signup + README Beta Program focused on hardware testing |
@@ -91,7 +91,7 @@ Re-run `python3 tests/run_verification.py` (and spot-check production) before tr
 
 - [x] **Redeploy Vercel** to latest `main` (historical)
 - [x] **Domain live** — spectorlabs.io acquired and serving the product site
-- [x] **Positioning / homepage honesty pass** — punctuation-paced lead, device matrix, free core / Pro once (see `docs/BRAND.md`)
+- [x] **Positioning / homepage honesty pass** — delivery-first H1 + live HTML hero demo; punctuation as supporting claim; device matrix; free core / Pro once (see `docs/BRAND.md`)
 - [ ] **Beta test on real glasses** via Developer Mode ([TESTING.md](./TESTING.md)) — especially XREAL / Viture mirror workflows
 - [ ] **Gather feedback** on Comfort, pacing feel, and comparison to other teleprompters (including Meta’s where users have it)
 - [ ] **Re-run full local verification** and record the result here when green

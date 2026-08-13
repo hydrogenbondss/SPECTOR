@@ -23,8 +23,8 @@ by design, not locked to any manufacturer.
 ## Quick start
 
 1. Open **https://spectorlabs.io**
-2. Paste text, drop a `.txt`, or load a sample script
-3. Hit **Launch teleprompter**
+2. Tap **Try Spector free**, or paste text / drop a `.txt` / load a sample under Try it
+3. Open the player (hero CTA or **Try with this script**)
 4. Pick a mode (try **Comfort**), speed, and text size
 5. Tap Play (or press Space) — the engine paces itself to your punctuation
 6. When done, review your pacing, hesitations, and slowest chunk on the end screen

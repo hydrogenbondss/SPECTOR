@@ -32,13 +32,16 @@ Claim tags used below:
 
 **VERIFIED:** Spector is an open-source, punctuation-paced teleprompter PWA. Users paste (or load) a script; the engine chunks it and advances on a timer shaped by punctuation, mode, and speed — **not** by microphone / speech recognition.
 
-**VERIFIED positioning (site H1 / brand):**  
+**VERIFIED positioning (site H1):**
+“Stop reading. Start delivering.”
+
+**VERIFIED supporting / meta claim (demo label, meta/OG, product capability):**
 “Your punctuation sets the pace — not your voice.”
 
-**VERIFIED permanent promise:**  
+**VERIFIED permanent promise:**
 “Free core, forever. No account, no cloud, nothing uploaded — ever.”
 
-**VERIFIED pairing tagline:**  
+**VERIFIED pairing tagline:**
 “Punctuation-paced. No mic. No cloud.”
 
 **VERIFIED product job:** rehearse on phone/computer → perform eyes-up where a display can show the script (today: XREAL / Viture via mirror). Ray-Ban Meta path is phone rehearsal, not on-lens Spector.
@@ -212,7 +215,7 @@ Claim tags used below:
 
 | Page | Job |
 |------|-----|
-| `/` `index.html` | Convert curiosity → try: dark hero (H1 + CTA + `launch.mp4`), proof, Try, devices matrix, Pro teaser, FAQ, tips email, hardware beta, close CTA |
+| `/` `index.html` | Convert curiosity → try: dark hero (H1 + CTA + live HTML `#hero-demo`), proof, Try, devices matrix, Pro teaser, FAQ, hardware beta, founder line |
 | `/pricing` | Convert trust → pay: Free vs Pro ledger, embedded Paddle, license restore, billing FAQ |
 | `/app.html` | Deliver product (player) — primary conversion destination |
 | `/say` | AAC side-product + mission signal; not the main monetization funnel |
@@ -232,7 +235,7 @@ Claim tags used below:
 
 ```
 Awareness (SEO device pages / OG / GitHub)
-  → Homepage hero comprehension (punctuation insight)
+  → Homepage hero comprehension (delivery H1 + live demo; punctuation as supporting insight)
   → Try free (sample in player)  [critical activation]
   → Optional: paste own script / Comfort / finish run
   → See analytics + history cap
@@ -264,7 +267,7 @@ Awareness (SEO device pages / OG / GitHub)
 - **CONTRADICTION — CONTRIBUTING.md:** still says “glassmorphism” as a priority — **legacy**; BRAND forbids glass blur.
 - **CONTRADICTION — TESTING.md:** overstates Ray-Ban on-lens readiness vs BRAND/PROJECT/homepage honesty.
 - **INFERRED intentional:** dark hero plane vs light body; player always dark for legibility.
-- **INFERRED legacy:** some older asset names (`hero-glasses.webp`, dark/light app icon variants) may predate current light marketing; current hero uses `launch.mp4` + `proof-glasses.webp`.
+- **INFERRED legacy:** some older asset names (`hero-glasses.webp`, dark/light app icon variants, `launch.mp4`, `proof-glasses.webp`) may predate current light marketing; **current homepage hero** is the live HTML `#hero-demo` (not `launch.mp4`); current proof is copy-only.
 
 ---
 
@@ -399,7 +402,7 @@ Pro is spoofable via DevTools; accepted for now. No backend Transactions API val
 
 Treat these as locked unless explicitly revisited:
 
-1. **Punctuation-paced, no-mic positioning** is primary (not “Eyes Forward” as H1). **VERIFIED** BRAND
+1. **Delivery-first homepage H1** (“Stop reading. Start delivering.”); punctuation-paced / no-mic remains core capability and supporting messaging (not “Eyes Forward” as H1). **VERIFIED** `index.html` / BRAND
 2. **Free core forever; Pro $34 once; no subscription.** **VERIFIED**
 3. **Cloud sync not sold until shipped.** **VERIFIED**
 4. **Honest device matrix** — no claiming Ray-Ban Meta Display on-lens Spector. **VERIFIED**

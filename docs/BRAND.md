@@ -16,12 +16,17 @@ across the landing + player — keep this doc and the CSS in lock-step.
   voice doesn't want. ALL-CAPS `SPECTOR` is reserved for graphic lockups: the
   letterspaced nav wordmark and the homepage hero kicker (not prose spelling).
   The repo name `SPECTOR` stays as-is and reads as that same lockup.
-- **Headline hierarchy:** lead with the falsifiable claim — **"Your punctuation
-  sets the pace — not your voice."** is the hero H1. **"Eyes Forward"** is earned
-  equity only (badge / secondary), never the primary share title. Retired primary:
-  "The teleprompter that reads your punctuation."
-- **One-liner:** *Your punctuation sets the pace — not your voice. No mic. No
-  listening. Rehearse on phone, perform eyes-up on smart glasses.*
+- **Headline hierarchy:** visible homepage H1 is **"Stop reading. Start
+  delivering."** Supporting subhead: SPECTOR turns your script into a natural
+  speaking pace, so you can keep your eyes up and stay present. Punctuation-aware
+  pacing remains a core product claim and supporting message (demo label,
+  meta/OG: **"Your punctuation sets the pace — not your voice."**). **"Eyes
+  Forward"** is earned equity only (badge / secondary), never the primary share
+  title. Retired as visible H1: "Your punctuation sets the pace — not your
+  voice."; "The teleprompter that reads your punctuation."
+- **One-liner (supporting / meta):** *Your punctuation sets the pace — not your
+  voice. No mic. No listening. Rehearse on phone, perform eyes-up on smart
+  glasses.*
 - **Two distinct lines — do not paraphrase either:**
   - **Pairing / footer tagline** (contrarian association): **"Punctuation-paced.
     No mic. No cloud."** — site footers, trust rows, OG titles.
@@ -30,18 +35,17 @@ across the landing + player — keep this doc and the CSS in lock-step.
 - Always write **Spector**, never "the Spector app" or "Spector Labs product."
   Footer entity line: `© Spector Labs`.
 - **Primary try CTA:** label **"Try Spector free"** → opens the player with a
-  sample (`app.html?script=…`). `#try` remains for paste / Launch / Save.
+  sample (`app.html?script=…`). `#try` remains for paste / Try with this script /
+  Save.
 - **Homepage IA (structural):** first viewport = one full-bleed dark plane —
-  brand + H1 + one line + one CTA + muted looping launch video (real `app.html`
-  UI capture; poster = player still; click opens the player with a sample;
-  pause control for WCAG 2.2.2). Trust row: free / no mic / no cloud / Pro once.
-  Light canvas begins below. Then: one proof section (three beats + mirrored
-  FOV composite `proof-glasses.webp` captioned as XREAL/Viture mirror — not
-  Meta Display) → collapsed Try (one Launch CTA; paste/save behind disclosure)
-  → compact devices → pricing teaser → 3 FAQs → tips email → hardware beta
-  (invite-capped; does not replace Buy Pro) → close CTA. No invented
-  testimonials. No feature-row essays, no changelog wall, no investor block on
-  the home page.
+  brand + H1 + one supporting sentence + one CTA + live HTML product demo
+  (`#hero-demo`; click opens the player with a sample; pause control for
+  WCAG 2.2.2). Light canvas begins below. Then: one proof section (three copy
+  beats — punctuation-paced / no microphone / screen first) → collapsed Try
+  (sample CTA; paste/save behind disclosure) → compact devices → pricing teaser
+  → 3 FAQs → hardware beta (invite-capped; does not replace Buy Pro) → quiet
+  founder line. No invented testimonials. No feature-row essays, no changelog
+  wall, no investor block on the home page.
 - **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
   Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history
   (50 vs 5) and export — not sync until it ships. Same light canvas / ink CTAs
@@ -148,9 +152,12 @@ legibility, but shares the same accent family, type, and CTA grammar.
 
 - **Logo mark:** `public/images/logo-mark.png` (nav) · app icon
   `public/images/app-icon.png` · favicon `public/favicon.ico`.
-- **Homepage visuals:** hero = `public/images/launch.mp4` (motion-graphics
-  loop); proof = `public/images/proof-glasses.webp` (mirrored phone FOV for
-  XREAL / Viture — not Ray-Ban Meta Display).
+- **Homepage visuals:** hero = live HTML product demo (`#hero-demo` in
+  `public/index.html`). `public/images/launch.mp4` is present and tracked but
+  is **not** the current homepage hero. Current proof section is copy-only;
+  `public/images/proof-glasses.webp` remains an available asset (mirrored phone
+  FOV for XREAL / Viture — not Ray-Ban Meta Display) but is not shown in the
+  current homepage proof block.
 - **PWA icons:** defined in `public/manifest.json`.
 - **Social/OG card:** `public/images/og-card.png` (1200×630).
 - **Theme color:** `#F7F7F8` marketing / `#0A0A0C` player

@@ -1,65 +1,84 @@
-# AGENTS.md
+# Security Rules
 
-## Cursor Cloud specific instructions
+These rules apply to all code generated in this project. They are non-negotiable.
 
-Spector is a **zero-runtime-dependency static PWA** (vanilla JS/HTML/CSS). The
-entire app lives in `public/`; all app logic is inline in `public/index.html`,
-`public/app.html`, and `public/say.html` (`SpectorCore`/`SayCore` are exposed on
-`window`). Node is only used for the CSS build and the link-check lint; Python
-runs the dev server and the verifier; Chrome is used by the headless test paths.
+## Secrets
 
-### Accessibility (frontend)
+- NEVER put API keys, database credentials, or tokens in frontend code (anything under src/, app/, pages/, components/, public/)
+- NEVER put secret keys in environment variables prefixed with NEXT_PUBLIC_, VITE_, or REACT_APP_ (these are bundled into the client)
+- NEVER hardcode credentials in source files. Use environment variables loaded server-side only
+- The .env file MUST be in .gitignore before the first commit. Verify this before creating any .env file
+- Use .env.example with placeholder values only, never real credentials
 
-When changing HTML/CSS/JS UI in `public/`, follow strictly the accessibility
-rules in [A11Y.md](https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md)
-(WCAG 2.2-aligned agent contract; lazy-load only the reference guides needed).
+## Database
 
-- **Compliance profile:** Launchpad (A floor for structure/semantics; do not
-  regress keyboard, labels, focus, or live regions). Prefer Standard (AA) when
-  the change is small and cheap.
-- **Stack constraint:** vanilla HTML — use native controls (`button`, `a`,
-  `label`/`for`, `dialog` patterns) before ARIA. No clickable `div`s for
-  primary actions.
-- **Brand override:** Spector ink/teal tokens and dark player stage win over
-  generic “tint gray / avoid pure black” design-linter advice when they
-  conflict. Contrast still must meet the profile.
+- Enable Row Level Security on EVERY Supabase table before deployment. Default policy: deny all. Write explicit policies scoped to auth.uid()
+- NEVER set a Supabase RLS policy to `USING (true)` or `FOR ALL` without a WHERE condition
+- Firebase Security Rules MUST require `request.auth != null` and scope access to `request.auth.uid`
+- NEVER use `pickle.loads`, `pickle.load`, or any deserialization on user-supplied data. Use JSON for all network data exchange
 
-### Services
+## Authentication and Authorization
 
-There is a single service: the static site served from `public/`.
+- EVERY API route that returns or modifies user data MUST have authentication middleware that runs BEFORE the handler, not inside it
+- Unauthenticated requests to protected endpoints MUST return 401
+- EVERY route that takes a resource ID MUST verify the authenticated user owns that resource: `current_user.id == resource.owner_id`. This is a SEPARATE check from authentication
+- Admin endpoints MUST verify admin role and return 403 for non-admin users
+- Session cookies MUST set `httpOnly: true`, `secure: true`, and `sameSite: 'lax'`
 
-- **Run (dev):** `python3 -m http.server 8000 --bind 127.0.0.1 --directory public`
-  then open `http://127.0.0.1:8000/index.html` (player at `/app.html`). There is
-  no hot reload — it serves files as-is, so just refresh the browser after edits.
-- **Rewrites:** production/pretty URLs (e.g. `/say`, `/pricing`) come from
-  `vercel.json` rewrites. Plain `http.server` does NOT apply them (use the full
-  `.html` path). To exercise the rewrites locally, run
-  `python3 scripts/preview_server.py` (serves `public/` on port 8765 with the
-  `vercel.json` routes applied).
-- **Build:** `npm run build` regenerates `public/style.min.css` and
-  `public/landing-v2.min.css` via `clean-css-cli`. These minified files ARE
-  committed; run the build after editing `style.css`/`landing-v2.css` and commit
-  the regenerated `.min.css`. The site loads fine without a build for local dev.
+## Input and Output
 
-### Lint / test
+- NEVER concatenate user input into SQL queries. ALWAYS use parameterized queries or ORM methods
+- NEVER use `dangerouslySetInnerHTML`, `v-html`, or `innerHTML` with user-supplied content unless it is first sanitized with DOMPurify
+- ALL user input MUST be validated server-side. Client-side validation is for UX only
+- File uploads MUST validate file type by reading magic bytes, not by checking the filename extension. Rename all uploads to UUIDs server-side. Store on a separate domain (S3, R2, GCS), never on the app origin
 
-- **Lint (internal links):** `node scripts/check_internal_links.mjs` — checks all
-  `<a href>` targets and fragment ids across the HTML files.
-- **Verifier (full gate):** `python3 tests/run_verification.py` — must print
-  `ALL VERIFICATION STEPS PASS`. It spins up its own `http.server` on port 8088,
-  runs static/structure checks, the in-browser `SpectorCore` test harness, and a
-  service-worker offline probe. It finds Chrome automatically via `google-chrome`
-  on PATH and writes all artifacts to `/tmp/spector-verify` (never into the repo).
-- **Core engine tests only:** open `http://127.0.0.1:<port>/app.html?test` in a
-  browser (or headless Chrome `--dump-dom`) and read the `SpectorTest` output
-  (`allPass` must be true).
-- **Deeper QA gate** (Lighthouse, visual screenshots): see
-  `.claude/skills/preflight/SKILL.md`.
+## URL Fetching (SSRF Prevention)
 
-### Gotchas
+- If the application fetches URLs provided by users (link previews, image proxies, URL validators), it MUST:
+  - Block all private/internal IP ranges: 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16, ::1
+  - Allow only http and https schemes
+  - Resolve the hostname and check the IP BEFORE making the request
 
-- Player debug scaffolding (temple-button sim, tilt sliders) is behind
-  `app.html?debug`; the core test harness is behind `app.html?test`. Neither is
-  visible to normal users.
-- Comfort mode uses device-orientation motion; on desktop it is inert unless you
-  simulate orientation (DevTools > Sensors) — this is expected, not a bug.
+## Security Headers
+
+- Set these headers on ALL responses via a single global middleware:
+  - `Content-Security-Policy: default-src 'self'` (adjust as needed for your app)
+  - `Strict-Transport-Security: max-age=31536000; includeSubDomains`
+  - `X-Frame-Options: DENY`
+  - `X-Content-Type-Options: nosniff`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+- In Express, use the `helmet` package. In Next.js, set headers in next.config.js
+
+## CORS
+
+- NEVER set CORS origin to `*` (wildcard). Use an explicit allowlist of your actual domains
+- NEVER combine `origin: '*'` with `credentials: true`
+
+## Rate Limiting
+
+- Login, registration, and password reset endpoints MUST have rate limiting (block after N failed attempts per IP within a time window)
+- Do NOT trust X-Forwarded-For for rate limiting unless behind a trusted reverse proxy
+
+## Payments
+
+- Stripe webhook endpoints MUST verify the signature using `stripe.Webhook.construct_event` (or equivalent) on every request. Reject any request with an invalid or missing signature
+- Webhook handlers MUST track processed event IDs and skip duplicates (idempotency)
+- Handle the full event lifecycle: payment_intent.succeeded, invoice.payment_failed, customer.subscription.deleted, customer.subscription.past_due
+
+## Error Handling
+
+- NEVER expose stack traces, SQL errors, file paths, or library names in API responses
+- Production error responses MUST return only generic messages: `{"error": "Something went wrong"}`
+- Full error details go to server-side logs only
+- Debug mode / development error pages MUST be disabled in production
+
+## Password Hashing
+
+- ALWAYS use bcrypt, Argon2, or scrypt for password hashing
+- NEVER use MD5, SHA-1, or plain SHA-256 for passwords
+
+## Dependencies
+
+- Before installing any package, verify it exists on the official registry with a reasonable download count and history
+- Pin exact versions in package.json / requirements.txt (no ^ or ~ in production)
+- Commit lock files (package-lock.json, poetry.lock, yarn.lock)

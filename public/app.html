@@ -1499,8 +1499,11 @@
 
         if (new URLSearchParams(window.location.search).has('test')) {
             runSpectorCoreTests().then((pass) => {
-                document.body.innerHTML = '<pre id="spector-test-output">' +
-                    JSON.stringify(window.__spectorTestResults, null, 2) + '</pre>';
+                document.body.replaceChildren();
+                const pre = document.createElement('pre');
+                pre.id = 'spector-test-output';
+                pre.textContent = JSON.stringify(window.__spectorTestResults, null, 2);
+                document.body.appendChild(pre);
                 document.title = pass ? 'SpectorTest: ALL PASS' : 'SpectorTest: FAIL';
             });
             return;

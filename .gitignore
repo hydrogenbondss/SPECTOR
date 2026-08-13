@@ -5,6 +5,11 @@ tests/.artifacts/
 # Node build tooling (CSS minification)
 node_modules/
 
+# Environment / secrets (SPECTOR has no runtime .env today — keep untracked if added)
+.env
+.env.*
+!.env.example
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db
@@ -15,3 +20,6 @@ NUL
 
 # Private operator data (beta tester PII — never commit)
 private/
+
+# Security audit working notes may include local scratch; keep plans/reports
+# Security audit artifacts are committed; never put real secrets in them.

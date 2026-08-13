@@ -316,8 +316,11 @@
 
         if (new URLSearchParams(window.location.search).has('test')) {
             runSayCoreTests().then((pass) => {
-                document.body.innerHTML = '<pre id="say-test-output">' +
-                    JSON.stringify(window.__sayTestResults, null, 2) + '</pre>';
+                document.body.replaceChildren();
+                const pre = document.createElement('pre');
+                pre.id = 'say-test-output';
+                pre.textContent = JSON.stringify(window.__sayTestResults, null, 2);
+                document.body.appendChild(pre);
                 document.title = pass ? 'SayTest: ALL PASS' : 'SayTest: FAIL';
             });
         } else if (document.readyState === 'loading') {

@@ -246,12 +246,21 @@
 
     function el(id) { return document.getElementById(id); }
 
+    function escapeHtml(str) {
+        return String(str == null ? '' : str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function fillRatings() {
         document.querySelectorAll('.beta-rating-options').forEach(function (wrap) {
             var name = wrap.getAttribute('data-name');
             var html = '';
             for (var i = 1; i <= 5; i++) {
-                html += '<label><input type="radio" name="' + name + '" value="' + i + '"> ' + i + '</label>';
+                html += '<label><input type="radio" name="' + escapeHtml(name) + '" value="' + i + '"> ' + i + '</label>';
             }
             if (name === 'readability') {
                 html += '<label><input type="radio" name="readability" value="n/a"> N/A</label>';
@@ -263,15 +272,17 @@
     function renderChecklist(items) {
         var root = el('checklist-root');
         root.innerHTML = items.map(function (item) {
+            var id = escapeHtml(item.id);
+            var label = escapeHtml(item.label);
             return (
-                '<article class="beta-check-item" data-id="' + item.id + '">' +
-                    '<p class="beta-check-label"><span class="beta-check-id">' + item.id + '</span> ' + item.label + '</p>' +
-                    '<div class="beta-check-actions" role="group" aria-label="' + item.id + ' result">' +
-                        '<label><input type="radio" name="check-' + item.id + '" value="completed"> Completed</label>' +
-                        '<label><input type="radio" name="check-' + item.id + '" value="could-not-complete"> Could not complete</label>' +
+                '<article class="beta-check-item" data-id="' + id + '">' +
+                    '<p class="beta-check-label"><span class="beta-check-id">' + id + '</span> ' + label + '</p>' +
+                    '<div class="beta-check-actions" role="group" aria-label="' + id + ' result">' +
+                        '<label><input type="radio" name="check-' + id + '" value="completed"> Completed</label>' +
+                        '<label><input type="radio" name="check-' + id + '" value="could-not-complete"> Could not complete</label>' +
                     '</div>' +
-                    '<label class="beta-check-notes-label" for="note-' + item.id + '">Notes <span class="beta-optional">(optional)</span></label>' +
-                    '<input class="beta-check-notes" id="note-' + item.id + '" type="text" autocomplete="off">' +
+                    '<label class="beta-check-notes-label" for="note-' + id + '">Notes <span class="beta-optional">(optional)</span></label>' +
+                    '<input class="beta-check-notes" id="note-' + id + '" type="text" autocomplete="off">' +
                 '</article>'
             );
         }).join('');
@@ -317,7 +328,9 @@
         el('meta-protocol').textContent = protocol.protocolLabel;
         el('meta-honesty').textContent = protocol.honesty;
 
-        el('beta-steps').innerHTML = protocol.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('');
+        el('beta-steps').innerHTML = protocol.steps.map(function (s) {
+            return '<li>' + escapeHtml(s) + '</li>';
+        }).join('');
         renderChecklist(protocol.checklist);
 
         el('fb-tester-id').value = record.id;

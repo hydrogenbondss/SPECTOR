@@ -20,7 +20,7 @@ Static site, no backend, no server. Checkout is Paddle's own **overlay**
   sandbox token can never accidentally behave as if it were live.
 - No backend to validate a purchase, so `checkout.completed` just sets
   `localStorage.spector_pro` directly. The “unlock on another device” box
-  accepts a Paddle transaction id (`txn_…`) or any saved token ≥ 8 chars —
+  accepts a Paddle transaction id (`txn_…`, length ≥ 12) —
   honor-system, same as the checkout flag. Spoofable via DevTools — known,
   accepted. Real enforcement would mean a backend against Paddle’s
   Transactions API — not planned, not needed yet.

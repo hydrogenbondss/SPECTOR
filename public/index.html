@@ -280,6 +280,7 @@
                 <textarea name="message" placeholder="Notes (optional)" rows="2"></textarea>
                 <button type="submit">Apply as hardware tester</button>
             </form>
+            <p id="beta-status" class="form-status" hidden></p>
             <div id="beta-success" style="display:none;color:var(--accent);font-weight:600;margin-top:16px;">Thanks — we'll write from hello@spectorlabs.io.</div>
         </section>
 
@@ -515,6 +516,36 @@
             return d.innerHTML;
         }
 
+        const SCRIPT_UPLOAD_MAX_BYTES = 200 * 1024;
+
+        function loadScriptFile(file) {
+            const textarea = document.getElementById('script-input');
+            if (!file || !textarea) return;
+            const nameOk = /\.txt$/i.test(file.name || '');
+            const typeOk = !file.type || /^text\//i.test(file.type) || file.type === 'application/json';
+            if (!nameOk && !typeOk) {
+                alert('Please upload a plain .txt script file.');
+                return;
+            }
+            if (file.size > SCRIPT_UPLOAD_MAX_BYTES) {
+                alert('Script files must be 200 KB or smaller.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const text = String(event.target.result || '');
+                if (/[\x00-\x08\x0E-\x1F]/.test(text.slice(0, 4096))) {
+                    alert('That file does not look like plain text.');
+                    return;
+                }
+                textarea.value = text;
+                updateScriptMeta();
+                const titleEl = document.getElementById('script-title');
+                if (titleEl && !titleEl.value) titleEl.value = file.name.replace(/\.txt$/i, '');
+            };
+            reader.readAsText(file);
+        }
+
         function initFileUpload() {
             const fileArea = document.getElementById('file-area');
             const fileInput = document.getElementById('file-input');
@@ -523,34 +554,14 @@
 
             fileArea.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        textarea.value = event.target.result;
-                        updateScriptMeta();
-                        const titleEl = document.getElementById('script-title');
-                        if (!titleEl.value) titleEl.value = file.name.replace(/\.txt$/i, '');
-                    };
-                    reader.readAsText(file);
-                }
+                loadScriptFile(e.target.files[0]);
             });
             fileArea.addEventListener('dragover', (e) => { e.preventDefault(); fileArea.classList.add('dragover'); });
             fileArea.addEventListener('dragleave', () => fileArea.classList.remove('dragover'));
             fileArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 fileArea.classList.remove('dragover');
-                const file = e.dataTransfer.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        textarea.value = event.target.result;
-                        updateScriptMeta();
-                        const titleEl = document.getElementById('script-title');
-                        if (!titleEl.value) titleEl.value = file.name.replace(/\.txt$/i, '');
-                    };
-                    reader.readAsText(file);
-                }
+                loadScriptFile(e.dataTransfer.files[0]);
             });
         }
 
@@ -887,6 +898,20 @@
             e.preventDefault();
             const form = e.target;
             const success = document.getElementById('beta-success');
+            const status = document.getElementById('beta-status');
+            const RATE_KEY = 'spector_beta_submit_at';
+            const WINDOW_MS = 60 * 1000;
+            try {
+                const last = Number(localStorage.getItem(RATE_KEY) || 0);
+                if (last && Date.now() - last < WINDOW_MS) {
+                    if (status) {
+                        status.hidden = false;
+                        status.classList.add('form-status-error');
+                        status.textContent = 'Please wait a minute before submitting again.';
+                    }
+                    return;
+                }
+            } catch {}
             const formData = new FormData(form);
             try {
                 const response = await fetch(form.action, {
@@ -897,7 +922,10 @@
                 if (response.ok) {
                     form.style.display = 'none';
                     success.style.display = 'block';
-                    try { localStorage.setItem('spector_beta_email', formData.get('email')); } catch {}
+                    try {
+                        localStorage.setItem('spector_beta_email', formData.get('email'));
+                        localStorage.setItem(RATE_KEY, String(Date.now()));
+                    } catch {}
                     form.reset();
                 } else {
                     submitFallback(formData, 'Spector Beta Request');

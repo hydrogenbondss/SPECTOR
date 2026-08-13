@@ -66,9 +66,10 @@
 
     function activateLicenseKey(key) {
         var trimmed = (key || '').trim();
-        // Honor-system restore: accept Paddle transaction ids (txn_…) or any
-        // saved token ≥ 8 chars. No server validation on this static site.
-        if (trimmed.length < 8) {
+        // Honor-system restore on a static site (no Transactions API). Require a
+        // Paddle-shaped txn_ id so random short strings cannot unlock Pro.
+        // Still spoofable via DevTools / fabricated txn_ strings — accepted.
+        if (!/^txn_[A-Za-z0-9]+$/i.test(trimmed) || trimmed.length < 12) {
             return { ok: false, message: 'Paste the transaction id from your Paddle receipt (starts with txn_).' };
         }
         setPro(trimmed);

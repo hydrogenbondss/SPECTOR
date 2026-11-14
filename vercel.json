@@ -6,10 +6,7 @@
     { "source": "/teleprompter-for-viture", "destination": "/teleprompter-for-viture.html" },
     { "source": "/ray-ban-meta-teleprompter", "destination": "/ray-ban-meta-teleprompter.html" },
     { "source": "/say", "destination": "/say.html" },
-    { "source": "/pricing", "destination": "/pricing.html" },
-    { "source": "/terms", "destination": "/terms.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/refund", "destination": "/refund.html" },
     { "source": "/beta/test", "destination": "/beta-test.html" }
   ],
   "headers": [
@@ -20,10 +17,10 @@
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(self)" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.paddle.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com https://formspree.io https://api.paddle.com https://sandbox-api.paddle.com; frame-src https://*.paddle.com https://*.paddle.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com https://formspree.io; frame-src 'none'; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'"
         }
       ]
     }

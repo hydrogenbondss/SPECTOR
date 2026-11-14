@@ -40,15 +40,10 @@
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Web, iOS, Android",
       "url": "https://www.spectorlabs.io",
-      "offers": [
-        { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free core" },
-        { "@type": "Offer", "price": "34", "priceCurrency": "USD", "name": "Spector Pro", "description": "One-time purchase" }
-      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free and open source" },
       "description": "A free, open-source teleprompter that paces from punctuation — no mic, no cloud. Rehearse on phone, perform eyes-up on smart glasses."
     }
     </script>
-    <script src="/js/paddle-pro.js"></script>
-    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (window.SpectorPro) SpectorPro.initPaddle({ onCompleted: function () { if (typeof reflectProState === 'function') reflectProState(); var s = document.getElementById('pro-status'); if (s) s.textContent = 'Pro activated ✓ — thank you!'; } });"></script>
 </head>
 <body class="landing">
 
@@ -62,7 +57,6 @@
         </a>
         <div class="nav-links" id="nav-links">
             <a href="#features">Product</a>
-            <a href="/pricing">Pricing</a>
             <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge hidden" id="gh-stars"></span></a>
             <a href="app.html" class="nav-cta" data-quick-start>Try Spector free</a>
         </div>
@@ -142,7 +136,7 @@
                         <div id="script-meta" class="script-meta">
                             <span id="word-count">0 words</span>
                             <span>·</span>
-                            <span>~<span id="est-minutes">0</span> min</span>
+                            <span id="est-duration">≈0:00 at Normal</span>
                         </div>
 
                         <div class="cue-list" id="cue-list"></div>
@@ -174,8 +168,8 @@
                         </div>
                         <p class="syntax-hint">Supports <code>**emphasis**</code>, <code>[pause]</code> / <code>[pause:3s]</code>, and <code>## Section</code>.</p>
                         <div class="file-upload" id="file-area">
-                            Drop .txt or click to browse
-                            <input type="file" id="file-input" accept=".txt" style="display:none;">
+                            Drop .txt or .md, or click to browse
+                            <input type="file" id="file-input" accept=".txt,.md" style="display:none;">
                         </div>
                     </div>
                 </details>
@@ -225,21 +219,11 @@
             <p class="matrix-note">Not listed? <a href="#beta">Tell us what you have</a> — we test before we claim it.</p>
         </section>
 
-        <!-- PRICING TEASER -->
+        <!-- FREE & OPEN SOURCE -->
         <section class="support-section" id="support">
-            <p class="kicker">Pricing</p>
-            <h2>Free core. Pro is $34 — once.</h2>
-            <p>Pro keeps 50 rehearsals on this device instead of 5, and copies your script with the stats after a run — <strong>one payment, never a subscription</strong>. Checkout via Paddle. <a href="/pricing">Full pricing</a>.</p>
-            <div class="support-cta">
-                <button type="button" id="go-pro-btn" class="btn-primary">Buy Spector Pro — $34, once</button>
-            </div>
-            <div class="license-box">
-                <label class="license-label" for="license-key">Paid on another device?</label>
-                <input type="text" id="license-key" placeholder="Paste transaction id from your receipt" autocomplete="off" spellcheck="false" aria-describedby="license-hint">
-                <button type="button" id="activate-pro" class="btn-secondary">Unlock here</button>
-            </div>
-            <p id="license-hint" class="license-hint">Pro unlocks on the browser where you check out. Paste your Paddle transaction id (starts with <code>txn_</code>) to unlock on this one.</p>
-            <p id="pro-status" class="pro-status" role="status"></p>
+            <p class="kicker">Free &amp; open source</p>
+            <h2>Free — the whole thing.</h2>
+            <p>Every feature, every rehearsal, on every device: no account, no watermark, no trial. Spector is MIT-licensed — read the code, file issues, or build on it <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">on GitHub</a>.</p>
         </section>
 
         <!-- FAQ — three only -->
@@ -256,19 +240,19 @@
                 <details class="faq-item">
                     <summary>Is my script private?</summary>
                     <div class="faq-answer">
-                        <p><strong>Free core, forever. No account, no cloud, nothing uploaded — ever.</strong> Scripts stay in your browser.</p>
+                        <p><strong>Spector is free and open source. No account, no cloud, nothing uploaded — ever.</strong> Scripts stay in your browser.</p>
                     </div>
                 </details>
                 <details class="faq-item">
                     <summary>What does it cost?</summary>
                     <div class="faq-answer">
-                        <p>Core is free forever. Spector Pro is <strong>$34 once</strong> via Paddle — 50 rehearsals kept on this device instead of 5, plus copying your script with its stats. Never a subscription. Details on <a href="/pricing">Pricing</a>.</p>
+                        <p>Nothing. Spector is free and open source (MIT) — the complete teleprompter, no account, watermark, or trial. The code is public on <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener">GitHub</a>.</p>
                     </div>
                 </details>
             </div>
         </section>
 
-        <!-- BETA — hardware testers only; below Buy Pro so it does not compete -->
+        <!-- BETA — hardware testers only -->
         <section class="beta-section" id="beta">
             <p class="kicker">Hardware beta</p>
             <h2>Have XREAL, Viture, or Ray-Ban Meta?</h2>
@@ -289,7 +273,7 @@
         </section>
 
         <footer class="site-footer">
-            <p class="footer-promise">Free core, forever. No account, no cloud, nothing uploaded — ever.</p>
+            <p class="footer-promise">Free and open source. No account, no cloud, nothing uploaded — ever.</p>
             <p class="footer-changelog"><a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · updated <a id="last-updated" href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener">recently</a></p>
             <div class="footer-columns">
                 <div class="footer-col footer-brand-col">
@@ -299,7 +283,6 @@
                 <div class="footer-col">
                     <p class="footer-heading">Product</p>
                     <a href="#try">Try it</a>
-                    <a href="/pricing">Pricing</a>
                     <a href="#beta">Beta</a>
                     <a href="/say" title="Switch-scan AAC composer">Say (AAC)</a>
                 </div>
@@ -317,72 +300,16 @@
                 </div>
                 <div class="footer-col">
                     <p class="footer-heading">Legal</p>
-                    <a href="/terms">Terms</a>
                     <a href="/privacy">Privacy</a>
-                    <a href="/refund">Refunds</a>
                 </div>
             </div>
         </footer>
 
     </main>
 
+    <script src="spector-core.js"></script>
     <script>
         const STORAGE_KEY = 'spector_scripts_v1';
-
-        // ── Monetization (shared SpectorPro + Paddle overlay) ─────────────────
-        // See public/js/paddle-pro.js and docs/PADDLE.md.
-        function isPro() {
-            return window.SpectorPro ? SpectorPro.isPro() : false;
-        }
-
-        function reflectProState() {
-            const status = document.getElementById('pro-status');
-            const goPro = document.getElementById('go-pro-btn');
-            if (isPro()) {
-                if (goPro) { goPro.textContent = 'Spector Pro ✓'; goPro.classList.add('owned'); goPro.disabled = true; }
-                if (status) { status.textContent = 'Pro is active on this device ✓'; status.classList.add('active'); }
-                document.body.classList.add('is-pro');
-            }
-        }
-
-        function initSupport() {
-            const goPro = document.getElementById('go-pro-btn');
-            const activate = document.getElementById('activate-pro');
-            const keyInput = document.getElementById('license-key');
-            const status = document.getElementById('pro-status');
-
-            if (window.SpectorPro) {
-                SpectorPro.initPaddle({
-                    onCompleted() {
-                        reflectProState();
-                        if (status) status.textContent = 'Pro activated ✓ — thank you!';
-                    },
-                });
-            }
-
-            if (goPro) goPro.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (isPro()) return;
-                if (window.SpectorPro && SpectorPro.openCheckout()) return;
-                if (status) status.textContent = 'Checkout couldn’t load — try again, or email hello@spectorlabs.io.';
-            });
-
-            if (activate && keyInput) activate.addEventListener('click', () => {
-                const result = window.SpectorPro
-                    ? SpectorPro.activateLicenseKey(keyInput.value)
-                    : { ok: false, message: 'Activation unavailable.' };
-                if (!result.ok) {
-                    if (status) status.textContent = result.message;
-                    return;
-                }
-                keyInput.value = '';
-                reflectProState();
-                if (status) status.textContent = result.message;
-            });
-
-            reflectProState();
-            window.addEventListener('spector:pro', reflectProState);
-        }
 
         function getLibrary() {
             try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -538,10 +465,14 @@
                     alert('That file does not look like plain text.');
                     return;
                 }
-                textarea.value = text;
+                // .md imports are flattened to plain script text by the shared
+                // parser (SpectorCore.markdownToScript); cue syntax survives.
+                textarea.value = /\.md$/i.test(file.name)
+                    ? SpectorCore.markdownToScript(text)
+                    : text;
                 updateScriptMeta();
                 const titleEl = document.getElementById('script-title');
-                if (titleEl && !titleEl.value) titleEl.value = file.name.replace(/\.txt$/i, '');
+                if (titleEl && !titleEl.value) titleEl.value = file.name.replace(/\.(txt|md)$/i, '');
             };
             reader.readAsText(file);
         }
@@ -811,15 +742,30 @@
             });
         }
 
+        function playerPrefs() {
+            try { return JSON.parse(localStorage.getItem('spector_prefs_v1')) || {}; } catch { return {}; }
+        }
+
         function updateScriptMeta() {
             const textarea = document.getElementById('script-input');
             const text = textarea.value.trim();
-            const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
-            const estMinutes = words > 0 ? Math.max(1, Math.round(words / 140)) : 0;
+            const words = SpectorCore.countSpokenWords(text);
             const countEl = document.getElementById('word-count');
-            const minEl = document.getElementById('est-minutes');
             if (countEl) countEl.textContent = `${words} words`;
-            if (minEl) minEl.textContent = estMinutes;
+            // Estimate reuses the engine (chunk + getMs sum); mode/speed come
+            // from the player's saved prefs — the settings the launched
+            // player will actually use — and update live via the storage
+            // event listener bound in init().
+            const prefs = playerPrefs();
+            const speed = prefs.speed || 'normal';
+            const mode = prefs.mode || 'focus';
+            const estEl = document.getElementById('est-duration');
+            if (estEl) {
+                const ms = text ? SpectorCore.estimateDurationMs(text, mode, speed) : 0;
+                const totalSec = Math.round(ms / 1000);
+                const mmss = `${Math.floor(totalSec / 60)}:${String(totalSec % 60).padStart(2, '0')}`;
+                estEl.textContent = `≈${mmss} at ${speed[0].toUpperCase() + speed.slice(1)}`;
+            }
             renderCueList();
         }
 
@@ -1228,10 +1174,12 @@
             initMagneticCTA();
             initMobileNav();
             initNavScroll();
-            initSupport();
 
             const textarea = document.getElementById('script-input');
             if (textarea) textarea.addEventListener('input', updateScriptMeta);
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'spector_prefs_v1') updateScriptMeta();
+            });
 
             const betaForm = document.getElementById('beta-form');
             if (betaForm) betaForm.addEventListener('submit', handleBetaSubmit);
@@ -1294,11 +1242,5 @@
         }
     </script>
 
-    <!-- Vercel Web Analytics (enable "Web Analytics" in the Vercel project dashboard for data to flow) -->
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script defer src="/analytics.js"></script>
 </body>
 </html>

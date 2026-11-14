@@ -23,3 +23,7 @@ private/
 
 # Security audit working notes may include local scratch; keep plans/reports
 # Security audit artifacts are committed; never put real secrets in them.
+
+# Python bytecode caches
+__pycache__/
+*.pyc

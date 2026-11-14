@@ -100,7 +100,7 @@ Spector on the lens yet, so phone rehearsal is the answer there too. If your dev
 The web player is fully usable today. What we need now is validation on real
 hardware: temple-button controls, HUD readability, and Comfort mode on actual
 devices (Ray-Ban Meta, XREAL, Viture, Brilliant Labs, Even Realities…).
-Founding testers get Spector Pro free for life.
+Founding testers shape the hardware roadmap and get early access to glasses features as they land.
 
 **Sign up on [the site](https://spectorlabs.io/#beta)** or email
 [hello@spectorlabs.io](mailto:hello@spectorlabs.io).
@@ -109,7 +109,7 @@ Founding testers get Spector Pro free for life.
 
 ## For developers
 
-- `SpectorCore` (in `public/app.html`) is the pure logic layer: `chunk()`, `getMs()`, `buildRehearsalAnalytics()`, `createMotion()`, Kalman filter, cue handling.
+- `SpectorCore` (in `public/spector-core.js`, loaded by both `app.html` and `index.html`) is the pure logic layer: `chunk()`, `getMs()`, `buildRehearsalAnalytics()`, `createMotion()`, Kalman filter, cue handling — the editor's duration estimate and markdown import reuse the same math.
 - Zero dependencies, static hosting only. The whole app is `public/`.
 - In-browser test harness: open `app.html?test` (expects `SpectorTest: ALL PASS`).
 - Full verifier: `python tests/run_verification.py` (spins up a local server and exercises the PWA/service-worker/test paths).

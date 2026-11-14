@@ -2482,6 +2482,19 @@ body.focus-mode .chunk.active {
     font-weight: 600;
 }
 
+/* Word-level read-along highlight (visual layer only — never affects
+   chunk advance timing). Driven by a rAF loop in app.html. */
+.chunk .w { transition: color 120ms linear; }
+.chunk .w.wh-on {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-border);
+    text-underline-offset: 0.18em;
+}
+.chunk .cue-emphasis .w.wh-on {
+    font-weight: 600;
+}
+
 .cue-pause {
     display: inline-block;
     margin: 0 4px;
@@ -2505,19 +2518,6 @@ body.glasses .chunk.active .cue-hold {
     text-decoration: underline;
     text-decoration-color: rgba(255, 255, 255, 0.32);
     text-underline-offset: 0.18em;
-}
-
-.export-pro-hint {
-    margin: 8px 0 0;
-    font-size: 12px;
-    color: var(--text-dim);
-    text-align: center;
-    width: 100%;
-}
-
-.export-pro-hint a,
-.export-pro-hint .link-btn {
-    color: var(--accent-text);
 }
 
 .chunk.cue-pause-chunk {
@@ -3963,59 +3963,6 @@ body.say-page {
     margin: 24px 0 18px;
 }
 
-.license-box {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 6px 0;
-}
-
-.license-label {
-    font-size: 13px;
-    color: var(--text-dim);
-}
-
-#license-key {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 12px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 13px;
-    min-width: 220px;
-}
-
-#license-key:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.pro-status {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin: 12px 0 0;
-    min-height: 1.1em;
-}
-
-.pro-status.active {
-    color: var(--success);
-    font-weight: var(--weight-semibold);
-}
-
-#go-pro-btn.owned {
-    opacity: 0.85;
-    pointer-events: none;
-}
-
-.support-note {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 16px;
-}
-
 /* ─── SEO device landing pages ─── */
 .seo-nav {
     display: flex;
@@ -4035,7 +3982,7 @@ body.say-page {
 .seo-crosslinks a { color: var(--text-muted); }
 .seo-crosslinks a:hover { color: var(--accent); }
 
-/* ─── Legal pages (terms/privacy/refund) ─── */
+/* ─── Legal pages (privacy) ─── */
 .legal-body {
     max-width: 720px;
     margin: 0 auto 40px;
@@ -4125,31 +4072,6 @@ body.say-page {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-}
-
-/* Pricing states */
-.pricing-value {
-    margin: 0 0 var(--space-5);
-    font-size: 32px;
-    font-weight: var(--weight-black);
-    letter-spacing: 0;
-}
-
-.pricing-value-planned {
-    margin-bottom: var(--space-1);
-    color: var(--text-muted);
-    font-size: 24px;
-}
-
-.pricing-note { margin-top: var(--space-5); }
-.pricing-note-lead { margin: 0 0 var(--space-5); }
-
-.pricing-page .hero-section {
-    padding-bottom: var(--space-8);
-}
-
-.pricing-page .comparison-section {
-    padding-top: var(--space-8);
 }
 
 [hidden] { display: none !important; }
@@ -4296,14 +4218,12 @@ body.say-page {
 /* Editorial product system: quiet chrome, strong type, one dominant surface. */
 
 .landing .container,
-.pricing-page .container,
 .device-detail-page .container,
 .legal-page.container {
     max-width: 1232px;
 }
 
 .landing .site-nav,
-.pricing-page .seo-nav,
 .device-detail-page .seo-nav {
     top: 0;
     left: 0;
@@ -4380,8 +4300,7 @@ body.say-page {
 }
 
 .landing .btn-primary,
-.device-detail-page .btn-primary,
-.pricing-page .btn-primary {
+.device-detail-page .btn-primary {
     color: var(--cta-text);
     background: var(--cta-bg);
     border-color: var(--cta-bg);
@@ -4389,8 +4308,7 @@ body.say-page {
 }
 
 .landing .btn-primary:hover,
-.device-detail-page .btn-primary:hover,
-.pricing-page .btn-primary:hover {
+.device-detail-page .btn-primary:hover {
     color: var(--cta-text);
     background: var(--cta-bg-hover);
     border-color: var(--cta-bg-hover);
@@ -4400,9 +4318,7 @@ body.say-page {
 .landing .btn-primary,
 .landing .btn-secondary,
 .device-detail-page .btn-primary,
-.device-detail-page .btn-secondary,
-.pricing-page .btn-primary,
-.pricing-page .btn-secondary {
+.device-detail-page .btn-secondary {
     border-radius: var(--radius);
 }
 
@@ -4908,77 +4824,6 @@ body.say-page {
     .device-detail-page .feature-spec { grid-column: 2; }
 }
 
-/* Pricing is a factual ledger, not a pair of promotional cards. */
-.pricing-page .seo-nav { position: fixed; z-index: 1000; }
-.pricing-page .pricing-hero { max-width: 980px; padding-bottom: 96px; }
-.pricing-page .pricing-hero .hero-headline {
-    font-size: clamp(50px, 6vw, 78px);
-    font-weight: var(--weight-regular);
-}
-
-.pricing-ledger {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 0;
-    border-top: 1px solid var(--border-hover);
-}
-
-.pricing-plan {
-    display: grid;
-    grid-template-columns: minmax(180px, 0.7fr) 140px minmax(220px, 1fr) minmax(240px, 1.1fr);
-    gap: var(--space-8);
-    align-items: start;
-    padding: var(--space-12) 0;
-    border-bottom: 1px solid var(--border-hover);
-}
-
-.pricing-plan-name span {
-    display: block;
-    margin-bottom: var(--space-3);
-    color: var(--text-dim);
-    font-size: 11px;
-    text-transform: uppercase;
-}
-
-.pricing-plan-name h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: var(--weight-medium);
-}
-
-.pricing-plan .pricing-value { margin: 0; font-weight: var(--weight-medium); }
-.pricing-plan-summary { margin: 0; color: var(--text-muted); }
-.pricing-plan ul {
-    margin: 0;
-    padding: 0;
-    color: var(--text-muted);
-    list-style: none;
-}
-
-.pricing-plan li { padding: 7px 0; border-bottom: 1px solid var(--border); }
-.pricing-plan li:last-child { border-bottom: 0; }
-.pricing-plan .btn-primary,
-.pricing-plan .support-note { grid-column: 4; justify-self: start; }
-.pricing-page .faq-section { padding-top: 120px; }
-.pricing-page .section-header { margin-left: 0; text-align: left; }
-
-@media (max-width: 900px) {
-    .pricing-plan { grid-template-columns: 1fr 1fr; }
-    .pricing-plan-summary { grid-column: 1; }
-    .pricing-plan ul { grid-column: 2; grid-row: 1 / span 3; }
-    .pricing-plan .btn-primary,
-    .pricing-plan .support-note { grid-column: 1; }
-}
-
-@media (max-width: 620px) {
-    .pricing-page .pricing-hero { padding: 128px 0 64px; }
-    .pricing-page .pricing-hero .hero-headline { font-size: clamp(44px, 12vw, 60px); }
-    .pricing-plan { grid-template-columns: 1fr; gap: var(--space-5); }
-    .pricing-plan ul,
-    .pricing-plan .btn-primary,
-    .pricing-plan .support-note { grid-column: 1; grid-row: auto; }
-}
-
 /* Legal pages share the same quiet masthead and readable measure. */
 .legal-shell .seo-nav {
     position: fixed;
@@ -5046,7 +4891,6 @@ body.say-page {
 .section-header,
 .footer-columns,
 .footer-col,
-.pricing-plan > *,
 .device-proof-band > * {
     min-width: 0;
 }
@@ -5186,7 +5030,6 @@ form[aria-busy="true"] button[type="submit"]::after {
     }
 
     .landing .site-nav,
-    .pricing-page .seo-nav,
     .device-detail-page .seo-nav,
     .legal-shell .seo-nav {
         padding-right: var(--space-4);

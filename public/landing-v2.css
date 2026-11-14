@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Spector landing v2 — structural composition (homepage + pricing skin).
+   Spector landing v2 — structural composition (homepage + light-hero page skins).
    Tokens in :root (style.css). Light canvas, ink CTAs, teal live-only.
    ========================================================================== */
 
@@ -381,7 +381,7 @@ body.landing .hero-bridge {
     background: linear-gradient(to bottom, #0A0A0C 0%, var(--bg) 100%);
 }
 
-/* Pricing (and any light hero) keeps the brochure hero */
+/* Light-hero pages (legal, etc.) keep the brochure hero */
 body.landing .hero-section {
     max-width: 720px; margin: 0 auto;
     padding: 64px 0 0; text-align: left;
@@ -684,45 +684,13 @@ body.landing .tips-section form button {
 }
 body.landing .tips-section form button:hover { background: var(--cta-bg-hover); }
 
-body.landing .pricing-license { margin-top: 16px; }
-body.landing .pricing-plan .btn-primary { width: 100%; }
-body.landing .btn-primary.owned,
-body.landing button.btn-primary.owned {
-    opacity: 0.85;
-    cursor: default;
-}
-
 /* --------------------------------------------------------------------------
-   PRICING TEASER / FAQ / BETA
+   FREE & OPEN SOURCE NOTE / FAQ / BETA
    -------------------------------------------------------------------------- */
 body.landing .support-section {
     text-align: left; background: none; border: none;
     padding: 88px 0 0; max-width: 640px; margin: 0 auto;
 }
-body.landing .support-cta { display: flex; margin: 24px 0 0; }
-body.landing .license-box {
-    margin-top: 20px;
-    background: none; border: none; box-shadow: none;
-    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0;
-}
-body.landing .license-box input {
-    flex: 1; min-width: 180px;
-    background: #fff; border: 1px solid var(--hair2); color: var(--t1);
-    border-radius: 8px; padding: 10px 12px;
-}
-body.landing .license-label { color: var(--t4); font-size: 12.5px; width: 100%; }
-body.landing .license-hint {
-    margin: 8px 0 0;
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: var(--t4);
-    max-width: 36em;
-}
-body.landing .license-hint code {
-    font-size: 11.5px;
-    color: var(--t3);
-}
-body.landing .pro-status.active { color: var(--accent); }
 
 body.landing .faq-section,
 body.landing .band {
@@ -798,54 +766,7 @@ body.landing .footer-col a:hover { color: var(--t1); }
 body.landing .footer-brand-col p { color: var(--t4); }
 
 /* --------------------------------------------------------------------------
-   PRICING PAGE
-   -------------------------------------------------------------------------- */
-body.landing.pricing-page .seo-nav {
-    max-width: 1080px; margin: 0 auto; padding: 16px 28px;
-    background: var(--bg); border-bottom: 1px solid var(--hair2);
-}
-body.landing.pricing-page .nav-wordmark {
-    color: var(--t1); font-size: 12px; font-weight: 650; letter-spacing: .14em;
-}
-body.landing.pricing-page .nav-logo { width: 22px; height: 22px; border-radius: 0; }
-body.landing.pricing-page .pricing-hero {
-    padding-top: 112px; padding-bottom: 40px; max-width: 640px;
-}
-body.landing.pricing-page .pricing-hero .hero-headline {
-    font-size: clamp(2.4rem, 4.8vw, 3.5rem);
-}
-body.landing.pricing-page .pricing-ledger {
-    border-top: 1px solid var(--hair2); margin-top: 8px;
-}
-body.landing.pricing-page .pricing-plan {
-    border-bottom: 1px solid var(--hair2); padding: 40px 0; gap: 24px;
-}
-body.landing.pricing-page .pricing-plan-name span {
-    letter-spacing: .08em; font-weight: 550; color: var(--t4);
-}
-body.landing.pricing-page .pricing-plan-name h2 {
-    color: var(--t1); font-size: 22px; letter-spacing: -0.02em; margin: 0;
-}
-body.landing.pricing-page .pricing-value {
-    color: var(--t1); font-size: 40px; letter-spacing: -0.03em;
-}
-body.landing.pricing-page .pricing-once {
-    font-size: .45em; font-weight: 500; color: var(--t3);
-}
-body.landing.pricing-page .pricing-plan-summary {
-    color: var(--t3); font-size: 15px; line-height: 1.5;
-}
-body.landing.pricing-page .pricing-plan li {
-    color: var(--t3); border-bottom-color: var(--hair1); font-size: 14.5px;
-}
-body.landing.pricing-page .faq-section { padding-top: 64px; max-width: 640px; }
-body.landing.pricing-page .seo-crosslinks {
-    padding: 40px 0 0; text-align: left; color: var(--t4); font-size: 13px;
-}
-body.landing.pricing-page .seo-crosslinks a { color: var(--t3); }
-
-/* --------------------------------------------------------------------------
-   LEGAL + DEVICE PAGES — same nav/type language as pricing (page-scoped)
+   LEGAL + DEVICE PAGES — light-hero nav/type language (page-scoped)
    -------------------------------------------------------------------------- */
 body.landing.legal-shell .seo-nav,
 body.landing.device-detail-page .seo-nav {

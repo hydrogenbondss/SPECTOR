@@ -17,8 +17,6 @@
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=5" sizes="32x32">
     <link rel="icon" type="image/png" href="images/logo-mark.png?v=5" sizes="256x256">
     <link rel="apple-touch-icon" href="images/app-icon.png?v=5">
-    <script src="/js/paddle-pro.js"></script>
-    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async onload="if (window.SpectorPro) SpectorPro.initPaddle();"></script>
 </head>
 <body class="glasses player-loading">
 
@@ -50,6 +48,7 @@
                 <span class="customize-value" id="line-spacing-val">1.55</span>
             </div>
             <button class="toggle-chip" id="mirror-toggle" type="button" title="Flip text for camera/mirror setups">Mirror</button>
+            <button class="toggle-chip" id="word-highlight-toggle" type="button" title="Highlight the approximate current word while playing">Word highlight</button>
         </div>
 
         <div class="speed-presets">
@@ -155,7 +154,6 @@
             </div>
             <div class="end-export-block">
                 <button id="export-btn" class="btn-secondary">Copy script + stats</button>
-                <p id="export-pro-hint" class="export-pro-hint hidden">Copying needs Pro — <a href="/pricing">$34 once</a>, or <button type="button" id="export-buy-btn" class="link-btn">buy it here</button>.</p>
             </div>
             <div class="end-actions-quiet">
                 <button type="button" id="new-script-btn" class="link-btn">New script</button>
@@ -164,6 +162,7 @@
         </div>
     </div>
 
+    <script src="spector-core.js"></script>
     <script>
     /*
      * Spector player engine
@@ -185,318 +184,11 @@
      * for future glasses SDK / app store founding-developer submission.
      */
 
-    // ─── SpectorCore: pure logic layer (testable, portable) ───
-    class KalmanFilter {
-        constructor(processNoise = 0.0025, measurementNoise = 1.2) {
-            this.Q = processNoise;
-            this.R = measurementNoise;
-            this.P = 1;
-            this.X = 0;
-            this.K = 0;
-        }
-        update(measurement) {
-            this.P = this.P + this.Q;
-            this.K = this.P / (this.P + this.R);
-            this.X = this.X + this.K * (measurement - this.X);
-            this.P = (1 - this.K) * this.P;
-            return this.X;
-        }
-        reset() { this.X = 0; this.P = 1; }
-    }
+    // SpectorCore (pure logic: chunking, pacing, cues, analytics, motion
+    // lifecycle) lives in spector-core.js — shared with the landing page so
+    // the editor's duration estimate and markdown import reuse the exact
+    // engine math instead of duplicating it. Loaded via <script src> above.
 
-    // Placeholder for a decimal point mid-number (e.g. "3.5") so the sentence
-    // splitter below doesn't mistake it for a sentence terminator; restored
-    // after splitting. Null char is never legitimate script input.
-    const DECIMAL_PLACEHOLDER = '\u0000';
-
-    function splitSentences(text) {
-        const protectedText = (text || '').replace(/(\d)\.(\d)/g, `$1${DECIMAL_PLACEHOLDER}$2`);
-        const sentences = [];
-        // Trailing ["'”’)]* after the terminator keeps a closing quote/paren
-        // attached to the sentence it closes (`"Hello!" she said.` would
-        // otherwise orphan the closing " onto the front of the next sentence).
-        const regex = /[^.!?]+[.!?]+["'”’)]*/g;
-        let match;
-        let lastIndex = 0;
-        while ((match = regex.exec(protectedText)) !== null) {
-            sentences.push(match[0]);
-            lastIndex = regex.lastIndex;
-        }
-        const tail = protectedText.slice(lastIndex).trim();
-        if (tail) sentences.push(tail);
-        if (!sentences.length && protectedText.trim()) sentences.push(protectedText.trim());
-        const restored = sentences.map((s) => s.split(DECIMAL_PLACEHOLDER).join('.'));
-        return mergeDanglingEmphasis(restored);
-    }
-
-    // A sentence terminator inside a **bold** span (e.g. "**We can do better.**")
-    // gets split by the tokenizer, orphaning the closing ** in the next fragment.
-    // Re-attach it so the emphasis renders instead of showing literal asterisks.
-    function mergeDanglingEmphasis(parts) {
-        const out = [];
-        for (let i = 0; i < parts.length; i++) {
-            let cur = parts[i];
-            const unclosed = (cur.match(/\*\*/g) || []).length % 2 === 1;
-            if (unclosed && i + 1 < parts.length && /^\s*\*\*/.test(parts[i + 1])) {
-                cur += '**';
-                const rest = parts[i + 1].replace(/^\s*\*\*/, '');
-                if (rest.trim()) parts[i + 1] = rest;
-                else i++; // consumed a standalone "**"
-            }
-            out.push(cur);
-        }
-        return out;
-    }
-
-    const chunkStrategies = {
-        hybrid(text) {
-            const result = [];
-            splitSentences(text).forEach(sentence => {
-                const words = sentence.trim().split(/\s+/);
-                if (words.length <= 7) result.push(sentence.trim());
-                else for (let i = 0; i < words.length; i += 6)
-                    result.push(words.slice(i, i + 6).join(' '));
-            });
-            return result.filter(c => c.length > 0);
-        },
-        sentence(text) {
-            return splitSentences(text).map(s => s.trim()).filter(Boolean);
-        },
-        word(text) {
-            return text.trim().split(/\s+/).filter(Boolean);
-        }
-    };
-
-    const postChunkHooks = [];
-
-    function cuePauseMs(chunkText) {
-        const tagged = (chunkText || '').match(/\[pause:(\d+)s\]/i);
-        if (tagged) return parseInt(tagged[1], 10) * 1000;
-        if (/^\[pause\]$/i.test((chunkText || '').trim())) return 2800;
-        if (/\[pause\]/i.test(chunkText || '')) return 1800;
-        return 0;
-    }
-
-    // Word count for the WPM stat -- must exclude cue markup, or scripts using
-    // Spector's own [pause]/## Section syntax get an inflated, wrong avg WPM.
-    function countSpokenWords(text) {
-        return (text || '')
-            .replace(/^##[ \t]+[^\r\n]+$/gm, '')
-            .replace(/\[pause(?::\d+s)?\]/gi, '')
-            .replace(/\*\*/g, '')
-            .split(/\s+/)
-            .filter(Boolean)
-            .length;
-    }
-
-    function formatChunkHtml(chunkText) {
-        let html = (chunkText || '')
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        html = html
-            .replace(/\*\*([^*]+)\*\*/g, '<span class="cue-emphasis">$1</span>')
-            .replace(/\[emphasis\]/gi, '')
-            .replace(/\[pause(?::\d+s)?\]/gi, '<span class="cue-pause" aria-hidden="true">⏸</span>')
-            .replace(/\[section:([^\]]+)\]/g, '$1');
-        // Visual receipt of punctuation pacing (engine already uses these marks).
-        html = html.replace(/,(?!\d)/g, '<span class="cue-breathe" aria-hidden="true">,</span>');
-        html = html.replace(/([.!?]+)(["'”’)]*)$/g, '<span class="cue-hold" aria-hidden="true">$1</span>$2');
-        return html;
-    }
-
-    function hybridChunkWithCues(text) {
-        // Capturing group keeps each matched pause tag (with its duration, if any)
-        // in the split result instead of discarding it — a plain .split() on the
-        // non-capturing version silently drops "[pause:Ns]" down to a bare "[pause]".
-        // A "## Section" header line is captured the same way, then converted to
-        // its own atomic [section:Label] chunk below — it must never be merged
-        // into surrounding sentences by the hybrid chunker.
-        const segments = text.split(/(\[pause(?::\d+s)?\]|^##[ \t]+[^\r\n]+$)/im);
-        const out = [];
-        segments.forEach((seg) => {
-            if (/^\[pause(?::\d+s)?\]$/i.test(seg)) {
-                out.push(seg);
-                return;
-            }
-            const headerMatch = seg.match(/^##[ \t]+([^\r\n]+)$/);
-            if (headerMatch) {
-                out.push(`[section:${headerMatch[1].trim()}]`);
-                return;
-            }
-            const trimmed = seg.trim();
-            if (trimmed) out.push(...chunkStrategies.hybrid(trimmed));
-        });
-        return out.length ? out : [''];
-    }
-
-    function computeMs(mode, speed, chunkText) {
-        const text = chunkText || '';
-        const taggedOnly = text.trim().match(/^\[pause:(\d+)s\]$/i);
-        if (taggedOnly) return Math.max(1000, parseInt(taggedOnly[1], 10) * 1000);
-        if (/^\[pause\]$/i.test(text.trim())) return 2800;
-
-        let msPerWord = 380;
-        if (mode === 'comfort') msPerWord = 400;
-        if (mode === 'presentation') msPerWord = 460;
-
-        const words = Math.max(1, countSpokenWords(text));
-        let duration = words * msPerWord;
-        if (speed === 'slow') duration *= 1.25;
-        if (speed === 'fast') duration *= 0.75;
-
-        // Additive holds — avoid stacking multiplicative punctuation into long delays.
-        if (/[.!?]$/.test(text)) duration += 350;
-        if (/,/.test(text)) duration += 150;
-        if (/\*\*[^*]+\*\*/.test(text)) duration += 120;
-
-        duration += cuePauseMs(text);
-        return Math.max(800, Math.round(duration));
-    }
-
-    function buildRehearsalAnalytics(timings) {
-        if (!timings.length) {
-            return { consistency: 0, hesitations: 0, slowestLabel: '—', slowestRatio: 0 };
-        }
-        let hesitations = 0;
-        let slowest = { i: 0, ratio: 0, text: '' };
-        const ratios = timings.map((t) => {
-            const expected = Math.max(1, t.expectedMs);
-            const ratio = t.actualMs / expected;
-            if (t.hesitated) hesitations++;
-            if (ratio > slowest.ratio) {
-                slowest = { i: t.index, ratio, text: (t.text || '').slice(0, 48) };
-            }
-            return ratio;
-        });
-        const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-        const variance = ratios.reduce((a, r) => a + Math.pow(r - mean, 2), 0) / ratios.length;
-        const consistency = Math.max(0, Math.min(100, Math.round(100 - Math.sqrt(variance) * 28)));
-        return {
-            consistency,
-            hesitations,
-            slowestLabel: slowest.text ? `"${slowest.text}"` : '—',
-            slowestRatio: slowest.ratio,
-        };
-    }
-
-    // Per-section pacing breakdown: groups chunk timings by which `## Section`
-    // bookmark they fall under and re-runs buildRehearsalAnalytics on each
-    // group. A section's own header chunk is excluded from every group (it's
-    // a label, not rehearsal content). Content before the first bookmark has
-    // no home section and is left out of the breakdown, though it's still
-    // counted in the overall run analytics.
-    function buildSectionAnalytics(timings, bookmarks) {
-        if (!bookmarks || !bookmarks.length || !timings || !timings.length) return [];
-        const sorted = [...bookmarks].sort((a, b) => a.index - b.index);
-        return sorted.map((section, i) => {
-            const nextIndex = i + 1 < sorted.length ? sorted[i + 1].index : Infinity;
-            const sectionTimings = timings.filter((t) => t.index > section.index && t.index < nextIndex);
-            if (!sectionTimings.length) return null;
-            const analytics = buildRehearsalAnalytics(sectionTimings);
-            return { label: section.label, chunkCount: sectionTimings.length, ...analytics };
-        }).filter(Boolean);
-    }
-
-    function computeSpatialDeltas(filteredGamma, filteredBeta, lastGamma, lastBeta, mode) {
-        const sensitivity = mode === 'comfort' ? 0.19 : 0.11;
-        const rotationAmount = mode === 'comfort' ? 0.11 : 0.055;
-        const scaleAmount = mode === 'comfort' ? 0.00042 : 0.00026;
-        return {
-            deltaX: (filteredGamma - lastGamma) * sensitivity,
-            deltaY: (filteredBeta - lastBeta) * sensitivity,
-            deltaRotate: (filteredGamma - lastGamma) * rotationAmount,
-            deltaScale: 1 + ((filteredGamma - lastGamma) * scaleAmount)
-        };
-    }
-
-    function estimateWpm(wordCount, elapsedMs) {
-        if (!elapsedMs || elapsedMs < 1000) return 0;
-        return Math.round(wordCount / (elapsedMs / 60000));
-    }
-
-    /** Portable motion permission + listener lifecycle (testable via createMotion(fakeWin)). */
-    function createSpectorMotion(win) {
-        const target = win || window;
-        let handler = null;
-        let bound = false;
-        let permissionState = 'unknown';
-
-        return {
-            get bound() { return bound; },
-            get permissionState() { return permissionState; },
-
-            async ensurePermission() {
-                if (!target.DeviceOrientationEvent) return false;
-                if (permissionState === 'granted' || permissionState === 'unnecessary') return true;
-                if (permissionState === 'denied') return false;
-                const req = target.DeviceOrientationEvent.requestPermission;
-                if (typeof req !== 'function') {
-                    permissionState = 'unnecessary';
-                    return true;
-                }
-                try {
-                    const result = await req.call(target.DeviceOrientationEvent);
-                    permissionState = result;
-                    return result === 'granted';
-                } catch (err) {
-                    permissionState = 'denied';
-                    return false;
-                }
-            },
-
-            unbind() {
-                if (handler) {
-                    target.removeEventListener('deviceorientation', handler);
-                    handler = null;
-                }
-                bound = false;
-            },
-
-            bind(onOrientation) {
-                this.unbind();
-                if (!target.DeviceOrientationEvent || typeof onOrientation !== 'function') return false;
-                handler = (event) => onOrientation(event);
-                target.addEventListener('deviceorientation', handler);
-                bound = true;
-                return true;
-            },
-
-            registerPageHideOnce(onHide) {
-                if (typeof onHide !== 'function') return;
-                target.addEventListener('pagehide', onHide, { once: true });
-            }
-        };
-    }
-
-    const SpectorCore = {
-        KalmanFilter,
-        chunkStrategies,
-        postChunkHooks,
-        splitSentences,
-        createMotion: createSpectorMotion,
-        chunk(text, strategyName = 'hybrid') {
-            const fn = chunkStrategies[strategyName] || chunkStrategies.hybrid;
-            let chunks = fn(text);
-            postChunkHooks.forEach(hook => { chunks = hook(chunks, text) || chunks; });
-            return chunks;
-        },
-        registerChunker(name, fn) { chunkStrategies[name] = fn; },
-        registerPostChunkHook(fn) { postChunkHooks.push(fn); },
-        getMs: computeMs,
-        cuePauseMs,
-        formatChunkHtml,
-        countSpokenWords,
-        hybridChunkWithCues,
-        buildRehearsalAnalytics,
-        buildSectionAnalytics,
-        chunkToAnnounceText,
-        computeSpatialDeltas,
-        estimateWpm,
-        decodeScript(encoded) {
-            try { return decodeURIComponent(atob(encoded)); }
-            catch { return null; }
-        }
-    };
-    window.SpectorCore = SpectorCore;
 
     const playerMotion = SpectorCore.createMotion(window);
 
@@ -515,9 +207,11 @@
     let rehearsalTimings = [];
     let mirrorEnabled = false;
     let sectionBookmarks = [];
+    let wordHighlightEnabled = true;
+    let wordHighlightFrame = null;
 
-    const kalmanBeta = new KalmanFilter();
-    const kalmanGamma = new KalmanFilter();
+    const kalmanBeta = new SpectorCore.KalmanFilter();
+    const kalmanGamma = new SpectorCore.KalmanFilter();
 
     const vibrate = (pattern) => {
         if (!navigator.userActivation || navigator.userActivation.hasBeenActive) {
@@ -697,16 +391,6 @@
         return Math.ceil(total);
     }
 
-    // Plain-text version of a chunk for the aria-live announcer -- strips cue
-    // markup instead of reading it aloud (no "asterisk asterisk", no pause icon).
-    function chunkToAnnounceText(raw) {
-        return (raw || '')
-            .replace(/\[section:([^\]]+)\]/g, '$1')
-            .replace(/\[pause(?::\d+s)?\]/gi, '')
-            .replace(/\*\*(.+?)\*\*/g, '$1')
-            .trim();
-    }
-
     function updateDisplay() {
         document.querySelectorAll('.chunk').forEach(el => el.classList.remove('active'));
         const active = document.querySelector(`.chunk[data-index="${currentIndex}"]`);
@@ -716,7 +400,7 @@
             scrollActiveIntoReadingPosition(active);
             settleActiveChunk();
             const announcer = document.getElementById('active-line-announcer');
-            if (announcer) announcer.textContent = chunkToAnnounceText(chunks[currentIndex] || '');
+            if (announcer) announcer.textContent = SpectorCore.chunkToAnnounceText(chunks[currentIndex] || '');
         }
         const progress = chunks.length ? ((currentIndex + 1) / chunks.length) * 100 : 0;
         document.getElementById('progress-fill').style.width = `${progress}%`;
@@ -737,6 +421,66 @@
         }
     }
 
+    // ─── Word-level read-along highlight (visual only) ───
+    // A rAF loop interpolates the approximate current word inside the active
+    // chunk from wall-clock elapsed vs that chunk's scheduled hold. It never
+    // feeds back into pacing: startPlayback's setTimeout chain is the only
+    // thing that decides when chunks advance or how long they hold.
+    function splitChunkWords(chunkEl) {
+        if (chunkEl.dataset.wordsSplit === '1') return;
+        chunkEl.dataset.wordsSplit = '1';
+        const walker = document.createTreeWalker(chunkEl, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+                if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+                if (node.parentElement && node.parentElement.classList.contains('cue-pause'))
+                    return NodeFilter.FILTER_REJECT;
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach((node) => {
+            const frag = document.createDocumentFragment();
+            node.nodeValue.split(/(\s+)/).forEach((piece) => {
+                if (!piece) return;
+                if (/^\s+$/.test(piece)) {
+                    frag.appendChild(document.createTextNode(piece));
+                    return;
+                }
+                const span = document.createElement('span');
+                span.className = 'w';
+                span.textContent = piece;
+                frag.appendChild(span);
+            });
+            node.parentNode.replaceChild(frag, node);
+        });
+    }
+
+    function startWordHighlight() {
+        if (!wordHighlightEnabled || wordHighlightFrame) return;
+        const step = () => {
+            wordHighlightFrame = null;
+            if (!isPlaying || !wordHighlightEnabled) return;
+            const active = document.querySelector('.chunk.active');
+            if (active) {
+                splitChunkWords(active);
+                const words = active.querySelectorAll('.w');
+                const idx = SpectorCore.wordIndexForElapsed(Date.now() - lastChunkAdvanceAt, getMs(), words.length);
+                words.forEach((w, i) => w.classList.toggle('wh-on', i === idx));
+            }
+            wordHighlightFrame = requestAnimationFrame(step);
+        };
+        wordHighlightFrame = requestAnimationFrame(step);
+    }
+
+    function stopWordHighlight() {
+        if (wordHighlightFrame) {
+            cancelAnimationFrame(wordHighlightFrame);
+            wordHighlightFrame = null;
+        }
+        document.querySelectorAll('.chunk .w.wh-on').forEach(w => w.classList.remove('wh-on'));
+    }
+
     function startPlayback() {
         if (isPlaying) return;
         isPlaying = true;
@@ -751,6 +495,7 @@
         playButton.title = 'Pause';
         Haptics.play();
         closeHudSheet();
+        startWordHighlight();
 
         // Re-center the current chunk immediately on Play (before the first tick).
         updateDisplay();
@@ -789,6 +534,7 @@
         }
         isPlaying = false;
         clearTimeout(interval);
+        stopWordHighlight();
         stopElapsedDisplayTimer();
         refreshElapsedDisplay();
         const playButton = document.getElementById('play-btn');
@@ -1285,6 +1031,8 @@
             document.getElementById('mirror-toggle')?.classList.add('active');
             document.body.classList.add('mirror-mode');
         }
+        wordHighlightEnabled = p.wordHighlight !== false;
+        if (wordHighlightEnabled) document.getElementById('word-highlight-toggle')?.classList.add('active');
         if (p.speed) {
             currentSpeed = p.speed;
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.speed === p.speed));
@@ -1326,6 +1074,15 @@
             savePrefs({ mirror: mirrorEnabled });
             Haptics.preset();
         });
+        const whToggle = document.getElementById('word-highlight-toggle');
+        whToggle.addEventListener('click', () => {
+            wordHighlightEnabled = !wordHighlightEnabled;
+            whToggle.classList.toggle('active', wordHighlightEnabled);
+            savePrefs({ wordHighlight: wordHighlightEnabled });
+            Haptics.preset();
+            if (wordHighlightEnabled) startWordHighlight();
+            else stopWordHighlight();
+        });
     }
 
     function saveToLibrary() {
@@ -1343,22 +1100,6 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
     }
 
-    function isPro() {
-        try {
-            if (window.SpectorPro && typeof window.SpectorPro.isPro === 'function') {
-                return window.SpectorPro.isPro();
-            }
-            return !!localStorage.getItem('spector_pro');
-        } catch { return false; }
-    }
-
-    function historyCap() {
-        if (window.SpectorPro && typeof window.SpectorPro.historyLimit === 'function') {
-            return window.SpectorPro.historyLimit();
-        }
-        return isPro() ? 50 : 5;
-    }
-
     function saveRunToHistory() {
         const key = 'spector_runs_v1';
         let runs = [];
@@ -1371,8 +1112,7 @@
             pacing: document.getElementById('end-consistency').textContent,
             scriptPreview: (rawScript || '').slice(0, 60).replace(/\n/g, ' ') + '...'
         });
-        const cap = historyCap();
-        if (runs.length > cap) runs.length = cap;
+        if (runs.length > 50) runs.length = 50;
         localStorage.setItem(key, JSON.stringify(runs));
     }
 
@@ -1414,9 +1154,6 @@
         document.getElementById('end-wpm').textContent = SpectorCore.estimateWpm(totalWords, elapsed);
         const analytics = SpectorCore.buildRehearsalAnalytics(rehearsalTimings);
         document.getElementById('end-consistency').textContent = `${analytics.consistency}%`;
-        if (typeof window.va === 'function') {
-            window.va('event', 'Rehearsal completed', { mode: currentMode });
-        }
         document.getElementById('analytics-hesitations').textContent =
             analytics.hesitations
                 ? `${analytics.hesitations} hesitation${analytics.hesitations === 1 ? '' : 's'} — you paused before the line finished.`
@@ -1460,22 +1197,7 @@
             document.getElementById('save-end-btn').textContent = 'Saved to library ✓';
         };
         const exportBtn = document.getElementById('export-btn');
-        const exportHint = document.getElementById('export-pro-hint');
-        const exportBuy = document.getElementById('export-buy-btn');
-        // Hint stays hidden until Export is tapped — checkout only from "buy it here" / pricing.
-        if (exportHint) exportHint.classList.add('hidden');
-        if (exportBtn && !isPro()) exportBtn.textContent = 'Copy script + stats (Pro)';
-        if (exportBuy) {
-            exportBuy.onclick = () => {
-                if (window.SpectorPro && window.SpectorPro.openCheckout()) return;
-                window.location.href = '/pricing';
-            };
-        }
         exportBtn.onclick = () => {
-            if (!isPro()) {
-                if (exportHint) exportHint.classList.remove('hidden');
-                return;
-            }
             const summary = `Script:\n${rawScript}\n\nLines: ${document.getElementById('end-chunks').textContent}\nTime: ${document.getElementById('end-time').textContent} min\nWPM: ${document.getElementById('end-wpm').textContent}\nPacing: ${document.getElementById('end-consistency').textContent}\n\n${document.getElementById('analytics-hesitations').textContent}\n${document.getElementById('analytics-slowest').textContent}`;
             const orig = 'Copy script + stats';
             const flash = (label) => { exportBtn.textContent = label; setTimeout(() => { exportBtn.textContent = orig; }, 1500); };
@@ -1826,6 +1548,35 @@
         assert('pagehide once registered',
             motionEvents.add.some(e => e.type === 'pagehide' && e.opts && e.opts.once));
 
+        // ── markdownToScript (editor .md import) ──
+        const mdOut = SpectorCore.markdownToScript('# Title\n\n## Opening\n\n- First **bold** point with [pause] here.\n- Second *italic* point. [pause:3s]\n\n> A quoted line\n\nVisit [the site](https://example.com) now. ~~scratch this~~ __strong__\n\n```\ncode line\n```\n');
+        assert('markdownToScript strips H1 to bare text', mdOut.includes('Title') && !mdOut.includes('# Title'));
+        assert('markdownToScript preserves ## Section lines', mdOut.split('\n').some(l => l.trim() === '## Opening'));
+        assert('markdownToScript preserves **emphasis** cues', mdOut.includes('**bold**') && mdOut.includes('**strong**'));
+        assert('markdownToScript preserves pause cues', mdOut.includes('[pause]') && mdOut.includes('[pause:3s]'));
+        assert('markdownToScript strips list markers', !/^[-*+] /m.test(mdOut));
+        assert('markdownToScript strips italic markers', mdOut.includes('italic point') && !mdOut.includes('*italic*'));
+        assert('markdownToScript keeps link text, drops URL', mdOut.includes('the site') && !mdOut.includes('https://example.com'));
+        assert('markdownToScript drops strikethrough text', !mdOut.includes('scratch'));
+        assert('markdownToScript keeps code contents, drops fences', mdOut.includes('code line') && !mdOut.includes('```'));
+
+        // ── estimateDurationMs (editor live estimate) ──
+        const durManual = SpectorCore.hybridChunkWithCues(sample)
+            .reduce((a, c) => a + SpectorCore.getMs('focus', 'normal', c), 0);
+        assert('estimateDurationMs equals manual getMs sum',
+            SpectorCore.estimateDurationMs(sample, 'focus', 'normal') === durManual);
+        assert('estimateDurationMs grows with slower mode',
+            SpectorCore.estimateDurationMs(sample, 'comfort', 'normal') > durManual);
+        assert('estimateDurationMs shrinks with faster speed',
+            SpectorCore.estimateDurationMs(sample, 'focus', 'fast') < durManual);
+
+        // ── wordIndexForElapsed (word highlight) ──
+        assert('wordIndexForElapsed starts at first word', SpectorCore.wordIndexForElapsed(0, 2000, 5) === 0);
+        assert('wordIndexForElapsed midpoint', SpectorCore.wordIndexForElapsed(1000, 2000, 4) === 2);
+        assert('wordIndexForElapsed reaches last word', SpectorCore.wordIndexForElapsed(2000, 2000, 5) === 4);
+        assert('wordIndexForElapsed clamps overrun', SpectorCore.wordIndexForElapsed(5000, 2000, 5) === 4);
+        assert('wordIndexForElapsed no words', SpectorCore.wordIndexForElapsed(100, 2000, 0) === -1);
+
         const allPass = results.every(r => r.pass);
         window.__spectorTestResults = { allPass, results };
         console.log('[SpectorTest]', allPass ? 'ALL PASS' : 'FAILURES', results);
@@ -1841,7 +1592,5 @@
         init();
     }
     </script>
-    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-    <script defer src="/analytics.js"></script>
 </body>
 </html>

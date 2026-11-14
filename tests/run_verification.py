@@ -836,12 +836,13 @@ def changed_files_list() -> str:
 def changes_file_patch() -> str:
     head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True)
     diff = subprocess.run(
-        ["git", "-C", str(ROOT), "diff", "HEAD~12..HEAD"],
+        ["git", "-C", str(ROOT), "diff", "HEAD~12..HEAD", "--",
+         ":(exclude)public/voice/model", ":(exclude)public/voice/vendor"],
         capture_output=True, text=True,
     )
     return "\n".join([
         meta(0),
-        "=== CHANGES_FILE (unified diff) ===",
+        "=== CHANGES_FILE (unified diff, binary model dirs excluded) ===",
         f"HEAD={head.stdout.strip()}",
         "",
         (diff.stdout or "# no diff")[:200000],
@@ -898,8 +899,11 @@ def sync_harness_honesty_artifacts():
     mirror_deliverables_to_goal()
     update_grok_config_manifest(head)
     append_spector_to_events(head)
+    # Text-only evidence: binary artifacts (e.g. vendored voice models under
+    # public/voice/) must not crash the decode — exclude them from the diff.
     diff = subprocess.run(
-        ["git", "-C", str(ROOT), "diff", "HEAD~12..HEAD"],
+        ["git", "-C", str(ROOT), "diff", "HEAD~12..HEAD", "--",
+         ":(exclude)public/voice/model", ":(exclude)public/voice/vendor"],
         capture_output=True, text=True,
     ).stdout or ""
     if diff.strip() and GOAL_PATCH.is_file():

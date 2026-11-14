@@ -54,7 +54,7 @@ grep -r "spector-plum.vercel.app" . --include="*.md" --include="*.html" --includ
 - Announce: Tweet / post the new domain + "now at spectorlabs.io".
 - Consider:
   - Email: Forward `hello@spectorlabs.io` or set up Google Workspace / custom email.
-  - Analytics: Add simple privacy-friendly tracking (Plausible, Fathom) if desired for funnel data.
+  - Analytics: none — decided (2026-11): brand-pure privacy, no site analytics or telemetry of any kind. Funnel questions are answered by talking to beta testers, not by tracking visitors.
   - Make GitHub repo public (if not already) for credibility.
   - Update TESTING.md with new domain for beta testers.
 - Monitor: Vercel logs, uptime, any broken links.
@@ -69,7 +69,7 @@ Acquiring the domain is a strong signal of commitment. Immediate next:
 - **Ecosystem play**:
   - Update copy to emphasize "works across Ray-Ban Meta Display, Gen 1/2, XREAL, Viture, and future glasses" + hardware button/gesture support.
   - Prepare SpectorCore porting guide for when app stores open.
-- **Monetization / sustainability**: Free core PWA forever? Premium features (cloud sync, advanced analytics, plugin marketplace) behind paywall once accounts are added. Or "founding supporter" model.
+- **Monetization / sustainability**: Decided (2026-11) — none. Spector is free and open source (MIT): no accounts, no paywall, no premium tier. A static site on the Vercel free tier has no meaningful running cost. Revisit only if a future feature (e.g. real cloud sync) creates infrastructure bills.
 - **Metrics & iteration**: Instrument basic events (sample used, Comfort tried, end screen reached, install clicked). Watch for drop-off at "first Comfort wow".
 - **Meta angle (internal note)**: With a real domain and polished experience, SPECTOR becomes a credible "reference implementation" showing what a great rehearsal + HUD teleprompter layer looks like. Use it to inform whether Meta should:
   - Build equivalent (or better) native features into the Meta AI app / glasses OS.

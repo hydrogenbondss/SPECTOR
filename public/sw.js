@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v12'; // ink-neutral favicons + app icons
+const CACHE = 'spector-v13'; // free + open source: monetization & analytics removed; spector-core.js shell
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {
@@ -12,6 +12,7 @@ const ASSETS = [
     '/index.html',
     '/app.html',
     '/say.html',
+    '/spector-core.js',
     '/style.css',
     '/manifest.json',
     '/verify-sw.html',

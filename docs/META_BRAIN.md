@@ -1,8 +1,11 @@
 # SPECTOR META BRAIN
 
-Strategic source of truth for future Spector work.  
-**Baseline:** `c68909a` — *Unify satellite page design with homepage* (`main` / `origin/main`).  
-**Non-authoritative:** `origin/design/unify-and-deslop` — do not merge, cherry-pick, or copy unless explicitly instructed.
+Strategic source of truth for future Spector work.
+**Baseline:** `origin/main` post-2026-11-14 reconciliation branch — monetization
+and site analytics **removed** (free + open source, MIT; no telemetry).
+Earlier baseline notes referencing Spector Pro / Paddle / Vercel Analytics
+described a state that was deliberately abandoned before public launch; the
+only surviving record of it is `CHANGELOG.md` (historical, untouched).
 
 Claim tags used below:
 
@@ -16,15 +19,12 @@ Claim tags used below:
 
 | Item | Status |
 |------|--------|
-| Canonical commit | **VERIFIED:** `c68909a56a1c3f4454c2c676c7e089119b01f59c` |
-| Branch | **VERIFIED:** `main` tracks `origin/main` at that commit |
 | Product shape | **VERIFIED:** static PWA in `public/`; no app server; Vercel hosts `public/` |
-| Monetization | **VERIFIED:** free core; Spector Pro `$34` once via Paddle (`public/js/paddle-pro.js`) |
+| Monetization | **VERIFIED:** none — free and open source (MIT); no checkout, no tiers, no accounts |
+| Site analytics / telemetry | **VERIFIED:** none (Vercel Analytics removed 2026-11); only your-initiated third-party touches remain: Formspree forms, GitHub API read, Google Fonts |
 | Brand surface (marketing) | **VERIFIED:** light canvas `#F7F7F8`, ink CTAs, teal accent `#0E7C74`, Instrument Sans |
 | Player surface | **VERIFIED:** dark reading stage (`body.glasses`), shared accent family |
-| Forbidden as source | **VERIFIED (process):** `origin/design/unify-and-deslop` restores rejected purple/dark/Inter player language — ignore unless ordered |
-
-**Local note:** a separate checkout at `~/Projects/SPECTOR` may lag this baseline. Treat **this** repo at `c68909a` as truth for Meta Brain.
+| Core location | **VERIFIED:** `public/spector-core.js` — pure logic shared by player + editor (extracted 2026-11) |
 
 ---
 
@@ -35,20 +35,20 @@ Claim tags used below:
 **VERIFIED positioning (site H1):**
 “Stop reading. Start delivering.”
 
-**VERIFIED supporting / meta claim (demo label, meta/OG, product capability):**
+**VERIFIED supporting / meta claim:**
 “Your punctuation sets the pace — not your voice.”
 
 **VERIFIED permanent promise:**
-“Free core, forever. No account, no cloud, nothing uploaded — ever.”
+“Free and open source. No account, no cloud, nothing uploaded — ever.”
 
 **VERIFIED pairing tagline:**
 “Punctuation-paced. No mic. No cloud.”
 
 **VERIFIED product job:** rehearse on phone/computer → perform eyes-up where a display can show the script (today: XREAL / Viture via mirror). Ray-Ban Meta path is phone rehearsal, not on-lens Spector.
 
-**VERIFIED sister surface:** `/say` — switch-scan AAC composer (row-column scanning), separate from the teleprompter but same privacy / static architecture.
+**VERIFIED sister surface:** `/say` — switch-scan AAC composer, separate from the teleprompter but same privacy / static architecture.
 
-**What Spector is not (VERIFIED in brand/legal/README):** not smart glasses hardware; not affiliated with Meta / Ray-Ban / XREAL / Viture; not a mic-listening coach; not a cloud SaaS with accounts.
+**What Spector is not (VERIFIED in brand/legal/README):** not smart glasses hardware; not affiliated with Meta / Ray-Ban / XREAL / Viture; not a mic-listening coach; not a cloud SaaS with accounts; not ad-supported or tracking-supported.
 
 ---
 
@@ -56,7 +56,7 @@ Claim tags used below:
 
 **VERIFIED insight in product + marketing:** Pace should come from **how the script is written** (commas breathe, periods hold, emphasis holds longer), not from listening to the speaker. That removes mic permission, privacy anxiety, and “is it hearing me?” failure modes.
 
-**INFERRED strongest differentiator vs Meta’s built-in path (where available):** local library + auto punctuation pacing + rehearsal analytics + installable offline PWA, without a Meta account — *competitive context*, not a claim of on-lens Meta Display support.
+**INFERRED strongest differentiator vs Meta’s built-in path (where available):** local library + auto punctuation pacing + rehearsal feedback + installable offline PWA, without a Meta account — *competitive context*, not a claim of on-lens Meta Display support.
 
 **INFERRED glasses-era insight:** many owners want eyes-up delivery before platforms give a great first-party HUD teleprompter; Spector bets on **web + honest device matrix** until native HUD APIs exist.
 
@@ -66,14 +66,12 @@ Claim tags used below:
 
 | Segment | Evidence | Tag |
 |---------|----------|-----|
-| Primary: people rehearsing talks/pitches who want eyes-up delivery and hate reading notes | Homepage/README (“Talk to camera. Not to your notes.”), samples (keynote/pitch/demo) | **INFERRED** |
-| XREAL / Viture owners who can mirror a phone | Device matrix “Eyes-up”; proof image captioned as mirrored FOV | **VERIFIED** (claimed + marketed); **UNKNOWN** how many real testers validated |
+| Primary: people rehearsing talks/pitches who want eyes-up delivery and hate reading notes | Homepage/README, samples (keynote/pitch/demo) | **INFERRED** |
+| XREAL / Viture owners who can mirror a phone | Device matrix “Eyes-up” | **VERIFIED** (claimed + marketed); **UNKNOWN** how many real testers validated |
 | Ray-Ban Meta Gen 1/2 owners (camera glasses, no display) | Device pages + matrix: phone rehearsal | **VERIFIED** as intended use |
-| Ray-Ban Meta Display owners | Matrix: “Waiting” / not on lens; phone rehearsal works | **VERIFIED** positioning; **UNKNOWN** whether Display WebView paths work beyond marketing docs |
-| AAC / non-verbal / Deaf users (Say) | `/say` + README honesty that it’s untested with real AAC users | **VERIFIED** intent; **VERIFIED** unvalidated with real users |
-| Founding hardware beta testers | `#beta` Formspree; Pro free for life for invite-capped testers | **VERIFIED** offer in copy; **UNKNOWN** signup volume / conversion |
-
-**Most likely initial paying user (INFERRED):** someone who rehearses repeatedly on one device, hits the **5-run history cap**, and wants longer history and/or copy-script+stats export — or a hardware beta invitee who would have paid but gets Pro free.
+| Ray-Ban Meta Display owners | Matrix: “Waiting” / not on lens | **VERIFIED** positioning; **UNKNOWN** whether Display WebView paths work |
+| AAC / non-verbal / Deaf users (Say) | `/say` + README honesty that it’s untested with real AAC users | **VERIFIED** intent; **VERIFIED** unvalidated |
+| Founding hardware beta testers | `#beta` Formspree; early access to glasses features | **VERIFIED** offer in copy; **UNKNOWN** signup volume |
 
 ---
 
@@ -83,191 +81,101 @@ Claim tags used below:
 
 **VERIFIED flow:**
 
-1. Land on homepage → **Try Spector free** / sample → `app.html?script=…` (base64 of URI-encoded sample), **or** `#try` paste / upload / samples → Launch.
-2. Player: choose mode (Comfort / Focus / Presentation), speed (Slow / Normal / Fast), text size, leading, optional Mirror, Compact stage.
+1. Land on homepage → **Try Spector free** / sample → `app.html?script=…`, **or** `#try` paste / upload / samples → Launch.
+2. Player: choose mode (Comfort / Focus / Presentation), speed (Slow / Normal / Fast), text size, leading, optional Mirror, Compact stage, word highlight.
 3. Play (Space / K / tap) — engine advances chunks on `getMs()` schedule; rewind 3 chunks (R).
-4. End screen: chunks, time, avg WPM, pacing consistency %, hesitations, slowest moment; optional section breakdown; Pro export.
-5. Landing can show local script library + recent rehearsal history (trend chart when ≥2 runs).
+4. End screen: chunks, time, avg WPM, pacing consistency %, hesitations, slowest moment, optional section breakdown, **Copy script + stats** (ungated).
+5. Landing shows local script library + recent rehearsal history (trend chart when ≥2 runs; last 50 runs kept on-device).
 
 ### 4.2 Pacing engine
 
-**VERIFIED (`SpectorCore` in `public/app.html`):**
+**VERIFIED (`SpectorCore` in `public/spector-core.js`):**
 
 - **Chunking (hybrid default):** split sentences → if ≤7 words keep sentence; else pack ~6-word groups. Also: `sentence` and `word` strategies registered.
 - **Cues before hybrid merge:** `[pause]` / `[pause:Ns]` and `## Section` extracted as atomic chunks.
 - **Timing (`computeMs`):** base by mode (focus 2400 / comfort 2800 / presentation 3200) × speed (slow 1.25 / fast 0.75); `×1.35` if chunk ends in `.!?`; `×1.15` if contains `,`; `×1.12` if contains `**…**`; floor 1200ms; plus pause extras.
 - **Pause extras:** `[pause:Ns]` → N×1000; bare `[pause]` chunk → 2800; inline `[pause]` → 1800.
-- **Visual pacing cues:** commas / terminators get CSS markers (`cue-breathe` / `cue-hold`); emphasis styled.
+- **Shared editor helpers (2026-11):** `estimateDurationMs()` (editor's live “≈M:SS at <Speed>” estimate), `markdownToScript()` (`.md` import preserving cue syntax), `wordIndexForElapsed()` (word-level read-along highlight).
 
 ### 4.3 Hesitations
 
-**VERIFIED:** a hesitation is recorded when the user **pauses early** on a line (`elapsed < expected * 0.85` in `stopPlayback`). End copy: “you paused before the line finished.” Not mic-detected silence.
-
-### 4.4 Modes & controls
-
-| Control | Behavior | Tag |
-|---------|----------|-----|
-| Comfort | Longer base timing + Kalman-filtered device orientation → translate/rotate/scale; breathing/drift when idle; respects `prefers-reduced-motion` for live transform | **VERIFIED** |
-| Focus | Default; steady center read; shorter base than Comfort | **VERIFIED** |
-| Presentation | Slowest base; “heavier” type (mode CSS) | **VERIFIED** |
-| Speeds | Slow / Normal / Fast multipliers | **VERIFIED** |
-| Mirror | Horizontal flip for camera/mirror rigs; controls stay usable | **VERIFIED** (CHANGELOG notes prior flip bug fixed) |
-| Compact stage | HUD compaction; defaults on short/narrow viewports | **VERIFIED** |
-| Motion permit | iOS-style DeviceOrientation permission for Comfort | **VERIFIED** |
-| Bookmarks | `##` → jump bar | **VERIFIED** |
-| Debug | `app.html?debug` temple-button / tilt sim | **VERIFIED** |
-| Tests | `app.html?test` → `SpectorTest` harness | **VERIFIED** |
-
-### 4.5 Rehearsal vs performance
-
-**INFERRED product model (supported by copy + matrix):**
-
-- **Rehearse:** phone/desktop full player + analytics + library.
-- **Perform eyes-up:** mirror phone/computer to XREAL/Viture (or any mirrored display). Ray-Ban Meta = rehearse on phone, perform without Spector on the lens.
+**VERIFIED:** a hesitation is recorded when the user **pauses early** on a line (`elapsed < expected * 0.85` in `stopPlayback`). Not mic-detected silence.
 
 ### 4.6 Scripts & storage
 
 **VERIFIED local keys / behaviors:**
 
-- Script library in `localStorage` (landing + player persistence patterns).
-- Draft / prefs / comfort tip / first-run flags in `localStorage`.
-- Rehearsal runs in `spector_runs_v1` (capped 5 free / 50 Pro via `SpectorPro.historyLimit()`).
-- Pro flag: `localStorage.spector_pro` (honor-system; unlock via Paddle checkout or pasted `txn_…` / ≥8 char token).
-- File upload / drag-drop / sample scripts on landing.
-- **No** user accounts; **no** server-side script store.
+- Script library, draft / prefs / comfort tip / first-run flags in `localStorage`.
+- Rehearsal runs in `spector_runs_v1` — capped at **50** for everyone.
+- File upload / drag-drop (`.txt` + `.md`) / sample scripts on landing.
+- **No** user accounts; **no** server-side script store; **no** product telemetry.
 
 ### 4.7 Offline / PWA
 
-**VERIFIED (code):** `manifest.json` installable; `sw.js` cache `spector-v12` precaches index/app/say/`style.css`/manifest/verify helpers. Network-first for HTML + css/js/json with cache fallback.
+**VERIFIED (code):** `manifest.json` installable; `sw.js` precaches the shell (including `spector-core.js`); network-first for HTML + css/js/json with cache fallback. Bump the cache version when shipped assets change.
 
-**VERIFIED (browser, Aug 2026):** Service Worker validation complete in Chrome DevTools — `sw.js` registers and activates; expected cache entries populate; `app.html` successfully reloads with DevTools **Offline** enabled. **Do not modify the Service Worker** on the basis of this pass (it is working).
+### 4.8 Analytics
 
-**VERIFIED (process):** Headless Chrome verifier / dump paths that hang or time out are **unreliable** and must **not** be treated as evidence of a PWA/offline failure. Prefer real-browser DevTools Offline checks for offline health.
-
-**INFERRED (remaining, marketing only):** production marketing pages also load `style.min.css` / `landing-v2.min.css`, while SW precache lists `style.css` — offline *marketing* styling may still depend on prior network cache. Core player offline reload is already browser-verified above.
-
-### 4.8 Analytics (product + site)
-
-**VERIFIED:**
-
-- **In-product rehearsal analytics:** end screen consistency (variance of actual/expected ratios), hesitations, slowest chunk; section analytics; landing history + SVG pacing trend.
-- **Site analytics:** Vercel Web Analytics via `analytics.js` / `window.va` (skipped on localhost); privacy policy states cookieless aggregates; rehearsal completed event fired from player.
-- Scripts/emails not sent to analytics (**VERIFIED** privacy copy + architecture).
+**VERIFIED:** the only “analytics” are **in-product rehearsal feedback** computed locally on-device (consistency, hesitations, slowest chunk, pacing trend). There is **no** site analytics, no telemetry, no event beacons. Product questions are answered by talking to beta testers.
 
 ---
 
 ## 5. Hardware & Compatibility
 
-| Hardware | Claimed today | What code actually does | Tag |
-|----------|---------------|---------------------------|-----|
-| Phone / computer | Full teleprompter | Browser PWA; full player | **VERIFIED** works in code |
-| XREAL / Viture | Eyes-up via mirror | Same web UI mirrored to glasses display; no vendor SDK | **VERIFIED** as product model; **UNKNOWN** formal QA matrix results in-repo |
-| Ray-Ban Meta Gen 1/2 | Phone rehearsal only | No glasses display API in repo | **VERIFIED** honesty on site |
-| Ray-Ban Meta Display | Not on lens yet; phone rehearsal | No Meta HUD SDK integration | **VERIFIED** site/docs; **CONTRADICTION:** `TESTING.md` still describes opening Spector “on your glasses” / HUD models running on lens — **stale vs homepage/PROJECT** |
-| Temple button / Neural Band | Debug `B` / simulator; future where platform forwards events | Simulation + keybinding in player; no proprietary BLE | **VERIFIED** simulation; **UNKNOWN** real Meta Display button forwarding |
-| Brilliant Labs / Even Realities / others | Mentioned as beta interest | Not implemented specially | **VERIFIED** mentioned; **UNKNOWN** support |
-| Desktop Comfort | Inert without sensors; DevTools Sensors / `?debug` tilt | Explicit in UI copy | **VERIFIED** |
-
-**Marketing vs reality rule (CONFIRMED decision in PROJECT/BRAND):** claim only what has been tested; Meta is competitor + research horizon, not primary homepage story.
+Unchanged from the previous baseline: phone/computer full player (**VERIFIED works in code**); XREAL / Viture via mirror (**VERIFIED** product model); Ray-Ban Meta Gen 1/2 phone rehearsal; Meta Display not on lens; temple button = debug simulation; Desktop Comfort needs sensors or `?debug` tilt sim. Marketing-vs-reality rule stands: claim only what has been tested.
 
 ---
 
 ## 6. Current Feature Map
 
-### Free core (**VERIFIED**)
+### Free — everything, for everyone (**VERIFIED**)
 
-- Paste / upload / samples / launch
+- Paste / upload (`.txt`, `.md`) / samples / launch
 - Hybrid punctuation pacing + cue syntax
 - Comfort / Focus / Presentation + speeds + size/leading
 - Mirror, compact HUD, section jumps
-- End-screen analytics (basic)
+- Word-level read-along highlight (toggle, persisted)
+- End-screen analytics + **Copy script + stats**
 - Local script library
-- Last **5** rehearsals on-device
-- PWA / offline shell (as implemented)
+- Last **50** rehearsals on-device
+- Live duration estimate in the editor (engine-accurate)
+- PWA / offline shell
 - Say AAC composer
-- No account, no mic listening, no watermark, no trial clock (pricing copy)
-
-### Spector Pro — $34 once (**VERIFIED**)
-
-- History **50** vs **5**
-- End-screen **Copy script + stats**
-- Unlock restore via transaction id (honor system)
-- Explicitly **not** cloud sync
+- No account, no mic listening, no watermark, no trial clock, no ads, no tracking
 
 ### Experimental / early / incomplete (**VERIFIED** unless noted)
 
 | Item | State |
 |------|--------|
-| Say | Shipped v1; **untested with real AAC users** (README/PROJECT) |
+| Say | Shipped v1; **untested with real AAC users** |
 | Hardware beta | Recruiting; Comfort / temple controls need real-device validation |
-| Cloud sync | Not shipped; explicitly excluded from Pro |
+| Cloud sync | Not shipped; not sold |
 | Live translated captions | Documented non-start; needs backend + mic — architecture break |
-| Cue authoring UX | Basic insert toolbar; deeper polish open (PROJECT) |
-| Analytics depth | End screen + trend chart; richer insight open |
+| Cue authoring UX | Basic insert toolbar; deeper polish open |
 | On-lens Meta Display | Waiting / research |
 | Native App Store binaries | Explicit non-goal for now |
 
 ---
 
-## 7. Website & Conversion Funnel
+## 7. Website & Funnel
 
 ### Page map (**VERIFIED**)
 
 | Page | Job |
 |------|-----|
-| `/` `index.html` | Convert curiosity → try: dark hero (H1 + CTA + live HTML `#hero-demo`), proof, Try, devices matrix, Pro teaser, FAQ, hardware beta, founder line |
-| `/pricing` | Convert trust → pay: Free vs Pro ledger, embedded Paddle, license restore, billing FAQ |
-| `/app.html` | Deliver product (player) — primary conversion destination |
-| `/say` | AAC side-product + mission signal; not the main monetization funnel |
-| `/ray-ban-meta-teleprompter` | SEO / honesty for Meta owners → try + beta |
-| `/teleprompter-for-xreal` | SEO for XREAL eyes-up path → try |
-| `/teleprompter-for-viture` | SEO for Viture eyes-up path → try |
-| `/privacy` `/terms` `/refund` | Legal trust for Paddle + buyers (14-day refund) |
+| `/` `index.html` | Convert curiosity → try: hero (H1 + CTA + live `#hero-demo`), proof, Try, devices matrix, free-&-open-source note, FAQ, hardware beta, founder line |
+| `/app.html` | Deliver product (player) |
+| `/say` | AAC side-product + mission signal |
+| `/ray-ban-meta-teleprompter`, `/teleprompter-for-xreal`, `/teleprompter-for-viture` | SEO / honesty per device → try + beta |
+| `/privacy` | Privacy truth: no accounts, no servers, no analytics, data stays on device |
+| `beta-test.html` (`/beta/test`) | Private beta-test route |
 | `sw-prime.html` / `verify-sw.html` | SW / verification helpers |
 
 ### Navigation & CTAs (**VERIFIED**)
 
-- Primary CTA label: **Try Spector free** → sample player (`data-quick-start`).
-- Secondary: Pricing, `#try` paste path, `#beta`, Buy Pro ($34).
-- Rewrites in `vercel.json` for pretty URLs.
-
-### Funnel (INFERRED)
-
-```
-Awareness (SEO device pages / OG / GitHub)
-  → Homepage hero comprehension (delivery H1 + live demo; punctuation as supporting insight)
-  → Try free (sample in player)  [critical activation]
-  → Optional: paste own script / Comfort / finish run
-  → See analytics + history cap
-  → Pricing / end-screen Pro upsell
-  → Paddle checkout → localStorage pro
-```
-
-**Friction points (INFERRED):** users who bounce before Play never feel punctuation pacing; Comfort needs motion permission; Pro value is thin if user never keeps history or exports.
-
----
-
-## 8. Brand System
-
-### Documented (`docs/BRAND.md`) — **VERIFIED** aligned with `:root` in `style.css` for core tokens
-
-| Domain | Spec |
-|--------|------|
-| Type | Instrument Sans only (display + body); avoid Inter |
-| Marketing colors | `#F7F7F8` bg, ink `#0A0A0C` text/CTAs, accent `#0E7C74` (not for CTA fills) |
-| Player | Dark `#0A0A0C` stage; accent `#2A9B90` / `#5EC4B8` |
-| Radii | 8 / 12; no 9999px pill CTAs (`--radius-pill` remapped to `--radius-lg`) |
-| Voice | Direct, second-person, short; falsifiable claims; no fake testimonials |
-| Feel | Resend/Linear-like restraint; anti purple-glow / glass / cream-terracotta AI defaults |
-
-### Implementation notes
-
-- **VERIFIED:** homepage + pricing + legal + device pages use Instrument + `landing-v2` composition; Say stays dark glasses UI with `style.min.css` only (no landing-v2) — intentional satellite unify at `c68909a`.
-- **CONTRADICTION — CHANGELOG v1.9:** still describes full-pill primary buttons and older radii; brand/CSS moved to 8/12 demoted pills. Treat **CSS + BRAND.md** as authoritative over that changelog line.
-- **CONTRADICTION — CONTRIBUTING.md:** still says “glassmorphism” as a priority — **legacy**; BRAND forbids glass blur.
-- **CONTRADICTION — TESTING.md:** overstates Ray-Ban on-lens readiness vs BRAND/PROJECT/homepage honesty.
-- **INFERRED intentional:** dark hero plane vs light body; player always dark for legibility.
-- **INFERRED legacy:** some older asset names (`hero-glasses.webp`, dark/light app icon variants, `launch.mp4`, `proof-glasses.webp`) may predate current light marketing; **current homepage hero** is the live HTML `#hero-demo` (not `launch.mp4`); current proof is copy-only.
+- Primary CTA: **Try Spector free** → sample player.
+- Secondary: `#try` paste path, `#beta`, GitHub.
+- Funnel: Awareness → hero comprehension → Try free (critical activation) → paste own script / Comfort / finish run → local history + feedback loop. Repeat rehearsal is the retention mechanic — there is no paywall step.
 
 ---
 
@@ -276,47 +184,38 @@ Awareness (SEO device pages / OG / GitHub)
 ```
 SPECTOR/ (static)
 ├── public/                 # entire product surface
-│   ├── index.html          # landing + library + history UI + funnel JS
-│   ├── app.html            # player + SpectorCore + tests + debug
+│   ├── index.html          # landing + library + history UI + editor JS
+│   ├── app.html            # player + tests + debug
+│   ├── spector-core.js     # SpectorCore pure logic (shared)
 │   ├── say.html            # SayCore / AAC scan UI + tests
-│   ├── pricing.html (+ legal + device SEO pages)
 │   ├── style.css / style.min.css
 │   ├── landing-v2.css / landing-v2.min.css
-│   ├── js/paddle-pro.js    # Pro entitlement + Paddle overlay
-│   ├── analytics.js        # Vercel Insights loader
 │   ├── sw.js / sw-prime.html / manifest.json
-│   └── images/…            # logo, OG, hero film, proof stills
+│   └── images/…
 ├── tests/run_verification.py
-├── vercel.json             # build + rewrites + CSP
+├── vercel.json             # build + rewrites + security headers + CSP
 ├── package.json            # clean-css only
-└── docs/                   # PROJECT, BRAND, PADDLE, DOMAIN, META_BRAIN
+└── docs/                   # PROJECT, BRAND, DOMAIN, META_BRAIN
 ```
 
 ### Where major logic lives (**VERIFIED**)
 
 | Concern | Location |
 |---------|----------|
-| Chunking, timing, analytics math, motion, cues | `public/app.html` → `window.SpectorCore` |
-| Player UI / rehearsal recording / Pro export gate | `public/app.html` |
-| Landing library, history chart, samples, forms | `public/index.html` inline JS |
-| AAC scanning | `public/say.html` (`SayCore`-style pure funcs + DOM) |
-| Payments | `public/js/paddle-pro.js` + Paddle.js CDN |
+| Chunking, timing, analytics math, motion, cues, editor helpers | `public/spector-core.js` → `window.SpectorCore` |
+| Player UI / rehearsal recording | `public/app.html` |
+| Landing library, history chart, samples, forms, estimate, .md import | `public/index.html` inline JS |
+| AAC scanning | `public/say.html` |
 | Offline | `public/sw.js` |
 | Build | `npm run build` → min CSS committed |
 | Deploy | Vercel `outputDirectory: public`, GitHub `main` |
-| External services | Paddle, Formspree (tips/beta), Google Fonts, Vercel Analytics, optional GitHub API for stars |
+| External services | Formspree (tips/beta), Google Fonts, GitHub API for stars |
 | Storage | browser `localStorage` only for product data |
-| APIs | none owned; client tokens only |
 
 ### Dependencies (**VERIFIED**)
 
-- Runtime app: **zero npm deps** in the browser app itself.
-- Dev: `clean-css-cli`.
-- Third-party runtime: Paddle.js, Formspree, fonts.googleapis, Vercel insights script.
-
-### Security / monetization honesty (**VERIFIED** in PADDLE.md)
-
-Pro is spoofable via DevTools; accepted for now. No backend Transactions API validation.
+- Runtime app: **zero npm deps**; third-party runtime: Formspree, fonts.googleapis, GitHub API.
+- Dev: `clean-css-cli` (pinned, lockfile committed).
 
 ---
 
@@ -324,176 +223,109 @@ Pro is spoofable via DevTools; accepted for now. No backend Transactions API val
 
 | Area | Assessment | Tag |
 |------|------------|-----|
-| Phone/desktop teleprompter loop | Production-ready for serious rehearsal | **VERIFIED** feature-complete in code; **INFERRED** “production” from live site + tests present |
+| Phone/desktop teleprompter loop | Production-ready for serious rehearsal | **VERIFIED** feature-complete in code |
 | Punctuation pacing + cues | Production-ready | **VERIFIED** |
-| Rehearsal analytics v1/v2 | Functional / useful; not deep coaching | **VERIFIED** shipped; **INFERRED** “rough” depth |
-| Comfort spatial | Functional; desktop needs sim/sensors; real-glasses feel unvalidated at scale | **VERIFIED** code; **UNKNOWN** field quality |
-| PWA offline | Working for player shell | **VERIFIED** browser: SW active, cache populated, `app.html` reloads Offline |
-| Pro checkout | Live Paddle product/price IDs in client | **VERIFIED** in paddle-pro.js / PADDLE.md |
+| Rehearsal feedback v1/v2 | Functional / useful; not deep coaching | **VERIFIED** shipped |
+| Comfort spatial | Functional; desktop needs sim/sensors; real-glasses feel unvalidated at scale | **UNKNOWN** field quality |
+| PWA offline | Working for player shell | **VERIFIED** |
 | Say | Functional v1; early | **VERIFIED** |
 | Device SEO pages | Shipped; honest Meta copy | **VERIFIED** |
-| Hardware integration depth | Thin (mirror + debug keys) | **VERIFIED** |
-| Docs drift | TESTING/CONTRIBUTING partially stale | **VERIFIED** contradictions |
-| Broken | No confirmed product-breaking offline/PWA defect after browser SW pass | **VERIFIED** for offline player path; other areas still need separate evidence |
+| Docs drift | TESTING/CONTRIBUTING partially stale (pre-existing) | **VERIFIED** |
 
-**Technically risky (**INFERRED**):** honor-system Pro; Formspree as sole lead capture; possible marketing `*.min.css` offline skew (player path verified); Comfort + iOS permission UX; any future mic/translation direction breaking “nothing uploaded.”
-
-**Marketing claims needing ongoing verification:** “XREAL/Viture eyes-up works today” (mirror workflow — true as browser mirror, not as native app); beta Pro-for-life fulfillment process (**UNKNOWN** ops detail).
+**Technically risky (INFERRED):** Formspree as sole lead capture; Comfort + iOS permission UX; any future mic/translation direction breaking “nothing uploaded.”
 
 ---
 
 ## 11. Strengths
 
-1. **Clear, falsifiable product insight** (punctuation pace, no mic) — rare honesty in wearable-adjacent software. **VERIFIED**
-2. **Honest device matrix** — builds trust vs vapor “works on all AR glasses.” **VERIFIED**
-3. **Portable core (`SpectorCore`)** — chunk/time/motion/analytics separable for future ports. **VERIFIED**
-4. **Privacy architecture matches promise** — local-first, static hosting. **VERIFIED**
-5. **Tight free→Pro story** (once, no subscription, sync not fake-sold). **VERIFIED**
-6. **Brand implementation largely matches BRAND.md** after light/teal unify — anti-slop tokens present. **VERIFIED**
-7. **End-to-end rehearsal loop** with measurable feedback (consistency / hesitations / slowest). **VERIFIED**
-8. **MIT + public repo** as distribution and trust channel. **VERIFIED**
-
----
+1. Clear, falsifiable product insight (punctuation pace, no mic). **VERIFIED**
+2. Honest device matrix. **VERIFIED**
+3. Portable core (`spector-core.js`). **VERIFIED**
+4. Privacy architecture matches promise — local-first, static, no telemetry. **VERIFIED**
+5. Free + MIT removes every adoption objection. **VERIFIED**
+6. Brand implementation matches BRAND.md. **VERIFIED**
+7. End-to-end rehearsal loop with measurable feedback. **VERIFIED**
+8. Public repo as distribution and trust channel. **VERIFIED**
 
 ## 12. Weaknesses
 
-1. **Pro value may feel thin** vs free core (history cap + export only). **INFERRED**
-2. **Glasses story is mostly mirroring** — differentiated pacing engine, undifferentiated display path. **INFERRED**
-3. **Hardware validation incomplete** — Phase 1 open in PROJECT. **VERIFIED** as open work
-4. **Say unvalidated** with AAC users; risk of well-intentioned but unusable UX. **VERIFIED** caveat
-5. **Doc contradictions** (TESTING, CONTRIBUTING, parts of CHANGELOG) undermine “honesty” brand if found. **VERIFIED**
-6. **Funnel activation** depends on users hitting Play with enough script to feel commas/periods. **INFERRED**
-7. **Cue authoring** still basic. **VERIFIED** open item
-8. **CONTRIBUTING still praises glassmorphism** — cultural drift risk for contributors. **VERIFIED**
-9. **Landing complexity** (many sections: try disclosure, library, history, tips, beta, founder) vs BRAND “hero budget” discipline — mostly OK but density can confuse. **INFERRED**
-
----
+1. Glasses story is mostly mirroring. **INFERRED**
+2. Hardware validation incomplete. **VERIFIED** as open work
+3. Say unvalidated with AAC users. **VERIFIED** caveat
+4. Doc contradictions (TESTING, CONTRIBUTING, parts of CHANGELOG) undermine the honesty brand if found. **VERIFIED**
+5. Funnel activation depends on users hitting Play with enough script to feel punctuation pacing. **INFERRED**
+6. Cue authoring still basic. **VERIFIED** open item
+7. Landing section density vs BRAND “hero budget” discipline. **INFERRED**
 
 ## 13. Risks
 
 | Risk | Why it matters | Tag |
 |------|----------------|-----|
-| Overclaiming Meta Display / temple controls | Trust collapse; Paddle/brand damage | **VERIFIED** stale TESTING text exists |
-| Pro spoof / support burden | Low financial risk; support confusion | **VERIFIED** known |
-| Privacy promise broken by future features (translation, accounts) | Strategic identity risk | **VERIFIED** called out in PROJECT |
-| Marketing offline style skew (`*.min.css` vs precache) | Cosmetic offline marketing FOUC — **not** a player-offline failure | **INFERRED**; player offline **VERIFIED** browser |
-| Treating headless Chrome hangs as PWA failure | False “offline broken” diagnoses; unnecessary SW churn | **VERIFIED** process risk — headless unreliable |
-| Adoption stall without hardware proof videos/testimonials | Growth | **INFERRED**; no fake testimonials policy **VERIFIED** |
-| Split mission (teleprompter vs AAC vs translation) | Dilution | **INFERRED**; PROJECT deliberately separates them **VERIFIED** |
+| Overclaiming Meta Display / temple controls | Trust collapse | **VERIFIED** stale TESTING text exists |
+| Privacy promise broken by future features (translation, accounts, analytics) | Strategic identity risk | **VERIFIED** called out in PROJECT |
+| Marketing offline style skew (`*.min.css` vs precache) | Cosmetic offline marketing FOUC — **not** a player-offline failure | **INFERRED** |
+| Treating headless Chrome hangs as PWA failure | False “offline broken” diagnoses | **VERIFIED** process risk |
+| Adoption stall without hardware proof | Growth | **INFERRED** |
 | Design-branch resurrection (`unify-and-deslop`) | Reintroduces rejected purple/Inter player | **VERIFIED** process risk |
-
----
 
 ## 14. Open Questions
 
-1. **UNKNOWN:** Real-world Comfort quality on XREAL/Viture/Meta Display WebViews.
-2. **UNKNOWN:** Conversion rates Try→Play→End→Pro; Formspree beta volume.
-3. **UNKNOWN:** Whether Meta Web App / Developer Mode path still matches TESTING.md steps in 2026.
-4. **UNKNOWN:** How many users hit the 5-run cap (is Pro priced to a real pain?).
-5. **UNKNOWN:** AAC user feedback on Say (scan speed defaults, phrase rows, SPEAK via `speechSynthesis`).
-6. **UNKNOWN:** Trademark / brand conflict risk for “Spector” (DOMAIN.md mentions check; outcome not recorded as final).
-7. **UNKNOWN:** Whether marketing-page offline styling (`style.min.css` / `landing-v2.min.css` vs SW precache of `style.css`) is user-visible — **player** offline is no longer unknown.
-8. **RESOLVED (browser VERIFIED):** PWA/SW offline for `app.html` — registers, activates, caches, reloads Offline. Headless hangs ≠ PWA failure.
-9. **PARTIAL:** Headless `tests/run_verification.py` / Chrome dump reliability — treat hangs as harness noise, not product proof; do not let them drive SW changes.
-
----
+1. **UNKNOWN:** Real-world Comfort quality on glasses.
+2. **UNKNOWN:** Formspree beta volume; which devices testers actually own.
+3. **UNKNOWN:** Whether Meta Web App / Developer Mode path still matches TESTING.md steps.
+4. **UNKNOWN:** AAC user feedback on Say.
+5. **UNKNOWN:** Trademark / brand conflict risk for “Spector”.
+6. **RESOLVED:** PWA/SW offline for `app.html` — verified; cache-version bumps for shipped changes are fine, behavior churn is not.
 
 ## 15. Confirmed Decisions
 
-Treat these as locked unless explicitly revisited:
+Locked unless explicitly revisited:
 
-1. **Delivery-first homepage H1** (“Stop reading. Start delivering.”); punctuation-paced / no-mic remains core capability and supporting messaging (not “Eyes Forward” as H1). **VERIFIED** `index.html` / BRAND
-2. **Free core forever; Pro $34 once; no subscription.** **VERIFIED**
-3. **Cloud sync not sold until shipped.** **VERIFIED**
-4. **Honest device matrix** — no claiming Ray-Ban Meta Display on-lens Spector. **VERIFIED**
-5. **Static zero-backend architecture** for the core product. **VERIFIED**
-6. **Light marketing + dark player; teal accent; Instrument Sans; ink CTAs.** **VERIFIED**
-7. **No purple / Inter / glassmorphism / cream-terracotta AI look.** **VERIFIED** BRAND
-8. **Say is separate from teleprompter; live translation is a different architecture decision.** **VERIFIED** PROJECT
-9. **Honor-system Pro is accepted** for now. **VERIFIED** PADDLE
-10. **`origin/design/unify-and-deslop` is non-authoritative.** **VERIFIED** (process instruction / Meta Brain baseline)
-11. **Baseline product truth = `main` @ `c68909a`.** **VERIFIED**
-12. **Do not modify `sw.js` to “fix” offline** after the Aug 2026 browser validation pass — player offline is working. **VERIFIED** process decision.
-13. **Headless Chrome hangs are not PWA failure evidence.** Use DevTools Offline / real-browser checks for offline health. **VERIFIED** process decision.
-
----
+1. Delivery-first homepage H1. **VERIFIED**
+2. **Free and open source (MIT); no monetization; no analytics or telemetry.** **VERIFIED** (2026-11 decision — supersedes the abandoned “Pro $34 once” experiment recorded only in CHANGELOG)
+3. Cloud sync not sold until shipped. **VERIFIED**
+4. Honest device matrix. **VERIFIED**
+5. Static zero-backend architecture. **VERIFIED**
+6. Light marketing + dark player; teal accent; Instrument Sans; ink CTAs. **VERIFIED**
+7. No purple / Inter / glassmorphism AI look. **VERIFIED**
+8. Say is separate from teleprompter. **VERIFIED**
+9. `origin/design/unify-and-deslop` is non-authoritative. **VERIFIED**
+10. Baseline product truth = `main`. **VERIFIED**
+11. Do not churn `sw.js` behavior; bump its cache version only when shipped assets change. **VERIFIED**
+12. Headless Chrome hangs are not PWA failure evidence. **VERIFIED**
 
 ## 16. Things We Must Not Break
 
-1. **Punctuation timing semantics** (`computeMs`, pause tags, hybrid chunking) — the product *is* this feel.
-2. **Privacy promise** — no silent uploads of scripts; no mic for pacing.
-3. **Free core surface** — modes, pacing, Comfort, offline-capable rehearsal without paywall.
-4. **Pro honesty** — don’t sell sync or features that aren’t live.
-5. **Device honesty** — especially Meta Display status.
-6. **`SpectorCore` test harness** (`app.html?test`) and verifier entrypoint — without treating headless hangs as offline truth.
-7. **Paddle load pattern** (`async`, not `defer`) — documented footgun.
-8. **CSP / Permissions-Policy** allowing Paddle payment frames.
-9. **Brand tokens** — accent not CTA; Instrument Sans; light marketing canvas.
-10. **Local storage data model** for scripts/runs/pro without forcing accounts.
-11. **Working Service Worker offline path** for `app.html` (register → activate → cache → Offline reload) — do not churn `sw.js` without a real-browser regression.
-
----
+1. **Punctuation timing semantics** (`computeMs`, pause tags, hybrid chunking).
+2. **Privacy promise** — no silent uploads, no mic for pacing, no analytics/telemetry.
+3. **Free surface** — every feature works without paywall, account, or tracking.
+4. **Device honesty** — especially Meta Display status.
+5. **`SpectorCore` test harness** (`app.html?test`) and verifier entrypoint.
+6. **CSP / Permissions-Policy** scoped to the actual third-party surface.
+7. **Brand tokens** — accent not CTA; Instrument Sans; light marketing canvas.
+8. **Local storage data model** for scripts/runs without forcing accounts.
+9. **Working Service Worker offline path** — no behavior churn without a real-browser regression.
 
 ## 17. Strategic Priorities
 
-Ordered for leverage (INFERRED strategy on VERIFIED facts):
-
-1. **Activation:** maximize first-session “commas breathe / periods hold” aha (sample → play → end screen).
-2. **Hardware proof:** real XREAL/Viture mirror validation + short honest proof (not Meta on-lens fiction).
-3. **Doc hygiene:** align TESTING.md / CONTRIBUTING.md with BRAND/PROJECT so honesty isn’t undercut.
-4. **Pro value clarity:** either prove history/export matter, or define the *next* shippable Pro benefit that doesn’t break privacy.
-5. **Say validation with real users** before feature expansion.
-6. **Keep architecture constraints** — don’t start translation/backend until deliberate plan.
-
----
+1. **Activation:** maximize first-session “commas breathe / periods hold” aha.
+2. **Hardware proof:** real XREAL/Viture mirror validation + short honest proof.
+3. **Doc hygiene:** align TESTING.md / CONTRIBUTING.md with BRAND/PROJECT.
+4. **Say validation with real users** before feature expansion.
+5. **Keep architecture constraints** — don’t start translation/backend/analytics until a deliberate plan.
 
 ## 18. Deferred / Do Not Work On Yet
 
-From PROJECT explicit non-goals + Meta Brain judgment:
-
 - Native App Store / Play binaries
-- User accounts / server backend (unless a deliberate new product line)
+- User accounts / server backend
 - Cloud sync implementation
 - Live translated captions / continuous mic capture
-- Plugin marketplace
+- Any analytics/telemetry reintroduction (requires an explicit, deliberate decision)
 - Claiming Meta Display / Neural Band support
-- Video recording / multi-device director mode
-- Redesigning the player or reopening purple/dark Inter branch aesthetics
 - Merging `origin/design/unify-and-deslop`
 - Broad CSS/HTML refactors “for cleanliness” without a product hypothesis
-- Modifying `sw.js` / Service Worker behavior without a real-browser Offline regression
-- Treating headless Chrome hangs as grounds to change the PWA
+- Modifying `sw.js` behavior without a real-browser Offline regression
 
 ---
 
-## 19. Recommended Next Experiments
-
-Small, evidence-seeking moves (do **not** implement in Meta Brain phase):
-
-1. **Instrumented activation funnel** (already have Vercel events): measure Try click → Play → End → Pro CTA. **INFERRED** next measurement.
-2. **Hardware beta protocol:** fixed script + Comfort vs Focus on XREAL/Viture; capture whether mirror lag kills trust. **VERIFIED** need in PROJECT.
-3. **History-cap experiment messaging:** show free users “4/5 rehearsals kept” earlier — test if Pro intent rises. **INFERRED**
-4. **Say user test (n=3–5 AAC/switch users):** scan speed, BACK affordance, SPEAK usefulness — ship feedback before features. **VERIFIED** next step per PROJECT.
-5. **TESTING.md honesty patch** (docs-only): remove on-lens overclaims so beta testers aren’t misled. **VERIFIED** contradiction to fix.
-6. **Offline warm-path (player) — DONE (browser VERIFIED):** SW register/activate/cache + `app.html` Offline reload. Optional leftover: marketing `*.min.css` offline cosmetics only — do not touch SW for that without evidence.
-
----
-
-## META BRAIN SUMMARY
-
-**What Spector needs to become successful**
-
-Spector wins if people who rehearse for camera **feel** punctuation-paced delivery in one session, trust the **no-mic / no-cloud** promise, and have a **credible eyes-up path** (today: phone + XREAL/Viture mirror — not Meta Display theater). Monetization works only if free is generous and Pro is a clear, honest upgrade for repeat rehearters — not fake sync.
-
-**What to focus on next**
-
-1. Protect the baseline (`c68909a`) and the punctuation/privacy identity.  
-2. Improve **first-run aha → completed rehearsal** without redesign churn.  
-3. Gather **real glasses evidence** for the mirror path; keep Meta claims cold and accurate.  
-4. Fix **doc contradictions** that threaten the honesty brand.  
-5. Validate **Say** with real users before expanding accessibility scope.  
-6. Do **not** chase backends, translation, App Store, or the rejected design branch until the core rehearsal wedge is proven with evidence.
-
----
-
-*Generated as documentation only. No application code, CSS, HTML, assets, routes, config, or dependencies were modified to produce this file. Not committed by the Meta Brain phase.*
+*Generated as documentation only. No application code, CSS, HTML, assets, routes, config, or dependencies were modified to produce this file.*

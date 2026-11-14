@@ -41,22 +41,20 @@
     <main class="container legal-page">
         <section class="hero-section legal-hero">
             <h1 class="hero-headline">Privacy Policy</h1>
-            <p class="hero-subhead">Last updated: July 31, 2026</p>
+            <p class="hero-subhead">Last updated: November 14, 2026</p>
         </section>
 
         <section class="legal-body">
             <h2>The short version</h2>
-            <p><strong>Free core, forever. No account, no cloud, nothing uploaded — ever.</strong> Your scripts and rehearsal history stay in your browser's local storage, on your own device. Spector Labs never sees them. The rest of this page explains the few places data does pass through a third party, and why.</p>
+            <p><strong>Spector is free and open source. No account, no servers, no analytics, no telemetry — nothing uploaded, ever.</strong> Your scripts and rehearsal history stay in your browser's local storage, on your own device. Spector Labs never sees them. The only third-party touches are the ones you initiate yourself, listed below.</p>
 
             <h2>1. What stays on your device</h2>
             <p>Everything related to using the free teleprompter — the scripts you paste or upload, your saved script library, player preferences (mode, speed, text size), and your rehearsal history — is stored using your browser's <code>localStorage</code>. It is never transmitted to Spector Labs' servers, because Spector doesn't have a server that stores this data. You can clear it at any time from the "Clear history" control on the site, or by clearing your browser's site data.</p>
 
             <h2>2. What does pass through a third party</h2>
             <ul>
-                <li><strong>Email forms:</strong> If you submit the founding-beta form or the tips form, your email address and any message you write are sent to <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a>, a third-party form processing service, so we can reply to you. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree's privacy policy</a>.</li>
+                <li><strong>Email forms:</strong> If you submit the hardware-beta or tips forms, your email address and any message you write are sent to <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a>, a third-party form processing service, so we can reply to you. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree's privacy policy</a>.</li>
                 <li><strong>GitHub star count:</strong> The landing page makes a request to GitHub's public API to show the current star count and last-updated date. This sends only a standard web request (no personal data) and is cached in your browser for an hour.</li>
-                <li><strong>Payments:</strong> Spector Pro purchases are processed by <a href="https://www.paddle.com" target="_blank" rel="noopener">Paddle</a> (merchant of record). Paddle collects billing details needed to complete payment and tax. See <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener">Paddle’s privacy policy</a>. Spector Labs does not store card numbers. A local Pro flag may be saved in your browser’s <code>localStorage</code> after checkout or license activation so this device can unlock Pro features — that flag never includes your payment details.</li>
-                <li><strong>Aggregate analytics:</strong> We use Vercel Web Analytics to measure page visits and a small set of product actions, such as launching or completing a rehearsal. It is cookieless and stores anonymized device, browser, country, referrer, and page information. We do not send script text, email addresses, or form contents to analytics.</li>
             </ul>
 
             <h2>3. Cookies</h2>
@@ -73,11 +71,11 @@
         </section>
 
         <section class="seo-crosslinks">
-            <p><a href="/pricing">Pricing</a> · <a href="/terms">Terms of Service</a> · <a href="/refund">Refund Policy</a> · <a href="/">Spector home</a></p>
+            <p><a href="/">Spector home</a></p>
         </section>
 
         <footer class="site-footer">
-            <p class="footer-promise">Free core, forever. No account, no cloud, nothing uploaded — ever.</p>
+            <p class="footer-promise">Free and open source. No account, no cloud, nothing uploaded — ever.</p>
             <div class="footer-columns">
                 <div class="footer-col footer-brand-col">
                     <span class="nav-wordmark">SPECTOR</span>
@@ -86,7 +84,6 @@
                 <div class="footer-col">
                     <p class="footer-heading">Product</p>
                     <a href="/#try">Try it</a>
-                    <a href="/pricing">Pricing</a>
                     <a href="/say" title="Switch-scan AAC composer — early, for non-verbal/Deaf communication">Say (AAC)</a>
                 </div>
                 <div class="footer-col">
@@ -103,13 +100,10 @@
                 </div>
                 <div class="footer-col">
                     <p class="footer-heading">Legal</p>
-                    <a href="/terms">Terms</a>
                     <a href="/privacy">Privacy</a>
-                    <a href="/refund">Refunds</a>
                 </div>
             </div>
         </footer>
     </main>
-    <script defer src="/analytics.js"></script>
 </body>
 </html>

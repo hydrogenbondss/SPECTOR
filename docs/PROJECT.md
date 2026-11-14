@@ -13,7 +13,7 @@ SPECTOR is a free, open-source **punctuation-paced teleprompter** PWA for seriou
 
 **Today:** rehearse on phone or computer; go eyes-up by mirroring to **XREAL or Viture**. Ray-Ban Meta Gen 1/2 and Ray-Ban Meta Display are **phone-rehearsal** paths — SPECTOR does **not** currently run on the Meta Display lens. Meta remains competitive context and a possible future platform option, not the primary product story.
 
-SPECTOR sells teleprompter software only — not smart glasses. Not affiliated with Meta, Ray-Ban, XREAL, Viture, or any glasses manufacturer. Free core forever; Spector Pro is **$34 once** (longer on-device history + copy script with stats). Cloud sync is **not shipped**.
+SPECTOR sells teleprompter software only — not smart glasses. Not affiliated with Meta, Ray-Ban, XREAL, Viture, or any glasses manufacturer. Spector is free and open source (MIT) — no paid tiers, no accounts. Cloud sync is **not shipped**.
 
 ---
 
@@ -42,8 +42,8 @@ SPECTOR sells teleprompter software only — not smart glasses. Not affiliated w
 | **End-screen reinforcement** | Done | Subtitle and analytics note after a run |
 | **Actionable beta + presets** | Done | Mailto beta form with glasses model field; sample scripts / presets |
 | **History clarity** | Done | Local history; cloud sync called out as not shipped |
-| **Monetization (current)** | Done | Free core; Pro $34 once via Paddle — 50 rehearsals on-device (vs 5) + copy script with stats; no subscription |
-| **Export (Pro)** | Done | End-screen “Copy script + stats” gated behind Pro |
+| **Monetization** | Done (removed 2026-11) | Product is fully free and open source (MIT); monetization removed before public launch |
+| **Export** | Done | End-screen “Copy script + stats”, ungated for everyone |
 | **Say (AAC composer)** | Done (v1) | New page at `/say` — row-column switch-scan speller, single input (tap/Space/B), no camera/translation/backend. See "Accessibility & communication direction" below |
 
 ### Infrastructure & quality
@@ -91,14 +91,14 @@ Re-run `python3 tests/run_verification.py` (and spot-check production) before tr
 
 - [x] **Redeploy Vercel** to latest `main` (historical)
 - [x] **Domain live** — spectorlabs.io acquired and serving the product site
-- [x] **Positioning / homepage honesty pass** — delivery-first H1 + live HTML hero demo; punctuation as supporting claim; device matrix; free core / Pro once (see `docs/BRAND.md`)
+- [x] **Positioning / homepage honesty pass** — delivery-first H1 + live HTML hero demo; punctuation as supporting claim; device matrix; free-and-open-source framing (see `docs/BRAND.md`)
 - [ ] **Beta test on real glasses** via Developer Mode ([TESTING.md](./TESTING.md)) — especially XREAL / Viture mirror workflows
 - [ ] **Gather feedback** on Comfort, pacing feel, and comparison to other teleprompters (including Meta’s where users have it)
 - [ ] **Re-run full local verification** and record the result here when green
 
 ### Phase 2 — Creator essentials (remaining)
 
-Shipped since earlier drafts (do not re-list as open): mirror mode (base), section bookmarks, rehearsal analytics v2 / trend chart, Pro export of script + stats, basic cue insert toolbar on landing.
+Shipped since earlier drafts (do not re-list as open): mirror mode (base), section bookmarks, rehearsal analytics v2 / trend chart, script + stats export (ungated), basic cue insert toolbar on landing.
 
 Still open:
 
@@ -169,11 +169,12 @@ Two distinct efforts, deliberately not conflated:
 SPECTOR/
 ├── public/
 │   ├── index.html      # Landing, script library, positioning
-│   ├── app.html        # Player + SpectorCore + ?test harness
+│   ├── app.html        # Player + ?test harness
+│   ├── spector-core.js # SpectorCore pure logic (shared by player + editor)
 │   ├── say.html        # Switch-scan AAC composer + ?test harness
 │   ├── style.css       # Canonical styles (landing + glasses mode)
 │   ├── manifest.json   # PWA manifest
-│   ├── sw.js           # Service worker (cache version: see file; currently spector-v12)
+│   ├── sw.js           # Service worker (cache version: see file)
 │   └── sw-prime.html   # SW registration helper
 ├── tests/
 │   └── run_verification.py

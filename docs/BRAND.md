@@ -42,14 +42,13 @@ across the landing + player — keep this doc and the CSS in lock-step.
   (`#hero-demo`; click opens the player with a sample; pause control for
   WCAG 2.2.2). Light canvas begins below. Then: one proof section (three copy
   beats — punctuation-paced / no microphone / screen first) → collapsed Try
-  (sample CTA; paste/save behind disclosure) → compact devices → pricing teaser
-  → 3 FAQs → hardware beta (invite-capped; does not replace Buy Pro) → quiet
-  founder line. No invented testimonials. No feature-row essays, no changelog
-  wall, no investor block on the home page.
-- **Pricing page:** short hero (free / $34 once) + quiet ledger + embedded
-  Paddle checkout + trimmed billing FAQ. Pro sells longer on-device history
-  (50 vs 5) and export — not sync until it ships. Same light canvas / ink CTAs
-  as home.
+  (sample CTA; paste/save behind disclosure) → compact devices → free & open
+  source note → 3 FAQs → hardware beta (invite-capped) → quiet founder line.
+  No invented testimonials. No feature-row essays, no changelog wall, no
+  investor block on the home page.
+- **Free & open source:** the whole product is free (MIT) — no pricing
+  page, no checkout, no tiers. Same light canvas / ink CTAs as home; a short
+  "Free — the whole thing" note links the GitHub repo.
 
 ---
 

@@ -537,8 +537,8 @@ def step2_core_logic():
     ]
     lines = [meta(2), "=== GREP PATTERNS (plan step 2: git grep core units) ==="]
     for label, pattern in core_patterns:
-        hit = git_grep(pattern, ["public/app.html"])
-        lines += [f"$ git grep -n -E '{pattern}' public/app.html", hit, ""]
+        hit = git_grep(pattern, ["public/app.html", "public/spector-core.js"])
+        lines += [f"$ git grep -n -E '{pattern}' public/app.html public/spector-core.js", hit, ""]
         if hit.startswith("(no matches"):
             fail(f"core logic missing {label}")
     lines += ["=== GREP PATTERNS (plan step 2: git grep CSS units) ==="]
@@ -560,7 +560,7 @@ def step2_core_logic():
     ]
     lines += ["=== APPENDIX: representative blocks (git grep -B/-A) ==="]
     for label, pattern in snippets:
-        lines += [f"--- {label} ---", git_grep_context(pattern, ["public/app.html"], 2, 18), ""]
+        lines += [f"--- {label} ---", git_grep_context(pattern, ["public/app.html", "public/spector-core.js"], 2, 18), ""]
     lines += ["--- body.glasses ---", git_grep_context(r"body\.glasses", ["public/style.css"], 0, 24)]
     ARTIFACTS["core-logic.txt"] = "\n".join(lines)
 
@@ -770,9 +770,15 @@ def step_static_verify():
     if (ROOT / "style.css").exists():
         fail("duplicate root style.css should not exist")
     app = (PUBLIC / "app.html").read_text(encoding="utf-8")
+    core_path = PUBLIC / "spector-core.js"
+    core = core_path.read_text(encoding="utf-8") if core_path.is_file() else ""
+    if not core:
+        fail("missing public/spector-core.js")
+    if "window.SpectorCore = SpectorCore" not in core:
+        fail("spector-core.js must publish window.SpectorCore")
     if "runSpectorCoreTests().then" not in app:
         fail("runSpectorCoreTests should be invoked via .then in test mode")
-    if "createSpectorMotion" not in app or "createMotion: createSpectorMotion" not in app:
+    if "createSpectorMotion" not in core or "createMotion: createSpectorMotion" not in core:
         fail("missing SpectorCore.createMotion factory")
     if "function ensureMotionForPlayback" not in app:
         fail("missing ensureMotionForPlayback for iOS resume")

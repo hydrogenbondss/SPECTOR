@@ -3,18 +3,17 @@
 ## Scope
 
 Spector is a static, client-side PWA (`public/index.html`, `app.html`,
-`style.css`, `sw.js`). There's no account system, no database, and nothing
-Spector controls stores your rehearsal data — it stays in `localStorage` on
-your device. Third-party surface today: the beta-signup form (posts to
-Formspree), a client-side GitHub API read (live star count, no auth token
-involved), Google Fonts, static hosting (Vercel), and the **Spector Pro
-checkout, handled entirely by Paddle.com Market Ltd as Merchant of Record**
-(see [`terms.html`](public/terms.html), [`privacy.html`](public/privacy.html),
-[`refund.html`](public/refund.html)) — Spector never sees or stores card
-details itself, but the checkout flow and any license-key validation logic
-built around it are in scope for review. A `Content-Security-Policy` header
-(`vercel.json`) is enforcing, scoped to the site's actual third-party
-surface (Paddle, Google Fonts, the GitHub API, Formspree).
+`say.html`, `spector-core.js`, `style.css`, `sw.js`). There's no account
+system, no database, no analytics or telemetry, and nothing Spector controls
+stores your rehearsal data — it stays in `localStorage` on your device.
+Third-party surface today: the beta/tips forms (post to Formspree), a
+client-side GitHub API read (live star count, no auth token involved),
+Google Fonts, and static hosting (Vercel). Spector is free and open source
+(MIT) and accepts no payments, so there is no checkout flow, payment
+processor, or license-key handling in the product. A
+`Content-Security-Policy` header (`vercel.json`) is enforcing, scoped to the
+site's actual third-party surface (Google Fonts, the GitHub API,
+Formspree).
 The attack surface today is intentionally small; this will get updated as
 that changes.
 

@@ -19,12 +19,6 @@
     <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png?v=2">
     <title>Spector — Your punctuation sets the pace</title>
     <link rel="canonical" href="https://www.spectorlabs.io/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts without blocking first paint (Lighthouse: render-blocking resources) -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap"></noscript>
     <link rel="stylesheet" href="style.min.css?v=9">
     <link rel="stylesheet" href="landing-v2.min.css?v=27">
     <link rel="manifest" href="manifest.json">
@@ -57,7 +51,7 @@
         </a>
         <div class="nav-links" id="nav-links">
             <a href="#features">Product</a>
-            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge hidden" id="gh-stars"></span></a>
+            <a href="https://github.com/hydrogenbondss/SPECTOR" target="_blank" rel="noopener" class="nav-github">GitHub<span class="nav-star-badge">★ Star</span></a>
             <a href="app.html" class="nav-cta" data-quick-start>Try Spector free</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
@@ -274,7 +268,7 @@
 
         <footer class="site-footer">
             <p class="footer-promise">Free and open source. No account, no cloud, nothing uploaded — ever.</p>
-            <p class="footer-changelog"><a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · updated <a id="last-updated" href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener">recently</a></p>
+            <p class="footer-changelog"><a href="https://github.com/hydrogenbondss/SPECTOR/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · updated <a href="https://github.com/hydrogenbondss/SPECTOR/commits/main" target="_blank" rel="noopener">recently</a></p>
             <div class="footer-columns">
                 <div class="footer-col footer-brand-col">
                     <span class="nav-wordmark">SPECTOR</span>
@@ -1031,39 +1025,6 @@
             window.addEventListener('resize', onScroll, { passive: true });
         }
 
-        // Proof of life: live GitHub stars in the nav + "updated N days ago" in the footer.
-        // One cached API call; degrades silently to plain "GitHub"/"recently" offline.
-        function initProofOfLife() {
-            const stars = document.getElementById('gh-stars');
-            const updated = document.getElementById('last-updated');
-            const apply = (d) => {
-                if (stars && d.stargazers_count >= 10) {
-                    stars.textContent = `★ ${d.stargazers_count}`;
-                    stars.classList.remove('hidden');
-                }
-                if (updated && d.pushed_at) {
-                    const days = Math.max(0, Math.floor((Date.now() - new Date(d.pushed_at)) / 864e5));
-                    updated.textContent = days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
-                }
-            };
-            try {
-                const cached = JSON.parse(localStorage.getItem('spector_gh') || 'null');
-                if (cached && Date.now() - cached.t < 36e5) { apply(cached.d); return; }
-            } catch {}
-            const go = () => fetch('https://api.github.com/repos/hydrogenbondss/SPECTOR')
-                .then(r => r.ok ? r.json() : null)
-                .then(d => {
-                    if (!d) return;
-                    const slim = { stargazers_count: d.stargazers_count || 0, pushed_at: d.pushed_at };
-                    try { localStorage.setItem('spector_gh', JSON.stringify({ t: Date.now(), d: slim })); } catch {}
-                    apply(slim);
-                })
-                .catch(() => {});
-            // off the critical path — wait for idle so it never competes with first paint
-            if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 5000 });
-            else setTimeout(go, 3500);
-        }
-
         // Live hero stage — Focus-mode pacing (380 ms/word + punctuation holds).
         // Click still opens the real player via data-quick-start.
         function initHeroDemo() {
@@ -1165,7 +1126,6 @@
             renderLibrary();
             renderHistory();
             initHeroDemo();
-            initProofOfLife();
             registerServiceWorker();
             initInstallPrompt();
             wireGlassButtons();
@@ -1231,10 +1191,9 @@
         }
 
         // DOMContentLoaded, not window.onload: init() only needs the DOM parsed, not
-        // every resource finished — onload waits on the Google Fonts stylesheet too,
-        // and that request hangs indefinitely (no error, just pending) for any visitor
-        // whose network/extensions block fonts.googleapis.com, which would otherwise
-        // leave every button and form on the page permanently non-functional.
+        // every resource finished. (Historically this also guarded against the
+        // Google Fonts stylesheet hanging for visitors whose network blocked it;
+        // fonts are self-hosted now, and the network tab is clean either way.)
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {

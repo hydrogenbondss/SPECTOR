@@ -1,6 +1,6 @@
 # Spector — Talk to camera. Not to your notes.
 
-Auto-paced, comfort-tuned teleprompter for smart glasses and serious rehearsal.
+A teleprompter that paces itself to your punctuation. Built for smart glasses and serious rehearsal.
 **Free and open source. No account, no cloud, nothing uploaded — ever.**
 
 [![Live demo](https://img.shields.io/badge/Live%20demo-spectorlabs.io-0E7C74?style=flat-square)](https://spectorlabs.io)
@@ -177,6 +177,6 @@ Meta hardware, and not affiliated with Meta Platforms, EssilorLuxottica, or Ray-
 
 ---
 
-**Built for the moment before built-in HUD teleprompters become truly great.**
+**Built by one person. Free forever.**
 
 Live: https://spectorlabs.io · Status: [docs/PROJECT.md](docs/PROJECT.md) · Glasses testing: [TESTING.md](TESTING.md)

@@ -439,9 +439,9 @@
      *   design). opts.maxLookaheadChunks bounds the forward window.
      *
      * Returns { chunkIndex, confidence, matchedWords, transcriptWordsUsed }.
-     * confidence is the strong-match ratio over the trailing window of
-     * transcript words (0..1); low confidence ⇒ caller should ignore the
-     * result and keep pacing on punctuation alone.
+     * confidence is the matched/considered ratio over the transcript words
+     * passed in this call (0..1) — trailing garbage dilutes it; callers gate
+     * on a confidence floor and keep pacing on punctuation alone below it.
      *
      * Algorithm: flatten the candidate chunk range into a word sequence with
      * chunk ids, then greedily match transcript words in order — each word
@@ -463,13 +463,12 @@
         let lastMatch = -1;
         let strong = 0, considered = 0;
         let t = 0;
-        // Skip leading transcript words that predate the hint position only
-        // when they clearly match before it would be impossible — with a
-        // stateless API we simply match everything from the hint forward.
         while (t < words.length) {
             const w = words[t];
-            // Trailing garbage (hesitations, ASR noise) shouldn't erase a
-            // solid earlier match: stop scoring after 6 consecutive misses.
+            // Every unmatched transcript word (hesitations, ASR noise) counts
+            // against confidence — there is no miss cutoff; a long garbage
+            // tail dilutes an earlier solid match by design, and callers gate
+            // on the confidence floor (see alignTranscript docs above).
             let bestJ = -1, bestScore = 0;
             const limit = Math.min(flat.length, anchor + WINDOW);
             for (let j = anchor; j < limit; j++) {

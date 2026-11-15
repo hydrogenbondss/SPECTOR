@@ -8,7 +8,8 @@
  *
  * Output is a CORRECTION SIGNAL: alignTranscript() suggests a chunk position
  * + confidence; the deterministic pacing engine remains the display driver.
- * See docs/patent-notes-voice-pacing.md.
+ * Internal patent review — kept out of the repo; D2 requires an FTO opinion
+ * before any user-facing voice work.
  */
 (function () {
     'use strict';

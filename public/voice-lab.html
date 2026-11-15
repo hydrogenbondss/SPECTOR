@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Spector Voice Lab — D1 spike</title>
+    <meta name="theme-color" content="#0A0A0C">
+    <link rel="stylesheet" href="style.min.css?v=10">
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <style>
+        body.lab { max-width: 860px; margin: 0 auto; padding: 48px 24px 96px; color: var(--text); background: var(--bg); font-family: var(--font-sans); }
+        .lab h1 { font-size: 26px; margin: 0 0 6px; }
+        .lab .sub { color: var(--text-muted); margin-bottom: 28px; max-width: 64em; line-height: 1.55; }
+        .lab-panel { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; background: var(--bg-elevated); }
+        .lab-panel h2 { font-size: 15px; margin: 0 0 12px; color: var(--text); }
+        .lab button { margin-right: 10px; margin-bottom: 8px; }
+        .lab pre { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; overflow: auto; font-size: 12.5px; line-height: 1.55; color: var(--text-muted); white-space: pre-wrap; }
+        .lab .mic-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--danger); margin-right: 8px; vertical-align: middle; }
+        .lab .mic-dot.on { background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .lab table { border-collapse: collapse; width: 100%; font-size: 12.5px; color: var(--text-muted); }
+        .lab td, .lab th { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+        .lab .stat { font-size: 22px; color: var(--accent-text); font-weight: 600; }
+        .lab .statlabel { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; }
+        .lab .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 8px 0 4px; }
+        .lab .warn { color: var(--danger); font-size: 12.5px; }
+    </style>
+</head>
+<body class="lab">
+    <h1>Voice Lab — D1 spike</h1>
+    <p class="sub">
+        Proves on-device ASR (Moonshine tiny, int8 — vendored under <code>/voice/</code>,
+        same-origin, never Web Speech API) can align a live transcript to a Spector
+        script. Everything below runs locally; the only network fetches are
+        same-origin model/runtime files, cached by the service worker in the
+        separate <code>spector-voice-v1</code> cache. The alignment output is a
+        <strong>correction signal</strong> for the deterministic pacer — never the display
+        driver. Not linked from nav. Internal patent review — kept out of the
+        repo; D2 requires an FTO opinion before any user-facing voice work.
+    </p>
+
+    <div class="lab-panel">
+        <h2>1 · Engine</h2>
+        <button id="load-btn" class="btn-primary" type="button">Load model + runtime (~44 MB, one-time)</button>
+        <span id="load-status" style="font-size:13px;color:var(--text-muted)"></span>
+        <div class="grid" id="stats" hidden>
+            <div><div class="stat" id="stat-load">—</div><div class="statlabel">load ms</div></div>
+            <div><div class="stat" id="stat-heap">—</div><div class="statlabel">heap Δ MB (Chrome)</div></div>
+            <div><div class="stat" id="stat-model">44 MB</div><div class="statlabel">runtime + model</div></div>
+        </div>
+    </div>
+
+    <div class="lab-panel">
+        <h2>2 · Scripted sample (deterministic, no mic needed)</h2>
+        <p style="font-size:13px;color:var(--text-muted)">
+            Reads <code>/voice/sample.wav</code> (macOS <code>say</code> render of the sample script),
+            transcribes it on-device, aligns to the script chunks.
+        </p>
+        <button id="sample-btn" class="btn-secondary" type="button" disabled>Run sample file</button>
+        <span id="sample-status" style="font-size:13px;color:var(--text-muted)"></span>
+        <div id="sample-out" style="margin-top:12px" hidden>
+            <table>
+                <tr><th>transcript (on-device)</th><th>alignment</th></tr>
+                <tr><td id="sample-text" style="width:60%"></td><td id="sample-align"></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="lab-panel">
+        <h2>3 · Live mic</h2>
+        <p><span class="mic-dot" id="mic-dot"></span><span id="mic-status" style="font-size:13px;color:var(--text-muted)">mic idle</span></p>
+        <button id="mic-btn" class="btn-secondary" type="button" disabled>Start mic</button>
+        <div id="live" style="margin-top:12px" hidden>
+            <div class="grid">
+                <div><div class="stat" id="stat-last">—</div><div class="statlabel">last window infer ms</div></div>
+                <div><div class="stat" id="stat-avg">—</div><div class="statlabel">avg infer ms</div></div>
+                <div><div class="stat" id="stat-alignms">—</div><div class="statlabel">audio end → alignment ms</div></div>
+                <div><div class="stat" id="stat-conf">—</div><div class="statlabel">alignment confidence</div></div>
+            </div>
+            <pre id="transcript">(transcript appears here)</pre>
+            <pre id="align-line"></pre>
+        </div>
+        <p class="warn" id="mic-error" hidden></p>
+    </div>
+
+    <script src="spector-core.js"></script>
+    <!-- Import map: vendored, same-origin module resolution. transformers.web
+         needs onnxruntime-web/common as bare specifiers; both map to the
+         single vendored ORT bundle. No CDN, no bundler. Must stay pure JSON. -->
+    <script type="importmap">
+        {"imports": {"onnxruntime-web": "/voice/vendor/ort.bundle.min.mjs", "onnxruntime-common": "/voice/vendor/ort.bundle.min.mjs"}}
+    </script>
+    <script type="module">
+        import * as Transformers from '/voice/vendor/transformers.web.min.js';
+        window.Transformers = Transformers;
+        document.getElementById('load-btn').disabled = false;
+    </script>
+    <script src="/voice/voice-engine.js"></script>
+    <script>
+        // The script the speaker is reading — mirrors the canned harness script.
+        const SCRIPT = [
+            'Hello world.',
+            'This is the second line here.',
+            '## Notes',
+            'Third line comes after the header.',
+            'Fourth and final line of the piece.',
+        ];
+        const CHUNKS = window.SpectorCore.hybridChunkWithCues(SCRIPT.join('\n'));
+
+        const $ = (id) => document.getElementById(id);
+        const log = [];
+        let transcriptWords = [];
+        let hintIndex = 0;
+        let inferTimes = [];
+
+        function pushLog(line) {
+            log.push(line);
+            $('transcript').textContent = log.slice(-12).join('\n');
+        }
+
+        $('load-btn').addEventListener('click', async () => {
+            $('load-btn').disabled = true;
+            $('load-status').textContent = 'downloading + compiling (first run only)…';
+            try {
+                const r = await window.SpectorVoice.load();
+                $('load-status').textContent = 'engine ready.';
+                $('stat-load').textContent = r.loadMs;
+                $('stat-heap').textContent = r.heapDeltaMB >= 0 ? r.heapDeltaMB : 'n/a';
+                $('stats').hidden = false;
+                $('sample-btn').disabled = false;
+                $('mic-btn').disabled = false;
+            } catch (err) {
+                $('load-status').textContent = 'load failed: ' + (err && err.message || err);
+                $('load-btn').disabled = false;
+            }
+        });
+
+        $('sample-btn').addEventListener('click', async () => {
+            $('sample-btn').disabled = true;
+            $('sample-status').textContent = 'decoding + transcribing /voice/sample.wav…';
+            try {
+                const pcm = await window.SpectorVoice.decodeWav('/voice/sample.wav');
+                const t0 = performance.now();
+                const r = await window.SpectorVoice.transcribeBuffer(pcm);
+                const e2e = Math.round(performance.now() - t0);
+                const align = window.SpectorCore.alignTranscript(r.words, CHUNKS, { hintIndex: 0 });
+                $('sample-status').textContent = `done in ${e2e} ms end-to-end.`;
+                $('sample-text').textContent = '“' + r.text + '”';
+                $('sample-align').innerHTML =
+                    `chunk <strong>${align.chunkIndex}</strong> of ${CHUNKS.length}` +
+                    ` (confidence ${align.confidence}, matched ${align.matchedWords} words, infer ${r.inferMs} ms)`;
+                $('sample-out').hidden = false;
+            } catch (err) {
+                $('sample-status').textContent = 'failed: ' + (err && err.message || err);
+            }
+            $('sample-btn').disabled = false;
+        });
+
+        let micOn = false;
+        $('mic-btn').addEventListener('click', async () => {
+            if (micOn) {
+                window.SpectorVoice.stopMic();
+                micOn = false;
+                $('mic-btn').textContent = 'Start mic';
+                $('mic-dot').classList.remove('on');
+                $('mic-status').textContent = 'mic idle';
+                return;
+            }
+            try {
+                await window.SpectorVoice.startMic((seg) => {
+                    if (seg.error) { pushLog('segment error: ' + seg.error); return; }
+                    const tAlign0 = performance.now();
+                    transcriptWords = transcriptWords.concat(seg.newWords);
+                    const align = window.SpectorCore.alignTranscript(transcriptWords, CHUNKS, { hintIndex: hintIndex });
+                    const alignMs = Math.round(performance.now() - tAlign0 + seg.inferMs);
+                    if (align.confidence >= 0.5) hintIndex = align.chunkIndex;
+                    inferTimes.push(seg.inferMs);
+                    const avg = Math.round(inferTimes.reduce((a, b) => a + b, 0) / inferTimes.length);
+                    $('live').hidden = false;
+                    $('stat-last').textContent = seg.inferMs;
+                    $('stat-avg').textContent = avg;
+                    $('stat-alignms').textContent = alignMs;
+                    $('stat-conf').textContent = align.confidence;
+                    $('align-line').textContent =
+                        `→ speaker at chunk ${align.chunkIndex}/${CHUNKS.length} ` +
+                        `(hint was ${hintIndex}, ${seg.windowSec.toFixed(1)}s audio window)`;
+                    pushLog(`[${seg.inferMs}ms] ${seg.segmentText}`);
+                });
+                micOn = true;
+                $('mic-btn').textContent = 'Stop mic';
+                $('mic-dot').classList.add('on');
+                $('mic-status').textContent = 'mic live — read the script aloud';
+            } catch (err) {
+                $('mic-error').hidden = false;
+                $('mic-error').textContent = 'mic failed (permission?): ' + (err && err.message || err);
+            }
+        });
+    </script>
+</body>
+</html>

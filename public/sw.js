@@ -1,6 +1,24 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v13'; // free + open source: monetization & analytics removed; spector-core.js shell
-const ORIGIN = self.location.origin; 
+const CACHE = 'spector-v14'; // + voice-mode spike: /voice/* routed to a separate model cache
+const ORIGIN = self.location.origin;
+
+/* Voice-mode ASR runtime + models (D1 spike): large, immutable, opt-in files
+   under /voice/. Kept in their OWN versioned cache so the core offline shell
+   stays lean and core cache bumps never touch them. The directory layout
+   versions the payloads (/voice/vendor/, /voice/model/); bump VOICE_CACHE
+   when replacing engine or model files. */
+const VOICE_CACHE = 'spector-voice-v1';
+
+async function voiceFirst(request) {
+    const cached = await caches.match(request, { cacheName: VOICE_CACHE });
+    if (cached) return cached;
+    const res = await fetch(request);
+    if (res && res.status === 200 && res.type !== 'opaque') {
+        const clone = res.clone();
+        caches.open(VOICE_CACHE).then((c) => c.put(request, clone));
+    }
+    return res;
+}
 
 function assetUrl(path) {
     if (path.startsWith('http')) return path;
@@ -34,7 +52,7 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys()
-            .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+            .then((keys) => Promise.all(keys.filter((k) => k !== CACHE && k !== VOICE_CACHE).map((k) => caches.delete(k))))
             .then(() => self.clients.claim())
     );
 });
@@ -86,6 +104,11 @@ self.addEventListener('fetch', (e) => {
     e.respondWith((async () => {
         if (shellPath) {
             return networkFirst(e.request, shellPath);
+        }
+
+        // Voice runtime + models: cache-first in the separate voice cache.
+        if (url.origin === ORIGIN && url.pathname.startsWith('/voice/')) {
+            return voiceFirst(e.request);
         }
 
         // style.css / js / json: network-first so they never skew against fresh HTML

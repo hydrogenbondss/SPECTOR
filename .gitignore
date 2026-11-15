@@ -27,3 +27,6 @@ private/
 # Python bytecode caches
 __pycache__/
 *.pyc
+
+# Legal-risk analyses stay local by default (owner decision to publish)
+docs/patent-notes-*.md

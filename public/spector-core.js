@@ -372,6 +372,135 @@
         return Math.min(wordCount - 1, Math.floor(frac * wordCount));
     }
 
+
+    // ─── Voice-alignment math (D1 voice-mode spike) ───
+    // Pure, DOM-free, audio-free: maps a stream of ASR transcript words onto
+    // the script's chunk list and reports where in the script the speaker
+    // most likely is. This is a CORRECTION SIGNAL for the deterministic
+    // pacing engine — never the display driver (see
+    // docs/patent-notes-voice-pacing.md).
+    function normalizeSpokenWord(w) {
+        return String(w || '')
+            .toLowerCase()
+            .replace(/^[^a-z0-9']+/, '')
+            .replace(/[^a-z0-9']+$/, '')
+            .replace(/''+/g, "'");
+    }
+
+    // Spoken words of a chunk, cue markup stripped (shares normalization with
+    // countSpokenWords but keeps the words, in order).
+    function extractChunkWords(chunkText) {
+        return String(chunkText || '')
+            .replace(/^##[ \t]+[^\r\n]+$/gm, '')
+            .replace(/\[pause(?::\d+s)?\]/gi, '')
+            .replace(/\*\*/g, '')
+            .split(/\s+/)
+            .map(normalizeSpokenWord)
+            .filter(Boolean);
+    }
+
+    // Cheap bounded edit distance (capped) for fuzzy word equality.
+    function editDistanceAtMost(a, b, cap) {
+        const la = a.length, lb = b.length;
+        if (Math.abs(la - lb) > cap) return cap + 1;
+        let prev = new Array(lb + 1);
+        for (let j = 0; j <= lb; j++) prev[j] = j;
+        for (let i = 1; i <= la; i++) {
+            let cur = [i];
+            let rowMin = i;
+            for (let j = 1; j <= lb; j++) {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+                if (cur[j] < rowMin) rowMin = cur[j];
+            }
+            if (rowMin > cap) return cap + 1;
+            prev = cur;
+        }
+        return prev[lb];
+    }
+
+    // Fuzzy word equality: exact, shared 4-char prefix, or ≤1 edit for
+    // words of 4+ chars. Deliberately conservative — false jumps are worse
+    // than missed corrections.
+    function wordsMatchFuzzy(a, b) {
+        if (!a || !b) return false;
+        if (a === b) return true;
+        if (a.length >= 4 && b.length >= 4 && a.slice(0, 4) === b.slice(0, 4)) return true;
+        if (a.length >= 4 && b.length >= 4 && editDistanceAtMost(a, b, 1) <= 1) return true;
+        return false;
+    }
+
+    /* Align a transcript word stream to the script's chunks.
+     *
+     * transcriptWords: array of raw ASR words (order = utterance order).
+     * chunks: the player's chunk array (raw chunk text, cues included).
+     * opts.hintIndex: chunk the player currently shows — search starts here
+     *   and never moves backwards (monotonic, matching the correction-signal
+     *   design). opts.maxLookaheadChunks bounds the forward window.
+     *
+     * Returns { chunkIndex, confidence, matchedWords, transcriptWordsUsed }.
+     * confidence is the matched/considered ratio over the transcript words
+     * passed in this call (0..1) — trailing garbage dilutes it; callers gate
+     * on a confidence floor and keep pacing on punctuation alone below it.
+     *
+     * Algorithm: flatten the candidate chunk range into a word sequence with
+     * chunk ids, then greedily match transcript words in order — each word
+     * searches a bounded forward window for its best fuzzy match, jumping
+     * ahead when the speaker skipped lines, staying put on garbage.
+     * Stateless: callers pass the full transcript-so-far each call. */
+    function alignTranscript(transcriptWords, chunks, opts = {}) {
+        const hint = Math.max(0, Math.min(opts.hintIndex || 0, chunks.length - 1));
+        const lookahead = Math.max(1, opts.maxLookaheadChunks || 10);
+        const end = Math.min(chunks.length, hint + lookahead);
+        const flat = [];
+        const flatChunk = [];
+        for (let i = hint; i < end; i++) {
+            extractChunkWords(chunks[i]).forEach((w) => { flat.push(w); flatChunk.push(i); });
+        }
+        const words = (transcriptWords || []).map(normalizeSpokenWord).filter(Boolean);
+        const WINDOW = 48; // max flat words searched ahead per transcript word
+        let anchor = 0;            // next flat position to consider
+        let lastMatch = -1;
+        let strong = 0, considered = 0;
+        let t = 0;
+        while (t < words.length) {
+            const w = words[t];
+            // Every unmatched transcript word (hesitations, ASR noise) counts
+            // against confidence — there is no miss cutoff; a long garbage
+            // tail dilutes an earlier solid match by design, and callers gate
+            // on the confidence floor (see alignTranscript docs above).
+            let bestJ = -1, bestScore = 0;
+            const limit = Math.min(flat.length, anchor + WINDOW);
+            for (let j = anchor; j < limit; j++) {
+                if (wordsMatchFuzzy(w, flat[j])) {
+                    const score = 1 - (j - anchor) / WINDOW; // prefer near matches
+                    if (score > bestScore) { bestScore = score; bestJ = j; }
+                    if (flat[j] === w) break; // exact: take it
+                }
+            }
+            if (bestJ >= 0 && bestScore >= 0.2) {
+                lastMatch = bestJ;
+                anchor = bestJ + 1;
+                strong += 1;
+                considered += 1;
+                t++;
+            } else {
+                considered += 1;
+                t++;
+            }
+        }
+        if (lastMatch < 0) {
+            return { chunkIndex: hint, confidence: 0, matchedWords: 0, transcriptWordsUsed: words.length };
+        }
+        const confidence = considered ? Math.round((strong / considered) * 100) / 100 : 0;
+        return {
+            chunkIndex: flatChunk[lastMatch],
+            confidence,
+            matchedWords: strong,
+            transcriptWordsUsed: words.length,
+        };
+    }
+
     const SpectorCore = {
         KalmanFilter,
         chunkStrategies,
@@ -399,6 +528,9 @@
         markdownToScript,
         estimateDurationMs,
         wordIndexForElapsed,
+        alignTranscript,
+        extractChunkWords,
+        wordsMatchFuzzy,
         decodeScript(encoded) {
             try { return decodeURIComponent(atob(encoded)); }
             catch { return null; }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- SPECTOR og-card generator — deterministic 1200x630 social card.
+     Serve the REPO ROOT (python3 -m http.server) and screenshot .card at
+     exactly 1200x630, then save to public/images/og-card.png.
+     Fonts resolve from the vendored public/fonts/ (OFL 1.1). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    @font-face {
+        font-family: 'Instrument Sans';
+        font-style: normal;
+        font-weight: 100 900;
+        src: url('../public/fonts/instrument-sans-var-latin.woff2') format('woff2');
+    }
+    @font-face {
+        font-family: 'Instrument Serif';
+        font-style: italic;
+        font-weight: 400;
+        src: url('../public/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #222; }
+    .card {
+        width: 1200px;
+        height: 630px;
+        position: relative;
+        overflow: hidden;
+        background-color: #070A0C;
+        background-image:
+            radial-gradient(ellipse 60% 55% at 78% 22%, rgba(47, 217, 196, 0.08), transparent),
+            radial-gradient(ellipse 50% 45% at 12% 88%, rgba(64, 96, 116, 0.07), transparent);
+        color: #E8EDEC;
+        font-family: 'Instrument Sans', system-ui, sans-serif;
+        padding: 64px 72px;
+        display: flex;
+        flex-direction: column;
+    }
+    /* page-wide scanline texture, same as the site */
+    .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 3px);
+    }
+    .wordmark {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 15px;
+        letter-spacing: 0.32em;
+        color: rgba(232, 237, 236, 0.55);
+    }
+    .headline {
+        margin-top: 54px;
+        font-size: 96px;
+        font-weight: 640;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+        max-width: 9.5ch;
+    }
+    .headline .serif {
+        font-family: 'Instrument Serif', serif;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -0.015em;
+        text-shadow: 0 0 34px rgba(47, 217, 196, 0.28);
+    }
+    .tagline {
+        margin-top: auto;
+        font-size: 24px;
+        color: rgba(232, 237, 236, 0.62);
+        letter-spacing: -0.01em;
+        max-width: 560px;
+    }
+    /* One phosphor accent: the notched demo-pane motif */
+    .pane {
+        position: absolute;
+        right: 72px;
+        bottom: 64px;
+        width: 380px;
+        background: #10161A;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+        box-shadow: 0 0 64px -20px rgba(47, 217, 196, 0.25);
+        padding: 26px 28px 18px;
+    }
+    .pane .ctx {
+        font-size: 15px;
+        color: rgba(232, 237, 236, 0.5);
+        line-height: 1.5;
+    }
+    .pane .active {
+        font-size: 21px;
+        font-weight: 550;
+        color: #F2F7F6;
+        margin: 8px 0;
+    }
+    .pane .active::after {
+        content: '';
+        display: inline-block;
+        width: 2px;
+        height: 0.95em;
+        margin-left: 4px;
+        vertical-align: -0.12em;
+        background: #2FD9C4;
+        box-shadow: 0 0 8px rgba(47, 217, 196, 0.6);
+    }
+    .pane .readouts {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        color: rgba(232, 237, 236, 0.4);
+    }
+    .pane .readouts b { color: #2FD9C4; font-weight: 400; }
+</style>
+</head>
+<body>
+    <div class="card">
+        <div class="wordmark">SPECTOR</div>
+        <div class="headline">Stop reading.<br>Start <span class="serif">delivering.</span></div>
+        <div class="tagline">Free, open-source teleprompter. Your punctuation sets the pace.</div>
+        <div class="pane">
+            <div class="ctx">Longer sentences get the room they need.</div>
+            <div class="active">Emphasis earns a hold.</div>
+            <div class="readouts"><b>WPM 142</b>&nbsp;&nbsp;&nbsp;CHUNK 03/18&nbsp;&nbsp;&nbsp;FOCUS · NORMAL</div>
+        </div>
+    </div>
+</body>
+</html>

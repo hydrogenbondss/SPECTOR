@@ -19,8 +19,8 @@
     <meta name="twitter:image" content="https://www.spectorlabs.io/images/og-card.png?v=2">
     <title>Spector — Your punctuation sets the pace</title>
     <link rel="canonical" href="https://www.spectorlabs.io/">
-    <link rel="stylesheet" href="style.min.css?v=9">
-    <link rel="stylesheet" href="landing-v2.min.css?v=27">
+    <link rel="stylesheet" href="style.min.css?v=10">
+    <link rel="stylesheet" href="landing-v2.min.css?v=29">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico?v=5" sizes="32x32">
     <link rel="icon" type="image/png" href="images/favicon-32.png?v=5" sizes="32x32">
@@ -39,7 +39,7 @@
     }
     </script>
 </head>
-<body class="landing">
+<body class="landing landing--refresh">
 
     <a class="skip-link" href="#try">Skip to try</a>
 
@@ -65,7 +65,7 @@
             <div class="hero-layout">
                 <div class="hero-copy">
                     <p class="hero-brand">SPECTOR</p>
-                    <h1 class="hero-headline">Stop reading. Start delivering.</h1>
+                    <h1 class="hero-headline">Stop reading.<br>Start <em class="serif-accent">delivering.</em></h1>
                     <p class="hero-subhead">SPECTOR turns your script into a natural speaking pace, so you can keep your eyes up and stay present.</p>
                     <div class="hero-cta-group">
                         <a href="app.html" class="btn-hero" data-quick-start>Try Spector free</a>
@@ -85,6 +85,11 @@
                                     <div class="hero-demo-footer">
                                         <div class="hero-demo-bar"><div class="hero-demo-fill" id="hd-fill" style="width:20%"></div></div>
                                         <span class="hero-demo-pacing" id="hd-pacing">Your punctuation sets the pace.</span>
+                                    </div>
+                                    <div class="hero-demo-readouts" aria-hidden="true">
+                                        <span id="hd-wpm">WPM —</span>
+                                        <span id="hd-chunk">CHUNK —/—</span>
+                                        <span>FOCUS · NORMAL</span>
                                     </div>
                                 </div>
                             </div>
@@ -111,6 +116,18 @@
                     <li><strong>No microphone</strong> SPECTOR doesn't need to hear you to keep the script moving.</li>
                     <li><strong>Screen first</strong> Rehearse on your phone or computer. Take the same workflow to display glasses when you're ready.</li>
                 </ul>
+            </div>
+        </section>
+
+        <!-- THE PLAYER — the real product, full width -->
+        <section class="player-section" id="player">
+            <p class="kicker">The player</p>
+            <h2>This is it. This is the whole product.</h2>
+            <p class="player-lead">No feed, no dashboard, no account screen. Your script, paced.</p>
+            <div class="player-panel">
+                <img src="images/player-screenshot.png"
+                     alt="The Spector player mid-rehearsal: dimmed context lines, one bright active line with the current word underlined, and the control set below"
+                     loading="lazy" width="1440" height="900">
             </div>
         </section>
 
@@ -1067,6 +1084,8 @@
             let i = 0;
             let timer = 0;
             let paused = false;
+            const wpmEl = document.getElementById('hd-wpm');
+            const chunkEl = document.getElementById('hd-chunk');
 
             const paint = () => {
                 const cur = i % LINES.length;
@@ -1074,6 +1093,12 @@
                 active.innerHTML = markPunct(LINES[cur]);
                 next.textContent = LINES[(cur + 1) % LINES.length];
                 if (fill) fill.style.width = ((cur + 1) / LINES.length) * 100 + '%';
+                if (chunkEl) chunkEl.textContent = 'CHUNK ' + String(cur + 1).padStart(2, '0') + '/' + String(LINES.length).padStart(2, '0');
+                if (wpmEl) {
+                    const words = LINES[cur].trim().split(/\s+/).length;
+                    const wpm = Math.round(words / (demoMs(LINES[cur]) / 60000));
+                    wpmEl.textContent = 'WPM ' + wpm;
+                }
                 if (pacing) {
                     pacing.classList.remove('tick');
                     void pacing.offsetWidth;

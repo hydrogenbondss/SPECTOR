@@ -1,5 +1,5 @@
 /* Spector service worker — offline shell for installed PWA rehearsal */
-const CACHE = 'spector-v15'; // self-hosted fonts + static star badge: zero third-party requests (v14 lives on the D1 spike branch)
+const CACHE = 'spector-v16'; // landing visual refresh: dark HUD theme + Instrument Serif (v14 lives on the D1 spike branch)
 const ORIGIN = self.location.origin; 
 
 function assetUrl(path) {
@@ -18,6 +18,8 @@ const ASSETS = [
     '/fonts/instrument-sans-var-latin-ext.woff2',
     '/fonts/instrument-sans-var-latin-italic.woff2',
     '/fonts/instrument-sans-var-latin-ext-italic.woff2',
+    '/fonts/instrument-serif-italic-latin.woff2',
+    '/fonts/instrument-serif-italic-latin-ext.woff2',
     '/manifest.json',
     '/verify-sw.html',
     '/sw-prime.html',
